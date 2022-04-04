@@ -1,0 +1,23 @@
+﻿namespace HappyVacation.Database.Entities
+{
+    public class Order
+    {
+        public int Id { get; set; }
+        public DateTime OrderDate { get; set; }
+        public int Adults { get; set; }
+        public int Children { get; set; }
+        public string State { get; set; }
+        public string? CancelReason { get; set; }
+        public string TouristName { get; set; }
+        public string TouristPhone { get; set; }
+        public string TouristEmail { get; set; }
+        public int TourId { get; set; }
+        public int ProviderId { get; set; }
+        public int UserId { get; set; }
+
+        // navigation props
+        public Tour Tour { get; set; }
+        public User User { get; set; }
+        public Provider Provider { get; set; }
+    }
+}
