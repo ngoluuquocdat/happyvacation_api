@@ -38,6 +38,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// add this to enable access static files in wwwroot via url
+app.UseStaticFiles();
+
+app.UseCors("MyCorsPolicy");
+
 app.UseAuthorization();
 
 app.MapControllers();
