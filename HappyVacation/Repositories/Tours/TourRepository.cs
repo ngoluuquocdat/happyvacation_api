@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HappyVacation.Repositories.Tours
 {
-    public class TourRepository : IUserRepository
+    public class TourRepository : ITourRepository
     {
         private readonly MyDbContext _context;
         private readonly IStorageService _storageService;
@@ -250,6 +250,7 @@ namespace HappyVacation.Repositories.Tours
         public async Task<PagedResult<ReviewVm>> GetTourReviews(int tourId, int page, int perPage)
         {
             var query = _context.Reviews.Where(x => x.TourId == tourId).AsNoTracking()
+                                        .OrderByDescending(x => x.DateModified)
                                         .Select(x => new ReviewVm()
                                         {
                                             Id = x.Id,
@@ -307,6 +308,35 @@ namespace HappyVacation.Repositories.Tours
             //}
 
             return await query.ToListAsync();
+        }
+
+        public async Task<int> CreateReview(int userId, int tourId, ReviewDTO request)
+        {
+            var review = _context.Reviews.Where(x => (x.UserId == userId) && (x.TourId == tourId)).FirstOrDefault();
+            if (review == null)
+            {
+                // add new review
+                review = new Review()
+                {
+                    Content = !String.IsNullOrEmpty(request.Content) ? request.Content : String.Empty,
+                    Rating = request.Rating,
+                    TourId = tourId,
+                    UserId = userId,
+                    DateCreated = DateTime.Now,
+                    DateModified = DateTime.Now
+                };
+            }
+            else
+            {
+                review.Content = request.Content;
+                review.Rating = request.Rating;
+                review.DateModified = DateTime.Now;
+            }
+
+            _context.Reviews.Update(review);
+            await _context.SaveChangesAsync();
+
+            return review.Id;
         }
     }
 }

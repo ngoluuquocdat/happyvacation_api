@@ -1,5 +1,7 @@
+using HappyVacation.DTOs.Reviews;
 using HappyVacation.DTOs.Tours;
 using HappyVacation.Repositories.Tours;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HappyVacation.Controllers
@@ -8,15 +10,16 @@ namespace HappyVacation.Controllers
     [Route("api/[controller]")]
     public class ToursController : ControllerBase
     {
-        private readonly IUserRepository _tourRepository;
+        private readonly ITourRepository _tourRepository;
 
-        public ToursController(IUserRepository tourRepository)
+        public ToursController(ITourRepository tourRepository)
         {
             _tourRepository = tourRepository;
         }
 
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult> GetTours([FromQuery] GetTourRequest request)
         {
             try
@@ -71,6 +74,18 @@ namespace HappyVacation.Controllers
             var newTour = await _tourRepository.GetTourById(newTourId);
 
             return CreatedAtAction(nameof(GetTourById), new { tourId = newTourId }, newTour);
+        }
+
+        [HttpPost("{tourId:int}/reviews")]
+        [Authorize]
+        public async Task<ActionResult> CreateReview(int tourId, ReviewDTO request)
+        {
+            var currentUser = HttpContext.User;
+            var userId = Int32.Parse(currentUser.FindFirst("id").Value);
+
+            var result = await _tourRepository.CreateReview(userId, tourId, request);
+
+            return Ok(result);
         }
 
 
