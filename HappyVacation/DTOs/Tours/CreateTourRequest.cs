@@ -10,9 +10,9 @@
         public int MinAdults { get; set; }
         public int PricePerAdult { get; set; }
         public int PricePerChild { get; set; }
-        public int PlaceId { get; set; }
         public string Location { get; set; }
         public string Destination { get; set; }
+        public List<int> PlaceIds { get; set; }
         public List<int> CategoryIds { get; set; }
         public List<ItineraryVm> Itineraries { get; set; }
         public List<ExpenseVm> Expenses { get; set; }

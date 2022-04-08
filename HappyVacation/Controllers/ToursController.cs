@@ -8,18 +8,33 @@ namespace HappyVacation.Controllers
     [Route("api/[controller]")]
     public class ToursController : ControllerBase
     {
-        private readonly ITourRepository _tourRepository;
+        private readonly IUserRepository _tourRepository;
 
-        public ToursController(ITourRepository tourRepository)
+        public ToursController(IUserRepository tourRepository)
         {
             _tourRepository = tourRepository;
         }
 
 
+        [HttpGet]
+        public async Task<ActionResult> GetTours([FromQuery] GetTourRequest request)
+        {
+            try
+            {
+                var result = await _tourRepository.GetTours(request);
+                return Ok(result);
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+
+        }
+
         [HttpGet("{tourId:int}")]
         public async Task<ActionResult> GetTourById(int tourId)
         {
-
             var result = await _tourRepository.GetTourById(tourId);
             if (result == null)
             {
@@ -58,5 +73,21 @@ namespace HappyVacation.Controllers
             return CreatedAtAction(nameof(GetTourById), new { tourId = newTourId }, newTour);
         }
 
+
+        [HttpGet("topOrderedCategories")]
+        public async Task<ActionResult> GetTopOrderedCategory()
+        {
+            try
+            {
+                var result = await _tourRepository.GetTopOrderedCategories(0, 0, 0, DateTime.MinValue);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+
+        }
     }
 }

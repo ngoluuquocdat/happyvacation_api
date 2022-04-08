@@ -1,4 +1,6 @@
-﻿namespace HappyVacation.DTOs.Tours
+﻿using HappyVacation.DTOs.Places;
+
+namespace HappyVacation.DTOs.Tours
 {
     public class TourVm
     {
@@ -10,10 +12,10 @@
         public int MinAdults { get; set; }
         public string Location { get; set; }
         public string Destination { get; set; }
-        public int PlaceId { get; set; }
         public int ProviderId { get; set; }
         public string ProviderName { get; set; }
         public string ProviderAvatar { get; set; }
+        public IEnumerable<PlaceVm> Places { get; set; }
         public IEnumerable<CategoryVm> Categories{ get; set; }
         public IEnumerable<ItineraryVm> Itineraries { get; set; }
         public IEnumerable<ExpenseVm> Expenses { get; set; }
