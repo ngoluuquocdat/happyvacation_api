@@ -1,5 +1,6 @@
 using HappyVacation.Database;
 using HappyVacation.Repositories.Authen;
+using HappyVacation.Repositories.Providers;
 using HappyVacation.Repositories.Tours;
 using HappyVacation.Services.Storage;
 using HappyVacation.Services.Token;
@@ -90,8 +91,9 @@ builder.Services.AddCors(p => p.AddPolicy("MyCorsPolicy", builder =>
 // add my services and repositories
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<IAuthenRepository, AuthenRepository>();
+builder.Services.AddScoped<ITourRepository, TourRepository>();
+builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 
 var app = builder.Build();
 
