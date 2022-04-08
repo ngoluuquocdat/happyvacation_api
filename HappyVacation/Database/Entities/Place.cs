@@ -8,7 +8,7 @@
         public bool IsTop { get; set; }
 
         // navigation props
-        // 1 place - n tours
-        public List<Tour> Tours { get; set; }
+        // 1 place - n tour places
+        public List<TourPlace> TourPlaces { get; set; }
     }
 }

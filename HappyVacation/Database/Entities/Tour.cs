@@ -15,12 +15,12 @@
         public bool IsPrivate { get; set; }
         public bool IsAvailable { get; set; }
         public int ViewCount { get; set; }
-        public int PlaceId { get; set; }
+        //public int PlaceId { get; set; }
         public int ProviderId { get; set; }
 
         // navigation props
-        // 1 place - n tours
-        public Place Place { get; set; }
+        // 1 tour - n tour places
+        public List<TourPlace> TourPlaces { get; set; }
         // 1 provider - n tours
         public Provider Provider { get; set; }
         // 1 tour - n tour categories

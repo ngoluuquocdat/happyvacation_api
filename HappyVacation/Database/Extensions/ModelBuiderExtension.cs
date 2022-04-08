@@ -20,7 +20,7 @@ namespace HappyVacation.Database.Extensions
                     Address = "32 Tien Giang St, Tan Binh District, Ho Chi Minh City, Viet Nam",
                     DateCreated = new DateTime(2022, 03, 28),
                     Description = "Established in 2002, Hoi An Express is a company specializing in organizing professional tours for foreign visitors to Vietnam to visit tours, conferences, events combined with team building.",
-                    ThumbnailUrl = "/storage/hoianexpresslogo.jpg",
+                    AvatarUrl = "/storage/hoianexpresslogo.jpg",
                     IsEnabled = true
                 }
             );
@@ -109,7 +109,8 @@ namespace HappyVacation.Database.Extensions
                 new UserRole { UserId = 1, RoleId = 3 },
                 new UserRole { UserId = 2, RoleId = 2 },
                 new UserRole { UserId = 2, RoleId = 3 },
-                new UserRole { UserId = 3, RoleId = 3 }
+                new UserRole { UserId = 3, RoleId = 3 },
+                new UserRole { UserId = 4, RoleId = 3 }
             );
             // data seeding for Places
             modelBuilder.Entity<Place>().HasData(
@@ -137,7 +138,6 @@ namespace HappyVacation.Database.Extensions
                     TourName = "HALF-DAY FOODIE TOUR BY BICYCLE & VISIT TRA QUE VEGETABLE VILLAGE",
                     Overview = "Take a journey through Hoi An’s culinary history; head out to the beautiful countryside by bicycle to experience some traditional local food favorites, including the most famous of Hoi An specialties; Cao Lau. Try the traditional Hoi An specialty, Cao Lau; " +
                                 "intoxicating pork noodle broth, featuring sticky rice noodles that must be soaked in water from the oldest well in Hoi An, Ba Le Well.",
-                    PlaceId = 3,
                     Duration = 0.5F,
                     GroupSize = 15,
                     MinAdults = 2,
@@ -156,7 +156,6 @@ namespace HappyVacation.Database.Extensions
                     TourName = "Private Tour: HOI AN MYSTERIOUS NIGHT TOUR WITH DINNER FROM HOI AN",
                     Overview = "Have a memorable end to your day in Hoi An with a tour of the ancient town after the sun goes down. " +
                                 "See the centuries-old houses and monuments illuminated by local lanterns. Visit a traditional restaurant for dinner",
-                    PlaceId = 3,
                     Duration = 0.125F,
                     GroupSize = 15,
                     MinAdults = 1,
@@ -169,6 +168,11 @@ namespace HappyVacation.Database.Extensions
                     ViewCount = 5,
                     IsAvailable = true,
                 }
+            );
+            // data seeding for TourPlaces
+            modelBuilder.Entity<TourPlace>().HasData(
+                new TourPlace { TourId = 1, PlaceId = 3 },
+                new TourPlace { TourId = 2, PlaceId = 3 }
             );
             // data seeding for Itineraries
             modelBuilder.Entity<Itinerary>().HasData(

@@ -19,11 +19,6 @@ namespace HappyVacation.Database.Configurations
             builder.Property(x => x.Destination).IsRequired().HasMaxLength(100);
 
             // relationship config
-
-            // 1-n: place - tours
-            builder.HasOne(tour => tour.Place)
-                .WithMany(place => place.Tours)
-                .HasForeignKey(tour => tour.PlaceId);
             // 1-n: provider - tours
             builder.HasOne(tour => tour.Provider)
                 .WithMany(provider => provider.Tours)

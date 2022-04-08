@@ -14,6 +14,7 @@ namespace HappyVacation.Database
 
             // Configure using Fluent API
             modelBuilder.ApplyConfiguration(new PlaceConfiguration());
+            modelBuilder.ApplyConfiguration(new TourPlaceConfiguration());
 
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new TourCategoryConfiguration());
@@ -38,6 +39,7 @@ namespace HappyVacation.Database
         public DbSet<Place> Places { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<TourCategory> TourCategories { get; set; }
+        public DbSet<TourPlace> TourPlaces { get; set; }
         public DbSet<Tour> Tours { get; set; }
         public DbSet<Itinerary> Itineraries { get; set; }
         public DbSet<Expense> Expenses { get; set; }
