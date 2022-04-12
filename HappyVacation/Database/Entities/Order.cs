@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+        public DateTime DepartureDate { get; set; }
         public int Adults { get; set; }
         public int Children { get; set; }
         public string State { get; set; }

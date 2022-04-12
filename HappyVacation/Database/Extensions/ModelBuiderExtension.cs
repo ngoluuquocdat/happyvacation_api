@@ -335,6 +335,7 @@ namespace HappyVacation.Database.Extensions
                 {
                     Id = 1,
                     OrderDate = new DateTime(2022, 03, 29),
+                    DepartureDate = new DateTime(2022, 03, 30),
                     Adults = 2,
                     Children = 1,
                     State = "Confirmed",
@@ -344,12 +345,13 @@ namespace HappyVacation.Database.Extensions
                     TouristEmail = "braddinh1952000@gmail.com",
                     TourId = 1,
                     ProviderId = 1,
-                    UserId = 1
+                    UserId = 3
                 },
                 new Order
                 {
                     Id = 2,
                     OrderDate = new DateTime(2022, 03, 29),
+                    DepartureDate = new DateTime(2022, 03, 30),
                     Adults = 2,
                     Children = 0,
                     State = "Confirmed",
@@ -359,7 +361,7 @@ namespace HappyVacation.Database.Extensions
                     TouristEmail = "braddinh1952000@gmail.com",
                     TourId = 2,
                     ProviderId = 1,
-                    UserId = 1
+                    UserId = 3
                 }
             );
         }
