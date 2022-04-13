@@ -97,7 +97,7 @@ namespace HappyVacation.Repositories.Tours
                 Id = x.Id,
                 TourName = x.TourName,
                 Reviews = x.Reviews.Count(),
-                Rating = (x.Reviews.Count() != 0) ? (float)Math.Round(x.Reviews.Average(r => r.Rating), 2) : 0,
+                Rating = (x.Reviews.Count() != 0) ? (float)Math.Round(x.Reviews.Where(r => r.Rating != 0).Average(r => r.Rating), 1) : 0,
                 IsPrivate = x.IsPrivate,
                 Duration = x.Duration,
                 MinPrice = x.PricePerAdult * x.MinAdults,

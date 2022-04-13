@@ -70,7 +70,7 @@ namespace HappyVacation.Controllers
                 return StatusCode(500);
             }
 
-            // get new product created
+            // get new tour created
             var newTour = await _tourRepository.GetTourById(newTourId);
 
             return CreatedAtAction(nameof(GetTourById), new { tourId = newTourId }, newTour);
