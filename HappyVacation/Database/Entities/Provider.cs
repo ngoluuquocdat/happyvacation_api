@@ -18,7 +18,7 @@
         // 1 provider - n tours
         public List<Tour> Tours { get; set; }
         // 1 tour - n orders
-        public List<Order> Orders { get; set; }
+        //public List<Order> Orders { get; set; }
     }
 
 }

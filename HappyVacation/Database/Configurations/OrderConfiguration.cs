@@ -27,10 +27,10 @@ namespace HappyVacation.Database.Configurations
                     .OnDelete(DeleteBehavior.NoAction);
                     
             // 1-n: provider - orders
-            builder.HasOne(order => order.Provider)
-                    .WithMany(provider => provider.Orders)
-                    .HasForeignKey(order => order.ProviderId)
-                    .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(order => order.Provider)
+            //        .WithMany(provider => provider.Orders)
+            //        .HasForeignKey(order => order.ProviderId)
+            //        .OnDelete(DeleteBehavior.NoAction);
 
             // 1-n: user - orders
             builder.HasOne(order => order.User)

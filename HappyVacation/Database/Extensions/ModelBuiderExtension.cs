@@ -344,7 +344,7 @@ namespace HappyVacation.Database.Extensions
                     TouristPhone = "0945501905",
                     TouristEmail = "braddinh1952000@gmail.com",
                     TourId = 1,
-                    ProviderId = 1,
+                    //ProviderId = 1,
                     UserId = 3
                 },
                 new Order
@@ -360,7 +360,7 @@ namespace HappyVacation.Database.Extensions
                     TouristPhone = "0945501905",
                     TouristEmail = "braddinh1952000@gmail.com",
                     TourId = 2,
-                    ProviderId = 1,
+                    //ProviderId = 1,
                     UserId = 3
                 }
             );
