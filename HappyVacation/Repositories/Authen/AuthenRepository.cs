@@ -79,17 +79,24 @@ namespace HappyVacation.Repositories.Authen
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Phone = request.Phone,
-                AvatarUrl = await _storageService.SaveImage(request.Avatar)
+                //AvatarUrl = await _storageService.SaveImage(request.Avatar)
+                AvatarUrl = "/storage/blank_avatar.png"
             };
             // assign 'Tourist' role to new user
-            newUser.UserRoles.Add(
+            var userRoles = new List<UserRole>();
+            userRoles.Add(
                 new UserRole { RoleId = 3 }
             );
+            newUser.UserRoles = userRoles;
+
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
 
-            var token = _tokenService.CreateToken(newUser, newUser.UserRoles.Select(x => x.Role.RoleName).ToList());
+            // get list roles of new user
+            var roles = _context.UserRoles.Where(x => x.UserId == newUser.Id).Select(x => x.Role.RoleName).ToList();
+
+            var token = _tokenService.CreateToken(newUser, roles);
 
             return new AuthenVm()
             {

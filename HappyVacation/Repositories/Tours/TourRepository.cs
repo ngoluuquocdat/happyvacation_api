@@ -89,7 +89,7 @@ namespace HappyVacation.Repositories.Tours
 
             // 3. paging
             int totalCount = query.Count();
-            int totalPages = totalCount / request.PerPage;
+            int totalPages = ((totalCount - 1) / request.PerPage) + 1;
             query = query.Skip((request.Page - 1) * request.PerPage).Take(request.PerPage);
 
             var tours = await query.Select(x => new TourMainInfoVm()
@@ -135,7 +135,9 @@ namespace HappyVacation.Repositories.Tours
                                        Location = x.Location,
                                        Destination = x.Destination,
                                        Reviews = x.Reviews.Count(),
-                                       Rating = (x.Reviews.Count() != 0) ? (float)Math.Round(x.Reviews.Average(r => r.Rating), 2) : 0,                                      
+                                       Rating = (x.Reviews.Count() != 0) ?
+                                       //(float)Math.Round(x.Reviews.Average(r => r.Rating), 1) : 0,
+                                       (float)Math.Round(x.Reviews.Where(r => r.Rating != 0).Average(r => r.Rating), 1) : 0,
                                        ProviderId = x.ProviderId,
                                        ProviderName = x.Provider.ProviderName,
                                        ProviderAvatar = x.Provider.AvatarUrl,
@@ -262,7 +264,7 @@ namespace HappyVacation.Repositories.Tours
                                         });
             // paging
             int totalCount = query.Count();
-            int totalPages = totalCount / perPage;
+            int totalPages = ((totalCount - 1) / perPage) + 1;
             query = query.Skip((page - 1) * perPage).Take(perPage);
 
             return new PagedResult<ReviewVm>()

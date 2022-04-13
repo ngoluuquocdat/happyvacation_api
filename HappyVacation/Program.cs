@@ -1,7 +1,9 @@
 using HappyVacation.Database;
 using HappyVacation.Repositories.Authen;
+using HappyVacation.Repositories.Orders;
 using HappyVacation.Repositories.Providers;
 using HappyVacation.Repositories.Tours;
+using HappyVacation.Repositories.Users;
 using HappyVacation.Services.Storage;
 using HappyVacation.Services.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -92,8 +94,10 @@ builder.Services.AddCors(p => p.AddPolicy("MyCorsPolicy", builder =>
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthenRepository, AuthenRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 var app = builder.Build();
 
