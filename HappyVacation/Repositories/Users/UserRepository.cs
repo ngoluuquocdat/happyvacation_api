@@ -33,6 +33,7 @@ namespace HappyVacation.Repositories.Users
                                             Phone = x.Phone,
                                             Email = x.Email,
                                             AvatarUrl = !String.IsNullOrEmpty(x.AvatarUrl) ? x.AvatarUrl : String.Empty,
+                                            ProviderId = x.ProviderId != null ? x.ProviderId : 0,
                                         }).FirstOrDefaultAsync();
             return user;
         }

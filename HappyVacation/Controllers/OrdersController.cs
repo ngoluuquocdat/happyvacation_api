@@ -77,5 +77,40 @@ namespace HappyVacation.Controllers
                 return StatusCode(500);
             }
         }
+
+        [HttpPut("{orderId:int}")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> ChangeOrderState(int orderId, [FromQuery] string state)
+        {
+            try
+            {
+                state = state.ToLower();
+                if(!state.Equals("confirmed") && !state.Equals("canceled"))
+                {
+                    return BadRequest("Invalid state.");
+                }
+
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _orderRepository.ChangeOrderState(userId, orderId, state);
+                if (result == -1)
+                {
+                    return Forbid();
+                }
+                if (result == 0)
+                {
+                    return BadRequest("Already in this state.");
+                }
+
+                var updatedOrder = await _orderRepository.GetOrderById(result);
+                return Ok(updatedOrder);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
     }
 }

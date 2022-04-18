@@ -55,6 +55,7 @@ namespace HappyVacation.Repositories.Authen
                 Phone = user.Phone,
                 Email = user.Email,
                 AvatarUrl = !String.IsNullOrEmpty(user.AvatarUrl) ? user.AvatarUrl : String.Empty,
+                ProviderId = user.ProviderId != null ? user.ProviderId : 0,
                 Token = token
             };
         }
@@ -79,7 +80,6 @@ namespace HappyVacation.Repositories.Authen
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Phone = request.Phone,
-                //AvatarUrl = await _storageService.SaveImage(request.Avatar)
                 AvatarUrl = "/storage/blank_avatar.png"
             };
             // assign 'Tourist' role to new user
@@ -104,6 +104,8 @@ namespace HappyVacation.Repositories.Authen
                 FullName = $"{newUser.FirstName} {newUser.LastName}",
                 Phone = newUser.Phone,
                 Email = newUser.Email,
+                AvatarUrl = "/storage/blank_avatar.png",
+                ProviderId = 0,
                 Token = token
             };
         }
