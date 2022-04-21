@@ -60,7 +60,7 @@ namespace HappyVacation.Controllers
         }
 
         [HttpGet("{orderId:int}")]
-        public async Task<ActionResult> GetOrderById(int orderId)
+        public async Task<ActionResult> GetOrderById(int orderId)   // this is for management (provider)
         {
             try
             {

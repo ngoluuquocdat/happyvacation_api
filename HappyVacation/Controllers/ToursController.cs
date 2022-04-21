@@ -47,14 +47,32 @@ namespace HappyVacation.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{tourId:int}/reviews")]
-        public async Task<ActionResult> GetTourReviews(int tourId, [FromQuery] int page, int perPage)
+
+        // tour manage for provider
+        [HttpPut("{tourId:int}/providingState")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> ChangeTourProvidingState(int tourId)
         {
-            var result = await _tourRepository.GetTourReviews(tourId, page, perPage);
+            try
+            {
+                var currentUser = HttpContext.User;
+                var userId = Int32.Parse(currentUser.FindFirst("id").Value);
 
-            return Ok(result);
+                var result = await _tourRepository.ChangeTourProvidingState(userId, tourId);
+
+                if (result == -1)
+                {
+                    return Forbid();
+                }
+                var updatedTour = await _tourRepository.GetTourByIdManage(result);
+                return Ok(updatedTour);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }       
         }
-
 
         [HttpPost]
         public async Task<ActionResult> CreateTour([FromForm] CreateTourRequest request)
@@ -74,6 +92,47 @@ namespace HappyVacation.Controllers
             var newTour = await _tourRepository.GetTourById(newTourId);
 
             return CreatedAtAction(nameof(GetTourById), new { tourId = newTourId }, newTour);
+        }
+        [HttpPut("{tourId}")]
+        public async Task<ActionResult> UpdateTour(int tourId, [FromForm] UpdateTourRequest request)
+        {
+            try
+            {
+                if (request == null)
+                {
+                    return BadRequest("Invalid data.");
+                }
+
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _tourRepository.UpdateTour(userId, tourId, request);
+                if(result == -1)
+                {
+                    return Forbid();
+                }
+
+                // get updated tour
+                var updatedTour = await _tourRepository.GetTourById(result);
+
+                return Ok(updatedTour);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }          
+        }
+
+
+        // tour reviews
+
+        [HttpGet("{tourId:int}/reviews")]
+        public async Task<ActionResult> GetTourReviews(int tourId, [FromQuery] int page, int perPage)
+        {
+            var result = await _tourRepository.GetTourReviews(tourId, page, perPage);
+
+            return Ok(result);
         }
 
         [HttpPost("{tourId:int}/reviews")]

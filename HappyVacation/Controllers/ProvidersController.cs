@@ -1,4 +1,5 @@
 ﻿using HappyVacation.DTOs.Providers;
+using HappyVacation.DTOs.Tours;
 using HappyVacation.Repositories.Orders;
 using HappyVacation.Repositories.Providers;
 using Microsoft.AspNetCore.Authorization;
@@ -76,8 +77,7 @@ namespace HappyVacation.Controllers
         }
 
         [HttpGet("{providerId:int}/tours")]
-        [Authorize(Roles = "Provider")]
-        public async Task<ActionResult> GetTours(int providerId, [FromQuery] string sort, int page, int perPage)
+        public async Task<ActionResult> GetTours(int providerId, [FromQuery] string? sort, int page, int perPage)
         {
             var result = await _providerRepository.GetTours(providerId, sort, page, perPage);
             if (result == null)
@@ -86,6 +86,29 @@ namespace HappyVacation.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpGet("me/tours")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetToursManage([FromQuery] GetTourManageRequest request)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _providerRepository.GetToursManage(userId, request);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
         }
 
         [HttpGet("me/orders")]

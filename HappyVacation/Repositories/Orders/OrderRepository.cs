@@ -43,13 +43,14 @@ namespace HappyVacation.Repositories.Orders
             // fire new notification 
             var providerId = await _context.Tours.Where(x => x.Id == request.TourId).Select(x => x.ProviderId).FirstOrDefaultAsync();
 
-            FirebaseApp.Create(new AppOptions()
-            {
-                Credential = GoogleCredential.FromFile("private_firebase_admin_key.json")
+            if (FirebaseApp.DefaultInstance == null) 
+            { 
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile("private_firebase_admin_key.json")
 
-            });
-
-            var registrationToken = "fm1zZCM6GS4jvHwJnQylWi:APA91bENrHSRP23r5wAkNfrbAcE4TBCAZG70zYlIuOrwMGS2fNJuN9q2LieT1131h93KjPibqAFJ4S7aarHjiBlYHw2KarZHNUi58khMZcIHb7VBscYMXQYpJp-E1eeK-jlHUE_EIvzN";
+                });          
+            }
 
             // The topic name can be optionally prefixed with "/topics/".
             var topic = $"Tour_Provider_{providerId}";
@@ -62,7 +63,6 @@ namespace HappyVacation.Repositories.Orders
                     { "type", "tour" },
                     { "provider", providerId.ToString() }
                 },
-                //Token = registrationToken,
                 Topic = topic,
                 Notification = new Notification()
                 {

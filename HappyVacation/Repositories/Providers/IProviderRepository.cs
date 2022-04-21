@@ -8,7 +8,13 @@ namespace HappyVacation.Repositories.Providers
     {
         Task<ProviderVm> GetProviderById(int providerId);
         Task<ProviderProfileVm> GetProviderProfile(int userId);
-        Task<PagedResult<TourMainInfoVm>> GetTours(int providerId, string sort, int page, int perPage);
         Task<bool?> UpdateProvider(int userId, UpdateProviderRequest request);
+
+        // get tours functions for user 
+        Task<PagedResult<TourMainInfoVm>> GetTours(int providerId, string? sort, int page, int perPage);     
+
+        // get tours functions for provider
+        Task<PagedResult<TourMainInfoManageVm>> GetToursManage(int userId, GetTourManageRequest request);   
+        
     }
 }
