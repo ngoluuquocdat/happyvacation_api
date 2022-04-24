@@ -34,7 +34,7 @@ namespace HappyVacation.Repositories.Orders
                 TouristEmail = request.TouristEmail,
                 OrderDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
-                State = "pending",
+                State = "pending"
             };
 
             _context.Orders.Add(order);
@@ -121,6 +121,12 @@ namespace HappyVacation.Repositories.Orders
             // filter by keyword tourist info
             if (!string.IsNullOrEmpty(keyword))
             {
+                // by order Id
+                int orderId;
+                if (int.TryParse(keyword, out orderId))
+                {
+                    query = query.Where(x => (x.Id == orderId));
+                }
                 var phoneRegex = new Regex(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}");
                 // by phone
                 if(phoneRegex.IsMatch(keyword))
@@ -133,10 +139,10 @@ namespace HappyVacation.Repositories.Orders
                     query = query.Where(x => (x.TouristEmail.Contains(keyword)));
                 }
                 // by name
-                if(!EmailValid.IsValid(keyword) && !phoneRegex.IsMatch(keyword))
+                if(!EmailValid.IsValid(keyword) && !phoneRegex.IsMatch(keyword) && !int.TryParse(keyword, out orderId))
                 {
                     query = query.Where(x => (x.TouristName.Contains(keyword)));
-                }              
+                }             
             }
 
             // filter by state

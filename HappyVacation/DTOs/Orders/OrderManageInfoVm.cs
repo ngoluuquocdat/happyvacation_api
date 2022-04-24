@@ -17,13 +17,8 @@
         public int TotalPrice { get; set; }
         public string ThumbnailUrl { get; set; }
         public string State { get; set; }
-        //public int ProviderId { get; set; }
-        //public string ProviderName { get; set; }
-        //public int UserId { get; set; }
-        //public string Username { get; set; }
         public string TouristName { get; set; }
         public string TouristPhone { get; set; }
         public string TouristEmail { get; set; }
-        //public string AvatarUrl { get; set; }
     }
 }

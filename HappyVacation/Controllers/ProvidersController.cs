@@ -133,5 +133,31 @@ namespace HappyVacation.Controllers
                 return StatusCode(500);
             }
         }
+
+        [HttpGet("me/orders/report")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetOrderExport([FromQuery] string startDate, string endDate)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _providerRepository.GetOrderExport(userId, startDate, endDate);
+                if (result == "Forbid")
+                {
+                    return Forbid();
+                }
+                return Ok( new
+                {
+                    filePath = result
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
     }
 }

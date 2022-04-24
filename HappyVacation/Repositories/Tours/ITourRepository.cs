@@ -9,7 +9,7 @@ namespace HappyVacation.Repositories.Tours
         Task<PagedResult<TourMainInfoVm>> GetTours(GetTourRequest request);
         Task<TourVm> GetTourById(int tourId);
         Task<TourMainInfoManageVm> GetTourByIdManage(int tourId);
-        Task<int> Create(CreateTourRequest request);
+        Task<int> Create(int userId, CreateTourRequest request);
         Task<int> ChangeTourProvidingState(int userId, int tourId);
         Task<int> UpdateTour(int userId, int tourId, UpdateTourRequest request);
 

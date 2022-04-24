@@ -77,22 +77,30 @@ namespace HappyVacation.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateTour([FromForm] CreateTourRequest request)
         {
-            if (request == null)
+            try
             {
-                return BadRequest("Invalid data.");
-            }
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
 
-            int newTourId = await _tourRepository.Create(request);
-            if (newTourId == 0)
+                int newTourId = await _tourRepository.Create(userId, request);
+
+                if (newTourId == -1)
+                {
+                    return Forbid();
+                }
+
+                // get new tour created
+                var newTour = await _tourRepository.GetTourById(newTourId);
+
+                return CreatedAtAction(nameof(GetTourById), new { tourId = newTourId }, newTour);
+            }
+            catch (Exception ex)
             {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
                 return StatusCode(500);
-            }
-
-            // get new tour created
-            var newTour = await _tourRepository.GetTourById(newTourId);
-
-            return CreatedAtAction(nameof(GetTourById), new { tourId = newTourId }, newTour);
+            }        
         }
+
         [HttpPut("{tourId}")]
         public async Task<ActionResult> UpdateTour(int tourId, [FromForm] UpdateTourRequest request)
         {

@@ -12,9 +12,11 @@ namespace HappyVacation.Repositories.Providers
 
         // get tours functions for user 
         Task<PagedResult<TourMainInfoVm>> GetTours(int providerId, string? sort, int page, int perPage);     
-
         // get tours functions for provider
-        Task<PagedResult<TourMainInfoManageVm>> GetToursManage(int userId, GetTourManageRequest request);   
-        
+        Task<PagedResult<TourMainInfoManageVm>> GetToursManage(int userId, GetTourManageRequest request);
+
+        // get order report
+        Task<string> GetOrderExport(int userId, string startDate, string endDate);
+
     }
 }

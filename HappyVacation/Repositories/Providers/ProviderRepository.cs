@@ -1,10 +1,13 @@
 ﻿using HappyVacation.Database;
 using HappyVacation.DTOs.Common;
+using HappyVacation.DTOs.Orders;
 using HappyVacation.DTOs.Places;
 using HappyVacation.DTOs.Providers;
 using HappyVacation.DTOs.Tours;
 using HappyVacation.Services.Storage;
+using HappyVacation.Services.XLSX;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace HappyVacation.Repositories.Providers
 {
@@ -12,12 +15,15 @@ namespace HappyVacation.Repositories.Providers
     {
         private readonly MyDbContext _context;
         private readonly IStorageService _storageService;
+        private readonly IXLSXService _xlsxService;
 
-        public ProviderRepository(MyDbContext context, IStorageService storageService)
+        public ProviderRepository(MyDbContext context, IStorageService storageService, IXLSXService xlsxService)
         {
             _context = context;
             _storageService = storageService;
+            _xlsxService = xlsxService;
         }
+
 
         public async Task<ProviderVm> GetProviderById(int providerId)
         {
@@ -260,6 +266,48 @@ namespace HappyVacation.Repositories.Providers
             var result = await _context.SaveChangesAsync();
 
             return result > 0;
+        }
+        public async Task<string> GetOrderExport(int userId, string startDate, string endDate)
+        {
+            var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
+            if (providerId == null || providerId == 0)
+            {
+                return "Forbid";
+            }
+            var _startDate = DateTime.Parse(startDate);
+            var _endDate = DateTime.Parse(endDate);
+            // get orders
+            var orders = await _context.Orders
+                                    .Where(x => (x.Tour.ProviderId == providerId) &&
+                                    (x.OrderDate.Date >= _startDate) && (x.OrderDate.Date <= _endDate) &&
+                                    (x.State != "pending"))
+                                    .AsNoTracking().Select(x => new OrderManageInfoVm()
+                                    {
+                                        Id = x.Id,
+                                        TourId = x.TourId,
+                                        TourName = x.Tour.TourName,
+                                        DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                                        OrderDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                                        ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
+                                        //Duration = x.Tour.Duration,
+                                        //IsPrivate = x.Tour.IsPrivate,
+                                        Adults = x.Adults,
+                                        Children = x.Children,
+                                        PricePerAdult = x.Tour.PricePerAdult,
+                                        PricePerChild = x.Tour.PricePerChild,
+                                        TotalPrice = x.Adults * x.Tour.PricePerAdult + x.Children * x.Tour.PricePerChild,
+                                        //ThumbnailUrl = (x.Tour.TourImages.Count() > 0) ? x.Tour.TourImages[0].Url : String.Empty,
+                                        State = x.State,
+                                        TouristName = x.TouristName,
+                                        TouristPhone = x.TouristPhone,
+                                        TouristEmail = x.TouristEmail
+                                    }).ToListAsync();
+            // create report file
+            var exportFileName = $"Orders.{startDate}_{endDate}";
+            var exportFilePath = await _xlsxService.ExportTourOrder((int)providerId, exportFileName, orders);
+            
+
+            return exportFilePath;
         }
     }
 }

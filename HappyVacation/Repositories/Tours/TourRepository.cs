@@ -210,8 +210,17 @@ namespace HappyVacation.Repositories.Tours
 
             return tour;
         }
-        public async Task<int> Create(CreateTourRequest request)
+        public async Task<int> Create(int userId, CreateTourRequest request)
         {
+            // get provider Id
+            var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
+
+            // check if provider exists
+            if (providerId == null || providerId == 0)
+            {
+                return -1;
+            }
+
             // tour's main info
             Tour tour = new Tour()
             {
@@ -224,7 +233,7 @@ namespace HappyVacation.Repositories.Tours
                 Destination = request.Destination,
                 PricePerAdult = request.PricePerAdult,
                 PricePerChild = request.PricePerChild,
-                ProviderId = 1,
+                ProviderId = (int)providerId,
                 IsAvailable = true
             };
             // places
