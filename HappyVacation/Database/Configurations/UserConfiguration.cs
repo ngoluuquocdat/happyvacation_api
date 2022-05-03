@@ -22,6 +22,7 @@ namespace HappyVacation.Database.Configurations
             builder.Property(x => x.Email).IsRequired().HasMaxLength(62);
 
             builder.Property(x => x.ProviderId).IsRequired(false);
+            builder.Property(x => x.HotelId).IsRequired(false);
 
 
             // relationship config
@@ -29,7 +30,12 @@ namespace HappyVacation.Database.Configurations
             // 1-1: user - provider
             builder.HasOne(user => user.Provider)
                 .WithOne(provider => provider.User)
-                .HasForeignKey<User>(user => user.ProviderId);           
+                .HasForeignKey<User>(user => user.ProviderId);
+
+            // 1-1: user - hotel
+            builder.HasOne(user => user.Hotel)
+                .WithOne(hotel => hotel.User)
+                .HasForeignKey<User>(user => user.HotelId);
         }
     }
 }

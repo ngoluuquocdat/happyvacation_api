@@ -23,8 +23,6 @@ namespace HappyVacation.Controllers
         [HttpGet("{providerId:int}")]
         public async Task<ActionResult> GetProviderById(int providerId)
         {
-            var claimsPrincipal = this.User;
-            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
 
             var result = await _providerRepository.GetProviderById(providerId);
             if (result == null)

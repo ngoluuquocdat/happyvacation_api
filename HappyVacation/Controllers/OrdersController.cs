@@ -37,7 +37,6 @@ namespace HappyVacation.Controllers
                 Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
                 return StatusCode(500);
             }
-
         }
 
         [HttpGet("me")]

@@ -1,4 +1,5 @@
 ﻿using HappyVacation.Database.Entities;
+using HappyVacation.Database.Entities.HotelBooking;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
@@ -39,6 +40,7 @@ namespace HappyVacation.Database.Extensions
                     Email = "ngoluuquocdat@gmail.com",
                     AvatarUrl = null,
                     ProviderId = null,
+                    HotelId = null,
                     IsEnabled = true
                 },
                 new User
@@ -52,6 +54,7 @@ namespace HappyVacation.Database.Extensions
                     Phone = "0921231220",
                     Email = "tuandang29042000@gmail.com",
                     ProviderId = 1,
+                    HotelId = null,
                     AvatarUrl = "/storage/tuan.jpg",
                     IsEnabled = true
                 },
@@ -66,6 +69,7 @@ namespace HappyVacation.Database.Extensions
                     Phone = "0945501905",
                     Email = "braddinh1952000@gmail.com",
                     ProviderId = null,
+                    HotelId = null,
                     AvatarUrl = "/storage/tai.jpg",
                     IsEnabled = true
                 },
@@ -80,7 +84,38 @@ namespace HappyVacation.Database.Extensions
                     Phone = "0905553859",
                     Email = "ngoluuquocdat@gmail.com",
                     ProviderId = null,
+                    HotelId = null,
                     AvatarUrl = "/storage/dat.jpg",
+                    IsEnabled = true
+                },
+                new User
+                {
+                    Id = 8,
+                    Username = "thaiduy",
+                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Thaiduy123!")),
+                    PasswordSalt = hmac.Key,
+                    FirstName = "Thai Duy",
+                    LastName = "Lam",
+                    Phone = "0764132745",
+                    Email = "duylam2906@gmail.com",
+                    ProviderId = null,
+                    HotelId = 1,
+                    AvatarUrl = "/storage/duy.jpg",
+                    IsEnabled = true
+                },
+                new User
+                {
+                    Id = 9,
+                    Username = "xuantoan",
+                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Xuantoan123!")),
+                    PasswordSalt = hmac.Key,
+                    FirstName = "Xuan Toan",
+                    LastName = "Mai",
+                    Phone = "0783803087",
+                    Email = "xuantoan2401@gmail.com",
+                    ProviderId = null,
+                    HotelId = 2,
+                    AvatarUrl = "/storage/toan.jpg",
                     IsEnabled = true
                 }
             );
@@ -100,6 +135,11 @@ namespace HappyVacation.Database.Extensions
                 {
                     Id = 3,
                     RoleName = "Tourist"
+                },
+                new Role
+                {
+                    Id = 4,
+                    RoleName = "Hotel_Owner"
                 }
             );
             // data seeding for UserRoles
@@ -110,7 +150,11 @@ namespace HappyVacation.Database.Extensions
                 new UserRole { UserId = 2, RoleId = 2 },
                 new UserRole { UserId = 2, RoleId = 3 },
                 new UserRole { UserId = 3, RoleId = 3 },
-                new UserRole { UserId = 4, RoleId = 3 }
+                new UserRole { UserId = 4, RoleId = 3 },
+                new UserRole { UserId = 8, RoleId = 3 },
+                new UserRole { UserId = 8, RoleId = 4 },
+                new UserRole { UserId = 9, RoleId = 3 },
+                new UserRole { UserId = 9, RoleId = 4 }
             );
             // data seeding for Places
             modelBuilder.Entity<Place>().HasData(
@@ -362,6 +406,164 @@ namespace HappyVacation.Database.Extensions
                     TourId = 2,
                     //ProviderId = 1,
                     UserId = 3
+                }
+            );
+            // data seeding for Hotels
+            modelBuilder.Entity<Hotel>().HasData(
+               new Hotel
+               {
+                   Id = 1,
+                   Name = "Hai Yen Hotel",
+                   Description = "Featuring a free-form outdoor pool and free private parking, Hai Yen Hotel offers budget accommodations with free Wi-Fi and flat-screen TVs. It is centrally located in Hoi An Ancient Town.&" +
+                            "Hotel Hai Yen is 2.4 km from well-known Cua Dai Beach.&Large air conditioned rooms at Hai Yen are equipped with a private balcony and seating areas.They are equipped with a safe, electric teakettle and satellite TV.Private bathrooms have a bathtub, toiletries and a hairdryer.&" +
+                            "The staff is available at the front desk 24 hours a day and can help with travel arrangements.Guests can purchase gifts at the souvenir shop. Hai Yen Hotel provides shuttle service and currency exchange.&"+
+                            "Local dishes, snacks and beverages are offered at Hai Yen’s restaurant.",
+                   Phone = "02033969555",
+                   Email = "sales@haiyenhotel.com.vn",
+                   Province = "Quang Nam",
+                   District = "Hoi An",
+                   Ward = "Cam Chau",
+                   Address = "568 Cua Dai",
+                   MinChildAge = 13,
+                   Stars = 2,
+                   HasParkingLot = true,
+                   HasBreakfast = true,
+                   PetAllowed = false,
+                   CreditCardRequired = false,
+                   PayInAdvance = false,
+                   Note = "Please inform Hai Yen Hotel of your expected arrival time in advance. You can use the Special Requests box when booking, or contact the property directly using the contact details in your confirmation.&" +
+                         "Guests are required to show a photo ID and credit card upon check-in. Please note that all Special Requests are subject to availability and additional charges may apply.&" +
+                         "In the event of an early departure, the property will charge you the full amount for your stay.&" +
+                         "Parking is subject to availability due to limited spaces.&",
+                   PlaceId = 3
+               },
+               new Hotel
+               {
+                   Id = 2,
+                   Name = "Hoi An Beach Resort ",
+                   Description = "This property is 1 minute walk from the beach. Nestled between Cua Dai Beach and De Vong River, Hoi An Beach Resort features 2 outdoor pools. It provides free Wi-Fi and two-way shuttle services to Hoi An Ancient Town.&" +
+                         "Rooms at Resort Hoi An come with private balconies overlooking the garden, river or sea. Each room is equipped with a TV, safety deposit box and tea/coffee making facilities..&" +
+                         "Local cooking classes begin with a guided boat trip to Hoi An Market. Waterlily Spa offers Vietnamese massage therapies. Other recreational activities include a game of billiards or a workout in the fitness center..&" +
+                         "At River Breeze Restaurant, guests can eat indoors or on the balcony overlooking the river. Snacks and refreshments can be enjoyed at the Sunshine Bar and the beachfront Sands Bar..&" +
+                         "Hoi An Beach Resort is a 45-minute drive from Danang International Airport and 2.5 mi from Hoi An’s town center. An airport shuttle is available at extra charge.",
+                   Phone = "02353927011",
+                   Email = "reservation@hoianbeachresort.com.vn",
+                   Province = "Quang Nam",
+                   District = "Hoi An",
+                   Ward = "Cua Dai",
+                   Address = "01 Cua Dai",
+                   MinChildAge = 6,
+                   Stars = 4,
+                   HasParkingLot = true,
+                   HasBreakfast = true,
+                   PetAllowed = false,
+                   CreditCardRequired = true,
+                   PayInAdvance = false,
+                   Note = "",
+                   PlaceId = 3
+               }
+           );
+            // data seeding for Rooms
+            modelBuilder.Entity<Room>().HasData(
+                new Room
+                {
+                    Id = 1,
+                    HotelId = 1,
+                    Name = "Standard Double or Twin Room",
+                    Description = "This double room features a electric kettle, air conditioning and tile/marble floor.&",
+                    MaxAdults = 2,
+                    Area = 25,
+                    Price = 50,
+                    Stock = 4,
+                    Views = "None",
+                    SmokingAllowed = false
+                },
+                new Room
+                {
+                    Id = 2,
+                    HotelId = 1,
+                    Name = "Superior Double or Twin Room",
+                    Description = "This twin room features a minibar, tile/marble floor and electric kettle.&",
+                    MaxAdults = 3,
+                    Area = 25,
+                    Price = 54,
+                    Stock = 4,
+                    Views = "None",
+                    SmokingAllowed = false
+                },
+                new Room
+                {
+                    Id = 3,
+                    HotelId = 2,
+                    Name = "Grand Deluxe",
+                    Description = "Located on the ground floor, air-conditioned rooms feature Eastern designs and traditional Vietnamese lanterns. There is a private balcony that leads to the garden. En suite bathroom comes with a bathtub and separate shower facility.&",
+                    MaxAdults = 2,
+                    Area = 55,
+                    Price = 144,
+                    Stock = 8,
+                    Views = "Garden View",
+                    SmokingAllowed = false                  
+                }
+            );
+            // data seeding for Bookings
+            modelBuilder.Entity<Booking>().HasData(
+                new Booking
+                {
+                    Id = 1,
+                    BookingDate = new DateTime(2022, 04, 26),
+                    CheckIn = new DateTime(2022, 04, 30),
+                    CheckOut = new DateTime(2022, 05, 01),
+                    State = "confirmed",
+                    CancelReason = null,
+                    Adults = 8,
+                    Children = 0,
+                    CustomerName = "Cong Tai Dinh",
+                    CustomerPhone = "0945501905",
+                    CustomerEmail = "braddinh1952000@gmail.com",
+                    HotelId = 1,
+                    UserId = 3
+                },
+                new Booking
+                {
+                    Id = 2,
+                    BookingDate = new DateTime(2022, 04, 26),
+                    CheckIn = new DateTime(2022, 04, 28),
+                    CheckOut = new DateTime(2022, 05, 02),
+                    State = "confirmed",
+                    CancelReason = null,
+                    Adults = 4,
+                    Children = 0,
+                    CustomerName = "Quoc Dat Ngo Luu",
+                    CustomerPhone = "0905553859",
+                    CustomerEmail = "ngoluuquocdat@gmail.com",
+                    HotelId = 2,
+                    UserId = 4
+                }
+            );
+            // data seeding for BookingDetails
+            modelBuilder.Entity<BookingDetail>().HasData(
+                // booking id = 1
+                new BookingDetail
+                {
+                    Id = 1,
+                    BookingId = 1,
+                    RoomId = 1,
+                    Quantity = 2
+                },
+                new BookingDetail
+                {
+                    Id = 2,
+                    BookingId = 1,
+                    RoomId = 2,
+                    Quantity = 2
+                },
+                // booking id = 2
+                new BookingDetail
+                {
+                    Id = 3,
+                    BookingId = 2,
+                    RoomId = 3,
+                    Quantity = 2
                 }
             );
         }

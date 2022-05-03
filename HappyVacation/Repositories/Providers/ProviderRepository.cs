@@ -41,7 +41,7 @@ namespace HappyVacation.Repositories.Providers
                                                 Phone = x.ProviderPhone,
                                                 Email = x.ProviderEmail,
                                                 AvatarUrl = x.AvatarUrl,
-                                                DateCreated = x.DateCreated,
+                                                DateCreated = x.DateCreated.ToString("dd/MM/yyyy"),
                                                 Description = x.Description,
                                                 TourAvailable = x.Tours.Count(),
                                             }).FirstOrDefaultAsync();
@@ -93,16 +93,16 @@ namespace HappyVacation.Repositories.Providers
                         query = query.OrderByDescending(x => x.Id); // should be 'Date Created';
                         break;
                     case "price-up":
-                        query = query.OrderBy(x => x.PricePerAdult * x.MinAdults);
+                        query = query.OrderBy(x => x.PricePerAdult * x.MinAdults).ThenByDescending(x => x.Id); ;
                         break;
                     case "price-down":
-                        query = query.OrderByDescending(x => x.PricePerAdult * x.MinAdults);
+                        query = query.OrderByDescending(x => x.PricePerAdult * x.MinAdults).ThenByDescending(x => x.Id);
                         break;
                     case "rating":
-                        query = query.OrderByDescending(x => (x.Reviews.Count() != 0) ? (float)Math.Round(x.Reviews.Average(r => r.Rating), 2) : 0);
+                        query = query.OrderByDescending(x => (x.Reviews.Count() != 0) ? (float)Math.Round(x.Reviews.Average(r => r.Rating), 2) : 0).ThenByDescending(x => x.Id);
                         break;
                     case "orders":
-                        query = query.OrderByDescending(x => x.Orders.Where(o => o.State == "confirmed").Count());
+                        query = query.OrderByDescending(x => x.Orders.Where(o => o.State == "confirmed").Count()).ThenByDescending(x => x.Id);
                         break;
                 }
             }
@@ -287,7 +287,7 @@ namespace HappyVacation.Repositories.Providers
                                         TourId = x.TourId,
                                         TourName = x.Tour.TourName,
                                         DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
-                                        OrderDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                                        OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                                         ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                                         //Duration = x.Tour.Duration,
                                         //IsPrivate = x.Tour.IsPrivate,

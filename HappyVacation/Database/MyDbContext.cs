@@ -1,5 +1,7 @@
 ﻿using HappyVacation.Database.Configurations;
+using HappyVacation.Database.Configurations.HotelBooking;
 using HappyVacation.Database.Entities;
+using HappyVacation.Database.Entities.HotelBooking;
 using HappyVacation.Database.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,8 @@ namespace HappyVacation.Database
             base.OnModelCreating(modelBuilder);
 
             // Configure using Fluent API
+
+            // configuration for tour booking
             modelBuilder.ApplyConfiguration(new PlaceConfiguration());
             modelBuilder.ApplyConfiguration(new TourPlaceConfiguration());
 
@@ -32,6 +36,12 @@ namespace HappyVacation.Database
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
+            // configuration for hotel booking
+            modelBuilder.ApplyConfiguration(new HotelConfiguration());
+            modelBuilder.ApplyConfiguration(new RoomConfiguration());
+            modelBuilder.ApplyConfiguration(new BookingConfiguration());
+            modelBuilder.ApplyConfiguration(new BookingDetailConfiguration());
+
             // Data seeding
             modelBuilder.Seed();
         }
@@ -50,5 +60,11 @@ namespace HappyVacation.Database
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
+
+        // hotel booking
+        public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<BookingDetail> BookingDetails { get; set; }
     }
 }

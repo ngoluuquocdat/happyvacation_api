@@ -1,5 +1,6 @@
 using HappyVacation.Database;
 using HappyVacation.Repositories.Authen;
+using HappyVacation.Repositories.Hotels;
 using HappyVacation.Repositories.Orders;
 using HappyVacation.Repositories.Providers;
 using HappyVacation.Repositories.Tours;
@@ -100,6 +101,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 
 var app = builder.Build();
 

@@ -1,4 +1,6 @@
-﻿namespace HappyVacation.Database.Entities
+﻿using HappyVacation.Database.Entities.HotelBooking;
+
+namespace HappyVacation.Database.Entities
 {
     public class Place
     {
@@ -10,5 +12,7 @@
         // navigation props
         // 1 place - n tour places
         public List<TourPlace> TourPlaces { get; set; }
+        // 1 place - n hotels
+        public List<Hotel> Hotels { get; set; }
     }
 }

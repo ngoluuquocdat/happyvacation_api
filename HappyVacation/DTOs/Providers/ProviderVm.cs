@@ -7,7 +7,7 @@
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
-        public DateTime DateCreated { get; set; }
+        public string DateCreated { get; set; }
         public float AverageRating { get; set; }
         public int TourAvailable { get; set; }
         public string Description { get; set; }

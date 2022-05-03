@@ -4,6 +4,7 @@ using HappyVacation.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HappyVacation.Database.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220425151437_HotelBookingBaseTables")]
+    partial class HotelBookingBaseTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -368,38 +370,6 @@ namespace HappyVacation.Database.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Adults = 8,
-                            BookingDate = new DateTime(2022, 4, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CheckIn = new DateTime(2022, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CheckOut = new DateTime(2022, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Children = 0,
-                            CustomerEmail = "braddinh1952000@gmail.com",
-                            CustomerName = "Cong Tai Dinh",
-                            CustomerPhone = "0945501905",
-                            HotelId = 1,
-                            State = "confirmed",
-                            UserId = 3
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Adults = 4,
-                            BookingDate = new DateTime(2022, 4, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CheckIn = new DateTime(2022, 4, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CheckOut = new DateTime(2022, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Children = 0,
-                            CustomerEmail = "ngoluuquocdat@gmail.com",
-                            CustomerName = "Quoc Dat Ngo Luu",
-                            CustomerPhone = "0905553859",
-                            HotelId = 2,
-                            State = "confirmed",
-                            UserId = 4
-                        });
                 });
 
             modelBuilder.Entity("HappyVacation.Database.Entities.HotelBooking.BookingDetail", b =>
@@ -426,29 +396,6 @@ namespace HappyVacation.Database.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("BookingDetails", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BookingId = 1,
-                            Quantity = 2,
-                            RoomId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            BookingId = 1,
-                            Quantity = 2,
-                            RoomId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            BookingId = 2,
-                            Quantity = 2,
-                            RoomId = 3
-                        });
                 });
 
             modelBuilder.Entity("HappyVacation.Database.Entities.HotelBooking.Hotel", b =>
@@ -527,50 +474,6 @@ namespace HappyVacation.Database.Migrations
                     b.HasIndex("PlaceId");
 
                     b.ToTable("Hotels", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "568 Cua Dai",
-                            CreditCardRequired = false,
-                            Description = "Featuring a free-form outdoor pool and free private parking, Hai Yen Hotel offers budget accommodations with free Wi-Fi and flat-screen TVs. It is centrally located in Hoi An Ancient Town.&Hotel Hai Yen is 2.4 km from well-known Cua Dai Beach.&Large air conditioned rooms at Hai Yen are equipped with a private balcony and seating areas.They are equipped with a safe, electric teakettle and satellite TV.Private bathrooms have a bathtub, toiletries and a hairdryer.&The staff is available at the front desk 24 hours a day and can help with travel arrangements.Guests can purchase gifts at the souvenir shop. Hai Yen Hotel provides shuttle service and currency exchange.&Local dishes, snacks and beverages are offered at Hai Yen’s restaurant.",
-                            District = "Hoi An",
-                            Email = "sales@haiyenhotel.com.vn",
-                            HasBreakfast = true,
-                            HasParkingLot = true,
-                            MinChildAge = 13,
-                            Name = "Hai Yen Hotel",
-                            Note = "Please inform Hai Yen Hotel of your expected arrival time in advance. You can use the Special Requests box when booking, or contact the property directly using the contact details in your confirmation.&Guests are required to show a photo ID and credit card upon check-in. Please note that all Special Requests are subject to availability and additional charges may apply.&In the event of an early departure, the property will charge you the full amount for your stay.&Parking is subject to availability due to limited spaces.&",
-                            PayInAdvance = false,
-                            PetAllowed = false,
-                            Phone = "02033969555",
-                            PlaceId = 3,
-                            Province = "Quang Nam",
-                            Stars = 2,
-                            Ward = "Cam Chau"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "01 Cua Dai",
-                            CreditCardRequired = true,
-                            Description = "This property is 1 minute walk from the beach. Nestled between Cua Dai Beach and De Vong River, Hoi An Beach Resort features 2 outdoor pools. It provides free Wi-Fi and two-way shuttle services to Hoi An Ancient Town.&Rooms at Resort Hoi An come with private balconies overlooking the garden, river or sea. Each room is equipped with a TV, safety deposit box and tea/coffee making facilities..&Local cooking classes begin with a guided boat trip to Hoi An Market. Waterlily Spa offers Vietnamese massage therapies. Other recreational activities include a game of billiards or a workout in the fitness center..&At River Breeze Restaurant, guests can eat indoors or on the balcony overlooking the river. Snacks and refreshments can be enjoyed at the Sunshine Bar and the beachfront Sands Bar..&Hoi An Beach Resort is a 45-minute drive from Danang International Airport and 2.5 mi from Hoi An’s town center. An airport shuttle is available at extra charge.",
-                            District = "Hoi An",
-                            Email = "reservation@hoianbeachresort.com.vn",
-                            HasBreakfast = true,
-                            HasParkingLot = true,
-                            MinChildAge = 6,
-                            Name = "Hoi An Beach Resort ",
-                            Note = "",
-                            PayInAdvance = false,
-                            PetAllowed = false,
-                            Phone = "02353927011",
-                            PlaceId = 3,
-                            Province = "Quang Nam",
-                            Stars = 4,
-                            Ward = "Cua Dai"
-                        });
                 });
 
             modelBuilder.Entity("HappyVacation.Database.Entities.HotelBooking.Room", b =>
@@ -617,47 +520,6 @@ namespace HappyVacation.Database.Migrations
                     b.HasIndex("HotelId");
 
                     b.ToTable("Rooms", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Area = 25,
-                            Description = "This double room features a electric kettle, air conditioning and tile/marble floor.&",
-                            HotelId = 1,
-                            MaxAdults = 2,
-                            Name = "Standard Double or Twin Room",
-                            Price = 50,
-                            SmokingAllowed = false,
-                            Stock = 4,
-                            Views = "None"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Area = 25,
-                            Description = "This twin room features a minibar, tile/marble floor and electric kettle.&",
-                            HotelId = 1,
-                            MaxAdults = 3,
-                            Name = "Superior Double or Twin Room",
-                            Price = 54,
-                            SmokingAllowed = false,
-                            Stock = 4,
-                            Views = "None"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Area = 55,
-                            Description = "Located on the ground floor, air-conditioned rooms feature Eastern designs and traditional Vietnamese lanterns. There is a private balcony that leads to the garden. En suite bathroom comes with a bathtub and separate shower facility.&",
-                            HotelId = 2,
-                            MaxAdults = 2,
-                            Name = "Grand Deluxe",
-                            Price = 144,
-                            SmokingAllowed = false,
-                            Stock = 8,
-                            Views = "Garden View"
-                        });
                 });
 
             modelBuilder.Entity("HappyVacation.Database.Entities.Itinerary", b =>
@@ -1121,11 +983,6 @@ namespace HappyVacation.Database.Migrations
                         {
                             Id = 3,
                             RoleName = "Tourist"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            RoleName = "Hotel_Owner"
                         });
                 });
 
@@ -1445,8 +1302,8 @@ namespace HappyVacation.Database.Migrations
                             FirstName = "Quoc Dat",
                             IsEnabled = true,
                             LastName = "Ngo Luu",
-                            PasswordHash = new byte[] { 188, 113, 182, 69, 220, 103, 230, 66, 110, 151, 140, 159, 223, 105, 193, 207, 161, 241, 161, 16, 239, 242, 174, 72, 116, 148, 74, 66, 211, 205, 97, 95, 177, 33, 183, 108, 96, 227, 22, 213, 13, 73, 35, 16, 208, 210, 69, 42, 218, 116, 244, 161, 181, 145, 4, 182, 177, 194, 23, 99, 48, 231, 4, 141 },
-                            PasswordSalt = new byte[] { 16, 1, 80, 89, 75, 174, 85, 243, 21, 169, 230, 192, 75, 193, 63, 36, 5, 104, 120, 122, 81, 201, 246, 195, 118, 212, 227, 128, 32, 116, 147, 31, 202, 129, 155, 10, 86, 204, 48, 44, 57, 46, 14, 240, 206, 71, 236, 70, 12, 21, 53, 126, 188, 209, 215, 236, 233, 65, 137, 144, 185, 165, 223, 42, 116, 244, 170, 127, 126, 203, 178, 92, 229, 165, 110, 200, 93, 57, 254, 62, 23, 207, 156, 143, 3, 179, 13, 9, 250, 67, 234, 68, 169, 153, 34, 236, 218, 50, 72, 12, 161, 81, 215, 41, 193, 195, 175, 207, 220, 80, 10, 136, 239, 22, 218, 76, 147, 173, 28, 251, 21, 46, 215, 57, 69, 173, 161, 124 },
+                            PasswordHash = new byte[] { 13, 107, 194, 81, 27, 72, 231, 118, 175, 96, 129, 163, 158, 36, 77, 69, 31, 96, 1, 64, 13, 49, 245, 15, 30, 108, 193, 37, 224, 23, 204, 1, 217, 101, 124, 3, 82, 12, 157, 50, 58, 23, 186, 167, 198, 125, 102, 82, 89, 53, 116, 170, 90, 90, 181, 108, 175, 183, 98, 170, 27, 53, 185, 46 },
+                            PasswordSalt = new byte[] { 158, 116, 178, 155, 29, 238, 182, 243, 101, 231, 114, 173, 110, 15, 40, 48, 115, 50, 78, 82, 67, 30, 205, 209, 29, 62, 93, 24, 25, 223, 162, 198, 130, 135, 250, 151, 206, 228, 202, 10, 9, 19, 128, 203, 50, 178, 155, 174, 168, 219, 186, 138, 253, 102, 65, 13, 212, 202, 18, 148, 196, 232, 86, 225, 119, 120, 232, 254, 228, 227, 252, 255, 182, 135, 2, 16, 37, 175, 236, 19, 99, 59, 123, 233, 46, 46, 10, 155, 135, 92, 212, 253, 225, 250, 231, 118, 99, 95, 90, 231, 248, 56, 145, 137, 22, 147, 35, 104, 127, 180, 130, 194, 124, 73, 207, 50, 153, 27, 61, 174, 203, 158, 221, 140, 174, 222, 5, 135 },
                             Phone = "0905553859",
                             Username = "admin"
                         },
@@ -1458,8 +1315,8 @@ namespace HappyVacation.Database.Migrations
                             FirstName = "Quoc Tuan",
                             IsEnabled = true,
                             LastName = "Dang",
-                            PasswordHash = new byte[] { 74, 3, 216, 249, 188, 52, 29, 37, 67, 95, 110, 19, 134, 154, 218, 141, 37, 70, 107, 117, 69, 213, 138, 229, 50, 162, 127, 50, 127, 242, 7, 187, 231, 135, 21, 9, 149, 47, 220, 92, 154, 158, 194, 138, 89, 204, 136, 62, 228, 153, 187, 77, 219, 54, 195, 148, 103, 150, 141, 166, 45, 132, 163, 108 },
-                            PasswordSalt = new byte[] { 16, 1, 80, 89, 75, 174, 85, 243, 21, 169, 230, 192, 75, 193, 63, 36, 5, 104, 120, 122, 81, 201, 246, 195, 118, 212, 227, 128, 32, 116, 147, 31, 202, 129, 155, 10, 86, 204, 48, 44, 57, 46, 14, 240, 206, 71, 236, 70, 12, 21, 53, 126, 188, 209, 215, 236, 233, 65, 137, 144, 185, 165, 223, 42, 116, 244, 170, 127, 126, 203, 178, 92, 229, 165, 110, 200, 93, 57, 254, 62, 23, 207, 156, 143, 3, 179, 13, 9, 250, 67, 234, 68, 169, 153, 34, 236, 218, 50, 72, 12, 161, 81, 215, 41, 193, 195, 175, 207, 220, 80, 10, 136, 239, 22, 218, 76, 147, 173, 28, 251, 21, 46, 215, 57, 69, 173, 161, 124 },
+                            PasswordHash = new byte[] { 253, 110, 122, 231, 110, 93, 13, 123, 98, 154, 244, 73, 30, 230, 206, 78, 186, 226, 133, 215, 58, 16, 154, 113, 55, 235, 171, 152, 70, 86, 23, 145, 62, 68, 248, 45, 2, 48, 84, 164, 241, 180, 244, 31, 121, 252, 137, 85, 54, 22, 10, 131, 118, 98, 112, 189, 212, 98, 89, 226, 173, 215, 28, 113 },
+                            PasswordSalt = new byte[] { 158, 116, 178, 155, 29, 238, 182, 243, 101, 231, 114, 173, 110, 15, 40, 48, 115, 50, 78, 82, 67, 30, 205, 209, 29, 62, 93, 24, 25, 223, 162, 198, 130, 135, 250, 151, 206, 228, 202, 10, 9, 19, 128, 203, 50, 178, 155, 174, 168, 219, 186, 138, 253, 102, 65, 13, 212, 202, 18, 148, 196, 232, 86, 225, 119, 120, 232, 254, 228, 227, 252, 255, 182, 135, 2, 16, 37, 175, 236, 19, 99, 59, 123, 233, 46, 46, 10, 155, 135, 92, 212, 253, 225, 250, 231, 118, 99, 95, 90, 231, 248, 56, 145, 137, 22, 147, 35, 104, 127, 180, 130, 194, 124, 73, 207, 50, 153, 27, 61, 174, 203, 158, 221, 140, 174, 222, 5, 135 },
                             Phone = "0921231220",
                             ProviderId = 1,
                             Username = "quoctuan"
@@ -1472,8 +1329,8 @@ namespace HappyVacation.Database.Migrations
                             FirstName = "Cong Tai",
                             IsEnabled = true,
                             LastName = "Dinh",
-                            PasswordHash = new byte[] { 31, 46, 160, 27, 19, 56, 234, 149, 87, 43, 60, 236, 24, 103, 88, 36, 93, 68, 123, 174, 0, 245, 20, 80, 87, 34, 40, 28, 19, 64, 116, 100, 70, 65, 12, 42, 171, 217, 126, 165, 239, 19, 195, 143, 208, 242, 164, 5, 131, 245, 10, 126, 94, 73, 133, 6, 150, 5, 89, 70, 133, 54, 232, 114 },
-                            PasswordSalt = new byte[] { 16, 1, 80, 89, 75, 174, 85, 243, 21, 169, 230, 192, 75, 193, 63, 36, 5, 104, 120, 122, 81, 201, 246, 195, 118, 212, 227, 128, 32, 116, 147, 31, 202, 129, 155, 10, 86, 204, 48, 44, 57, 46, 14, 240, 206, 71, 236, 70, 12, 21, 53, 126, 188, 209, 215, 236, 233, 65, 137, 144, 185, 165, 223, 42, 116, 244, 170, 127, 126, 203, 178, 92, 229, 165, 110, 200, 93, 57, 254, 62, 23, 207, 156, 143, 3, 179, 13, 9, 250, 67, 234, 68, 169, 153, 34, 236, 218, 50, 72, 12, 161, 81, 215, 41, 193, 195, 175, 207, 220, 80, 10, 136, 239, 22, 218, 76, 147, 173, 28, 251, 21, 46, 215, 57, 69, 173, 161, 124 },
+                            PasswordHash = new byte[] { 53, 221, 129, 16, 234, 193, 226, 218, 69, 2, 83, 160, 166, 195, 168, 67, 186, 10, 203, 120, 71, 124, 138, 193, 166, 46, 190, 59, 23, 128, 92, 30, 229, 169, 251, 223, 88, 58, 253, 194, 50, 118, 216, 103, 54, 60, 246, 241, 249, 35, 10, 179, 215, 112, 228, 134, 126, 180, 65, 15, 36, 176, 238, 47 },
+                            PasswordSalt = new byte[] { 158, 116, 178, 155, 29, 238, 182, 243, 101, 231, 114, 173, 110, 15, 40, 48, 115, 50, 78, 82, 67, 30, 205, 209, 29, 62, 93, 24, 25, 223, 162, 198, 130, 135, 250, 151, 206, 228, 202, 10, 9, 19, 128, 203, 50, 178, 155, 174, 168, 219, 186, 138, 253, 102, 65, 13, 212, 202, 18, 148, 196, 232, 86, 225, 119, 120, 232, 254, 228, 227, 252, 255, 182, 135, 2, 16, 37, 175, 236, 19, 99, 59, 123, 233, 46, 46, 10, 155, 135, 92, 212, 253, 225, 250, 231, 118, 99, 95, 90, 231, 248, 56, 145, 137, 22, 147, 35, 104, 127, 180, 130, 194, 124, 73, 207, 50, 153, 27, 61, 174, 203, 158, 221, 140, 174, 222, 5, 135 },
                             Phone = "0945501905",
                             Username = "congtai"
                         },
@@ -1485,38 +1342,10 @@ namespace HappyVacation.Database.Migrations
                             FirstName = "Quoc Dat",
                             IsEnabled = true,
                             LastName = "Ngo Luu",
-                            PasswordHash = new byte[] { 171, 115, 19, 28, 56, 222, 23, 72, 56, 90, 198, 94, 74, 167, 211, 35, 204, 208, 55, 72, 86, 64, 197, 202, 97, 164, 172, 237, 94, 197, 169, 99, 10, 73, 151, 255, 139, 130, 232, 127, 51, 14, 120, 250, 127, 70, 244, 195, 239, 176, 232, 226, 24, 17, 196, 121, 147, 134, 129, 56, 15, 58, 145, 69 },
-                            PasswordSalt = new byte[] { 16, 1, 80, 89, 75, 174, 85, 243, 21, 169, 230, 192, 75, 193, 63, 36, 5, 104, 120, 122, 81, 201, 246, 195, 118, 212, 227, 128, 32, 116, 147, 31, 202, 129, 155, 10, 86, 204, 48, 44, 57, 46, 14, 240, 206, 71, 236, 70, 12, 21, 53, 126, 188, 209, 215, 236, 233, 65, 137, 144, 185, 165, 223, 42, 116, 244, 170, 127, 126, 203, 178, 92, 229, 165, 110, 200, 93, 57, 254, 62, 23, 207, 156, 143, 3, 179, 13, 9, 250, 67, 234, 68, 169, 153, 34, 236, 218, 50, 72, 12, 161, 81, 215, 41, 193, 195, 175, 207, 220, 80, 10, 136, 239, 22, 218, 76, 147, 173, 28, 251, 21, 46, 215, 57, 69, 173, 161, 124 },
+                            PasswordHash = new byte[] { 131, 223, 94, 225, 243, 96, 66, 251, 110, 180, 14, 99, 101, 54, 37, 204, 225, 2, 43, 69, 201, 215, 70, 210, 33, 194, 9, 192, 84, 91, 149, 98, 42, 3, 84, 244, 67, 159, 164, 104, 62, 61, 111, 28, 89, 246, 57, 148, 237, 221, 137, 4, 127, 173, 18, 108, 245, 62, 77, 1, 152, 101, 3, 60 },
+                            PasswordSalt = new byte[] { 158, 116, 178, 155, 29, 238, 182, 243, 101, 231, 114, 173, 110, 15, 40, 48, 115, 50, 78, 82, 67, 30, 205, 209, 29, 62, 93, 24, 25, 223, 162, 198, 130, 135, 250, 151, 206, 228, 202, 10, 9, 19, 128, 203, 50, 178, 155, 174, 168, 219, 186, 138, 253, 102, 65, 13, 212, 202, 18, 148, 196, 232, 86, 225, 119, 120, 232, 254, 228, 227, 252, 255, 182, 135, 2, 16, 37, 175, 236, 19, 99, 59, 123, 233, 46, 46, 10, 155, 135, 92, 212, 253, 225, 250, 231, 118, 99, 95, 90, 231, 248, 56, 145, 137, 22, 147, 35, 104, 127, 180, 130, 194, 124, 73, 207, 50, 153, 27, 61, 174, 203, 158, 221, 140, 174, 222, 5, 135 },
                             Phone = "0905553859",
                             Username = "quocdat"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AvatarUrl = "/storage/duy.jpg",
-                            Email = "duylam2906@gmail.com",
-                            FirstName = "Thai Duy",
-                            HotelId = 1,
-                            IsEnabled = true,
-                            LastName = "Lam",
-                            PasswordHash = new byte[] { 54, 66, 81, 228, 254, 4, 242, 80, 96, 171, 12, 135, 146, 50, 114, 26, 186, 153, 42, 247, 175, 128, 197, 28, 83, 18, 166, 175, 74, 250, 208, 177, 221, 170, 196, 167, 24, 136, 167, 202, 99, 77, 230, 253, 16, 13, 117, 225, 203, 43, 149, 49, 13, 23, 202, 248, 116, 114, 204, 59, 246, 40, 220, 243 },
-                            PasswordSalt = new byte[] { 16, 1, 80, 89, 75, 174, 85, 243, 21, 169, 230, 192, 75, 193, 63, 36, 5, 104, 120, 122, 81, 201, 246, 195, 118, 212, 227, 128, 32, 116, 147, 31, 202, 129, 155, 10, 86, 204, 48, 44, 57, 46, 14, 240, 206, 71, 236, 70, 12, 21, 53, 126, 188, 209, 215, 236, 233, 65, 137, 144, 185, 165, 223, 42, 116, 244, 170, 127, 126, 203, 178, 92, 229, 165, 110, 200, 93, 57, 254, 62, 23, 207, 156, 143, 3, 179, 13, 9, 250, 67, 234, 68, 169, 153, 34, 236, 218, 50, 72, 12, 161, 81, 215, 41, 193, 195, 175, 207, 220, 80, 10, 136, 239, 22, 218, 76, 147, 173, 28, 251, 21, 46, 215, 57, 69, 173, 161, 124 },
-                            Phone = "0764132745",
-                            Username = "thaiduy"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            AvatarUrl = "/storage/toan.jpg",
-                            Email = "xuantoan2401@gmail.com",
-                            FirstName = "Xuan Toan",
-                            HotelId = 2,
-                            IsEnabled = true,
-                            LastName = "Mai",
-                            PasswordHash = new byte[] { 224, 241, 21, 23, 159, 142, 122, 30, 43, 48, 20, 192, 181, 170, 249, 27, 116, 199, 213, 215, 208, 175, 244, 224, 235, 172, 41, 145, 47, 82, 79, 125, 21, 212, 196, 23, 17, 172, 171, 49, 146, 47, 19, 248, 35, 61, 81, 217, 196, 184, 211, 132, 218, 241, 104, 113, 199, 208, 44, 186, 237, 69, 145, 123 },
-                            PasswordSalt = new byte[] { 16, 1, 80, 89, 75, 174, 85, 243, 21, 169, 230, 192, 75, 193, 63, 36, 5, 104, 120, 122, 81, 201, 246, 195, 118, 212, 227, 128, 32, 116, 147, 31, 202, 129, 155, 10, 86, 204, 48, 44, 57, 46, 14, 240, 206, 71, 236, 70, 12, 21, 53, 126, 188, 209, 215, 236, 233, 65, 137, 144, 185, 165, 223, 42, 116, 244, 170, 127, 126, 203, 178, 92, 229, 165, 110, 200, 93, 57, 254, 62, 23, 207, 156, 143, 3, 179, 13, 9, 250, 67, 234, 68, 169, 153, 34, 236, 218, 50, 72, 12, 161, 81, 215, 41, 193, 195, 175, 207, 220, 80, 10, 136, 239, 22, 218, 76, 147, 173, 28, 251, 21, 46, 215, 57, 69, 173, 161, 124 },
-                            Phone = "0783803087",
-                            Username = "xuantoan"
                         });
                 });
 
@@ -1569,26 +1398,6 @@ namespace HappyVacation.Database.Migrations
                         {
                             UserId = 4,
                             RoleId = 3
-                        },
-                        new
-                        {
-                            UserId = 8,
-                            RoleId = 3
-                        },
-                        new
-                        {
-                            UserId = 8,
-                            RoleId = 4
-                        },
-                        new
-                        {
-                            UserId = 9,
-                            RoleId = 3
-                        },
-                        new
-                        {
-                            UserId = 9,
-                            RoleId = 4
                         });
                 });
 

@@ -76,13 +76,16 @@ namespace HappyVacation.Repositories.Tours
                         query = query.OrderByDescending(x => x.Id); // should be 'Date Created';
                         break;
                     case "price-up":
-                        query = query.OrderBy(x => x.PricePerAdult * x.MinAdults);
+                        query = query.OrderBy(x => x.PricePerAdult * x.MinAdults).ThenByDescending(x => x.Id);
                         break;
                     case "price-down":
-                        query = query.OrderByDescending(x => x.PricePerAdult * x.MinAdults);
+                        query = query.OrderByDescending(x => x.PricePerAdult * x.MinAdults).ThenByDescending(x => x.Id);
                         break;
                     case "rating":
-                        query = query.OrderByDescending(x => (x.Reviews.Count() != 0) ? (float)Math.Round(x.Reviews.Where(r => r.Rating != 0).Average(r => r.Rating), 1) : 0);
+                        query = query.OrderByDescending(x => (x.Reviews.Count() != 0) ? (float)Math.Round(x.Reviews.Where(r => r.Rating != 0).Average(r => r.Rating), 1) : 0).ThenByDescending(x => x.Id);
+                        break;
+                    case "orders":
+                        query = query.OrderByDescending(x => x.Orders.Where(o => o.State == "confirmed").Count()).ThenByDescending(x => x.Id);
                         break;
                 }
             }
@@ -232,7 +235,7 @@ namespace HappyVacation.Repositories.Tours
                 Location = request.Location,    
                 Destination = request.Destination,
                 PricePerAdult = request.PricePerAdult,
-                PricePerChild = request.PricePerChild,
+                PricePerChild = request.IncludeChildren ? request.PricePerChild : -1,
                 ProviderId = (int)providerId,
                 IsAvailable = true
             };
@@ -332,7 +335,7 @@ namespace HappyVacation.Repositories.Tours
             tour.GroupSize = request.GroupSize;
             tour.MinAdults = request.MinAdults;
             tour.PricePerAdult = request.PricePerAdult;
-            tour.PricePerChild = request.PricePerChild;
+            tour.PricePerChild = request.IncludeChildren ? request.PricePerChild : -1;
             tour.Location = request.Location;
             tour.Destination = request.Destination;
             // update places
