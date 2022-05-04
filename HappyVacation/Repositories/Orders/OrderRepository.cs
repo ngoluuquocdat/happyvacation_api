@@ -5,6 +5,8 @@ using HappyVacation.Database;
 using HappyVacation.Database.Entities;
 using HappyVacation.DTOs.Common;
 using HappyVacation.DTOs.Orders;
+using HappyVacation.Services.Email;
+using HappyVacation.Services.QRCodeGen;
 using HappyVacation.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
@@ -14,10 +16,12 @@ namespace HappyVacation.Repositories.Orders
     public class OrderRepository : IOrderRepository
     {
         private readonly MyDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public OrderRepository(MyDbContext context)
+        public OrderRepository(MyDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         public async Task<int> CreateOrder(int userId, CreateTourOrderRequest request)
@@ -257,24 +261,115 @@ namespace HappyVacation.Repositories.Orders
             };
         }
 
-        public async Task<int> ChangeOrderState(int userId, int orderId, string state)
+        public async Task<int> ConfirmOrder(int userId, int orderId)
         {       
             var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
-            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == orderId && x.Tour.ProviderId == providerId);
+            var order = await _context.Orders.Include(x => x.Tour).ThenInclude(t => t.Provider).AsSplitQuery().FirstOrDefaultAsync(x => x.Id == orderId && x.Tour.ProviderId == providerId);
             // check if provider has this order
             if(order == null)
             {
                 return -1;
             }
             // change order state
-            if(!order.State.Equals(state))
+            if(order.State.Equals("pending"))
             {
-                order.State = state;
+                order.State = "confirmed";
                 order.ModifiedDate = DateTime.Now;
                 _context.Orders.Update(order);
                 await _context.SaveChangesAsync();
+
+                var departure = order.DepartureDate.ToString("dd/MM/yyyy");
+                var tourName = order.Tour.TourName.ToUpper();
+                var touristName = order.TouristName;
+                var tourProvider = order.Tour.Provider.ProviderName;
+                var tourProviderPhone = order.Tour.Provider.ProviderPhone;
+                var tourProviderEmail = order.Tour.Provider.ProviderEmail;
+                var tourProviderAddress = order.Tour.Provider.Address;
+
+                // create QR code
+                string qrText = $"OrderId: {order.Id}\n" +
+                                $"Tour Provider: {tourProvider}\n" +
+                                $"Tour name: {tourName}\n" +
+                                $"Depature: {departure}\n" +
+                                $"Tourist: {touristName}";
+
+                byte[] qrCodeAsBytes = QRCodeService.CreateQRCodeAsBytes(qrText);
+
+                // send email               
+                string subject = $"You’re booked! Pack your bags – see you on {departure}!";
+                string content = "<html>" +
+                                    "<body> " +
+                                        $"<p> Hi {touristName}, </p> " +
+                                        $"<p> Your booking for {tourName} at {tourProvider} is confirmed, {tourProvider} will see you on {order.DepartureDate.ToString("dd/MM/yyyy")}! </p> " +
+                                        $"<p> All of your tour booking information is stored in the QR code attached below. <br>" +
+                                        $"You don't need to print this email for confirmation at {tourProvider}. </p>" +        
+                                        $"<p> If you need to get in touch, you can contact your tour provider directly:<br>" +
+                                        $"{tourProvider} <br>" +
+                                        $"Phone: {tourProviderPhone} <br>" +
+                                        $"Email: {tourProviderEmail} <br>" +
+                                        $"Address: {tourProviderAddress} <br> <p/>" +
+                                        $"<p> Thank you for booking tour on Happy Vacation. <p/>" +
+                                        $"<p> Happy Vacation team. <p/>" +
+                                    "</body>" +
+                                 "</html>";
+                _emailService.SendEmail("ngoluuquocdat@gmail.com", subject, content, qrCodeAttachment: qrCodeAsBytes);              
+
                 return order.Id;
-            } else
+            } 
+            else
+            {
+                return 0;
+            }
+        }     
+
+        public async Task<int> CancelOrder(int userId, int orderId)
+        {
+            var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
+            var order = await _context.Orders.Include(x => x.Tour).ThenInclude(t => t.Provider).AsSplitQuery().FirstOrDefaultAsync(x => x.Id == orderId && x.Tour.ProviderId == providerId);
+            // check if provider has this order
+            if (order == null)
+            {
+                return -1;
+            }
+            // change order state
+            if (order.State.Equals("pending") || order.State.Equals("confirmed"))
+            {
+                order.State = "canceled";
+                order.ModifiedDate = DateTime.Now;
+                _context.Orders.Update(order);
+                await _context.SaveChangesAsync();
+
+                // send email
+                var departure = order.DepartureDate.ToString("dd/MM/yyyy");
+                var tourName = order.Tour.TourName.ToUpper();
+                var touristName = order.TouristName;
+                var tourProvider = order.Tour.Provider.ProviderName;
+                var tourProviderPhone = order.Tour.Provider.ProviderPhone;
+                var tourProviderEmail = order.Tour.Provider.ProviderEmail;
+                var tourProviderAddress = order.Tour.Provider.Address;
+
+                string subject = $"Booking at {tourProvider} has been canceled";
+
+                string content = "<html>" +
+                                    "<body> " +
+                                        $"<p> Hi {order.TouristName}, </p> " +
+                                        $"<p> We confirm your booking for {tourName} on {departure} at {tourProvider} has been canceled. <br> " +
+                                        $"You don't have to do anything else, but if you have any question for {tourProvider}, " +
+                                        $"feel free to contact them at: {tourProviderPhone} or via: {tourProviderEmail}.  </p> " +
+                                        $"<p> Thank you for booking tour on Happy Vacation. <p/>" +
+                                        $"<p> Happy Vacation team. <p/>" +
+                                    "</body>" +
+                                 "</html>";
+
+                string content1 = $"Hi {order.TouristName},\n" +
+                    $"We confirm your booking for {order.Tour.TourName} at {order.Tour.Provider.ProviderName} has been canceled\n" +
+                    $"You don't have to do anything else.";
+
+                _emailService.SendEmail("ngoluuquocdat@gmail.com", subject, content, qrCodeAttachment: null);
+
+                return order.Id;
+            }
+            else
             {
                 return 0;
             }

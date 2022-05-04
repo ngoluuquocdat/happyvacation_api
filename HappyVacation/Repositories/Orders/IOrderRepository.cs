@@ -9,6 +9,7 @@ namespace HappyVacation.Repositories.Orders
         Task<PagedResult<OrderManageInfoVm>> GetTourProviderOrders(int userId, string state, int page, int perPage, string keyword);
         Task<OrderManageInfoVm> GetOrderById(int orderId);
         Task<int> CreateOrder(int userId, CreateTourOrderRequest request);
-        Task<int> ChangeOrderState(int userId, int orderId, string state);
+        Task<int> ConfirmOrder(int userId, int orderId);
+        Task<int> CancelOrder(int userId, int orderId);
     }
 }
