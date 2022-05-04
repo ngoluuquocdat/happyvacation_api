@@ -280,18 +280,33 @@ namespace HappyVacation.Repositories.Orders
 
                 var departure = order.DepartureDate.ToString("dd/MM/yyyy");
                 var tourName = order.Tour.TourName.ToUpper();
+                var tourStartTime = order.Tour.StartTime;
                 var touristName = order.TouristName;
                 var tourProvider = order.Tour.Provider.ProviderName;
                 var tourProviderPhone = order.Tour.Provider.ProviderPhone;
                 var tourProviderEmail = order.Tour.Provider.ProviderEmail;
                 var tourProviderAddress = order.Tour.Provider.Address;
 
+                var startPoint = order.StartPoint;
+                var isStartCustomerChoice = startPoint.Split('&').Last().Equals("CustomerPoint");
+                if (isStartCustomerChoice)
+                {
+                    startPoint = "your chosen place: " + startPoint.Replace("&CustomerPoint", String.Empty);
+                }
+                
+                var endPoint = order.EndPoint;
+                var isEndCustomerChoice = endPoint.Split('&').Last().Equals("CustomerPoint");
+                if (isEndCustomerChoice)
+                {
+                    endPoint = "your chosen place: " + endPoint.Replace("&CustomerPoint", String.Empty);
+                }
+
                 // create QR code
                 string qrText = $"OrderId: {order.Id}\n" +
                                 $"Tour Provider: {tourProvider}\n" +
+                                $"Tourist: {touristName}\n" +
                                 $"Tour name: {tourName}\n" +
-                                $"Depature: {departure}\n" +
-                                $"Tourist: {touristName}";
+                                $"Depature: {departure}\n";
 
                 byte[] qrCodeAsBytes = QRCodeService.CreateQRCodeAsBytes(qrText);
 
@@ -300,7 +315,11 @@ namespace HappyVacation.Repositories.Orders
                 string content = "<html>" +
                                     "<body> " +
                                         $"<p> Hi {touristName}, </p> " +
-                                        $"<p> Your booking for {tourName} at {tourProvider} is confirmed, {tourProvider} will see you on {order.DepartureDate.ToString("dd/MM/yyyy")}! </p> " +
+                                        $"<p> Your booking for {tourName} at {tourProvider} is confirmed!</p> " +
+                                        $"<p> {tourProvider} will see you on {order.DepartureDate.ToString("dd/MM/yyyy")}, at {startPoint}.<br>" +
+                                        $"The starting time is {tourStartTime}, you should come earlier for preparation.<br>" +
+                                        $"At the end of the tour, you will be taken to {endPoint}.</p>" +
+
                                         $"<p> All of your tour booking information is stored in the QR code attached below. <br>" +
                                         $"You don't need to print this email for confirmation at {tourProvider}. </p>" +        
                                         $"<p> If you need to get in touch, you can contact your tour provider directly:<br>" +

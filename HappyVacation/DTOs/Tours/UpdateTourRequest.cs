@@ -11,8 +11,9 @@
         public int PricePerAdult { get; set; }
         public int PricePerChild { get; set; }
         public bool IncludeChildren { get; set; }
-        public string Location { get; set; }
-        public string Destination { get; set; }
+        public string StartTime { get; set; }
+        public string StartPoint { get; set; }
+        public string EndPoint { get; set; }
         public List<int> PlaceIds { get; set; }
         public List<int> CategoryIds { get; set; }
         public List<ItineraryVm> Itineraries { get; set; }

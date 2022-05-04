@@ -15,8 +15,8 @@ namespace HappyVacation.Database.Configurations
 
             builder.Property(x => x.TourName).IsRequired().HasMaxLength(200);
             builder.Property(x => x.Overview).IsRequired();
-            builder.Property(x => x.Location).IsRequired().HasMaxLength(100);
-            builder.Property(x => x.Destination).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.StartPoint).IsRequired().HasMaxLength(100);
+            builder.Property(x => x.EndPoint).IsRequired().HasMaxLength(100);
 
             // relationship config
             // 1-n: provider - tours

@@ -9,9 +9,10 @@ namespace HappyVacation.DTOs.Tours
         public string Overview { get; set; }
         public float Duration { get; set; }
         public int GroupSize { get; set; }
-        public int MinAdults { get; set; }
-        public string Location { get; set; }
-        public string Destination { get; set; }
+        public int MinAdults { get; set; }       
+        public string StartTime { get; set; }
+        public string StartPoint { get; set; }
+        public string EndPoint { get; set; }
         public int ProviderId { get; set; }
         public string ProviderName { get; set; }
         public string ProviderAvatar { get; set; }

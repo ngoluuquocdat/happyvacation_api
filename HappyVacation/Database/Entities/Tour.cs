@@ -8,14 +8,14 @@
         public float Duration { get; set; }
         public int GroupSize { get; set; }
         public int MinAdults { get; set; }
-        public string Location { get; set; }
-        public string Destination { get; set; }
+        public string StartTime { get; set; }
+        public string StartPoint { get; set; }
+        public string EndPoint { get; set; }
         public int PricePerAdult { get; set; }
         public int PricePerChild { get; set; }
         public bool IsPrivate { get; set; }
         public bool IsAvailable { get; set; }
         public int ViewCount { get; set; }
-        //public int PlaceId { get; set; }
         public int ProviderId { get; set; }
 
         // navigation props

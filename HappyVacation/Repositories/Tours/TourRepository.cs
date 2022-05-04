@@ -134,11 +134,11 @@ namespace HappyVacation.Repositories.Tours
                                        MinAdults = x.MinAdults,
                                        PricePerAdult = x.PricePerAdult,
                                        PricePerChild = x.PricePerChild,
-                                       Location = x.Location,
-                                       Destination = x.Destination,
+                                       StartTime = x.StartTime,
+                                       StartPoint = x.StartPoint,
+                                       EndPoint = x.EndPoint,
                                        Reviews = x.Reviews.Count(),
                                        Rating = (x.Reviews.Count() != 0) ?
-                                       //(float)Math.Round(x.Reviews.Average(r => r.Rating), 1) : 0,
                                        (float)Math.Round(x.Reviews.Where(r => r.Rating != 0).Average(r => r.Rating), 1) : 0,
                                        ProviderId = x.ProviderId,
                                        ProviderName = x.Provider.ProviderName,
@@ -232,8 +232,9 @@ namespace HappyVacation.Repositories.Tours
                 Duration = request.Duration,
                 GroupSize = request.GroupSize,
                 MinAdults = request.MinAdults,
-                Location = request.Location,    
-                Destination = request.Destination,
+                StartTime = request.StartTime,
+                StartPoint = request.StartPoint,    
+                EndPoint = request.EndPoint,
                 PricePerAdult = request.PricePerAdult,
                 PricePerChild = request.IncludeChildren ? request.PricePerChild : -1,
                 ProviderId = (int)providerId,
@@ -336,8 +337,9 @@ namespace HappyVacation.Repositories.Tours
             tour.MinAdults = request.MinAdults;
             tour.PricePerAdult = request.PricePerAdult;
             tour.PricePerChild = request.IncludeChildren ? request.PricePerChild : -1;
-            tour.Location = request.Location;
-            tour.Destination = request.Destination;
+            tour.StartTime = request.StartTime;
+            tour.StartPoint = request.StartPoint;
+            tour.EndPoint = request.EndPoint;
             // update places
             tour.TourPlaces.Clear();
             //var tourPlaces = new List<TourPlace>();

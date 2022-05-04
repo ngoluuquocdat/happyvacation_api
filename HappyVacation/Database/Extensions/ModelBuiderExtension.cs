@@ -188,8 +188,9 @@ namespace HappyVacation.Database.Extensions
                     PricePerAdult = 89,
                     PricePerChild = 30,
                     ProviderId = 1,
-                    Location = "Minh An Ward, Hoi An City, Quang Nam Province",
-                    Destination = "Cam Chau Ward, Hoi An City, Quang Nam Province",
+                    StartTime = "8:00 AM",
+                    StartPoint = "123 Le Loi, Minh An Ward, Hoi An City, Quang Nam Province",
+                    EndPoint = "123 Le Loi, Minh An Ward, Hoi An City, Quang Nam Province",
                     IsPrivate = false,
                     ViewCount = 10,
                     IsAvailable = true,
@@ -206,8 +207,9 @@ namespace HappyVacation.Database.Extensions
                     PricePerAdult = 180,
                     PricePerChild = 50,
                     ProviderId = 1,
-                    Location = "Minh An Ward, Hoi An City, Quang Nam Province",
-                    Destination = "Minh An Ward, Hoi An City, Quang Nam Province",
+                    StartTime = "5:00 PM",
+                    StartPoint = "123 Le Loi, Minh An Ward, Hoi An City, Quang Nam Province",
+                    EndPoint = "123 Le Loi, Minh An Ward, Hoi An City, Quang Nam Province",
                     IsPrivate = true,
                     ViewCount = 5,
                     IsAvailable = true,
@@ -380,6 +382,8 @@ namespace HappyVacation.Database.Extensions
                     Id = 1,
                     OrderDate = new DateTime(2022, 03, 29),
                     DepartureDate = new DateTime(2022, 03, 30),
+                    StartPoint = "123 Le Loi, Minh An Ward, Hoi An City, Quang Nam Province",
+                    EndPoint = "123 Le Loi, Minh An Ward, Hoi An City, Quang Nam Province",
                     Adults = 2,
                     Children = 1,
                     State = "Confirmed",
@@ -388,7 +392,6 @@ namespace HappyVacation.Database.Extensions
                     TouristPhone = "0945501905",
                     TouristEmail = "braddinh1952000@gmail.com",
                     TourId = 1,
-                    //ProviderId = 1,
                     UserId = 3
                 },
                 new Order
@@ -396,6 +399,8 @@ namespace HappyVacation.Database.Extensions
                     Id = 2,
                     OrderDate = new DateTime(2022, 03, 29),
                     DepartureDate = new DateTime(2022, 03, 30),
+                    StartPoint = "160 Tran Nhat Duat, Cam Chau, Hoi An&Customer Point",
+                    EndPoint = "123 Le Loi, Minh An Ward, Hoi An City, Quang Nam Province",
                     Adults = 2,
                     Children = 0,
                     State = "Confirmed",
@@ -404,7 +409,6 @@ namespace HappyVacation.Database.Extensions
                     TouristPhone = "0945501905",
                     TouristEmail = "braddinh1952000@gmail.com",
                     TourId = 2,
-                    //ProviderId = 1,
                     UserId = 3
                 }
             );
