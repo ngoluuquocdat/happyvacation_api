@@ -44,13 +44,6 @@ namespace HappyVacation.Services.Email
                 smtp.EnableSsl = true;
                 smtp.Send(message);
             }
-
-            //using (SmtpClient smtp = new SmtpClient("smtp.mail.yahoo.com", 587))
-            //{
-            //    smtp.Credentials = new NetworkCredential(MyEmailAddress, Password);
-            //    smtp.EnableSsl = false;
-            //    smtp.Send(message);
-            //}
         }
     }
 }

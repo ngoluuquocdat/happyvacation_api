@@ -26,11 +26,17 @@ namespace HappyVacation.Repositories.Orders
 
         public async Task<int> CreateOrder(int userId, CreateTourOrderRequest request)
         {
+            var start_end = await _context.Tours.Where(x => x.Id == request.TourId)
+                .Select(x => new { startPoint = x.StartPoint, endPoint = x.EndPoint })
+                .FirstOrDefaultAsync();
+
             var order = new Order()
             {
                 UserId = userId,
                 TourId = request.TourId,
                 DepartureDate = DateTime.Parse(request.DepartureDate),
+                StartPoint = !String.IsNullOrEmpty(request.StartPoint) ? request.StartPoint : start_end.startPoint,
+                EndPoint = !String.IsNullOrEmpty(request.EndPoint) ? request.EndPoint : start_end.endPoint,
                 Adults = request.Adults,
                 Children = request.Children,
                 TouristName = request.TouristName,
@@ -106,7 +112,9 @@ namespace HappyVacation.Repositories.Orders
                 State = x.State,
                 TouristName = x.TouristName,
                 TouristPhone = x.TouristPhone,
-                TouristEmail = x.TouristEmail
+                TouristEmail = x.TouristEmail,
+                StartPoint = x.StartPoint,
+                EndPoint = x.EndPoint
             }).FirstOrDefaultAsync();
 
             return order;
@@ -193,7 +201,9 @@ namespace HappyVacation.Repositories.Orders
                 State = x.State,
                 TouristName = x.TouristName,
                 TouristPhone = x.TouristPhone,
-                TouristEmail = x.TouristEmail
+                TouristEmail = x.TouristEmail,
+                StartPoint = x.StartPoint,
+                EndPoint = x.EndPoint
             }).ToListAsync();
 
             return new PagedResult<OrderManageInfoVm>()
@@ -238,8 +248,8 @@ namespace HappyVacation.Repositories.Orders
                 Id = x.Id,
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
-                DepartureDate = x.DepartureDate.ToShortDateString(),
-                ModifiedDate = x.ModifiedDate.ToShortDateString(),
+                DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
                 IsPrivate = x.Tour.IsPrivate,
                 Adults = x.Adults,
@@ -250,7 +260,9 @@ namespace HappyVacation.Repositories.Orders
                 ThumbnailUrl = (x.Tour.TourImages.Count() > 0) ? x.Tour.TourImages[0].Url : String.Empty,
                 State = x.State,
                 ProviderId = x.Tour.ProviderId,
-                ProviderName = x.Tour.Provider.ProviderName
+                ProviderName = x.Tour.Provider.ProviderName,
+                StartPoint = x.StartPoint,
+                EndPoint = x.EndPoint
             }).ToListAsync();
 
             return new PagedResult<OrderMainInfoVm>()
@@ -306,7 +318,9 @@ namespace HappyVacation.Repositories.Orders
                                 $"Tour Provider: {tourProvider}\n" +
                                 $"Tourist: {touristName}\n" +
                                 $"Tour name: {tourName}\n" +
-                                $"Depature: {departure}\n";
+                                $"Depature: {departure}\n" +
+                                $"Adults: {order.Adults}\n" +
+                                $"Children: {order.Children}\n";
 
                 byte[] qrCodeAsBytes = QRCodeService.CreateQRCodeAsBytes(qrText);
 

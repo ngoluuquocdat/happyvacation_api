@@ -20,5 +20,7 @@
         public string TouristName { get; set; }
         public string TouristPhone { get; set; }
         public string TouristEmail { get; set; }
+        public string StartPoint { get; set; }
+        public string EndPoint { get; set; }
     }
 }
