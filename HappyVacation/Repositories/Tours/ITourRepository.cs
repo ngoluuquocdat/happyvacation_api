@@ -7,7 +7,7 @@ namespace HappyVacation.Repositories.Tours
     public interface ITourRepository
     {
         Task<PagedResult<TourMainInfoVm>> GetTours(GetTourRequest request);
-        Task<TourVm> GetTourById(int tourId);
+        Task<TourVm> GetTourById(int tourId, int userId = 0);
         Task<TourMainInfoManageVm> GetTourByIdManage(int tourId);
         Task<int> Create(int userId, CreateTourRequest request);
         Task<int> ChangeTourProvidingState(int userId, int tourId);

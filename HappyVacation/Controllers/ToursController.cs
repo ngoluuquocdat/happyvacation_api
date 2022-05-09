@@ -38,7 +38,14 @@ namespace HappyVacation.Controllers
         [HttpGet("{tourId:int}")]
         public async Task<ActionResult> GetTourById(int tourId)
         {
-            var result = await _tourRepository.GetTourById(tourId);
+            var currentUser = HttpContext.User;
+            var userId = 0;
+            if (currentUser != null)
+            {
+                userId = Int32.Parse(currentUser.FindFirst("id").Value);
+            }
+
+            var result = await _tourRepository.GetTourById(tourId, userId);
             if (result == null)
             {
                 return NotFound();

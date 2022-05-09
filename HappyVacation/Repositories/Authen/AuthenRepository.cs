@@ -51,7 +51,8 @@ namespace HappyVacation.Repositories.Authen
             return new AuthenVm()
             {
                 Username = user.Username,
-                FullName = $"{user.FirstName} {user.LastName}",
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Phone = user.Phone,
                 Email = user.Email,
                 AvatarUrl = !String.IsNullOrEmpty(user.AvatarUrl) ? user.AvatarUrl : String.Empty,
@@ -101,7 +102,8 @@ namespace HappyVacation.Repositories.Authen
             return new AuthenVm()
             {
                 Username = newUser.Username,
-                FullName = $"{newUser.FirstName} {newUser.LastName}",
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
                 Phone = newUser.Phone,
                 Email = newUser.Email,
                 AvatarUrl = "/storage/blank_avatar.png",

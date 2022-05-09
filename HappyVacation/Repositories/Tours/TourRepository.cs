@@ -114,12 +114,15 @@ namespace HappyVacation.Repositories.Tours
                 Items = tours
             };
         }
-        public async Task<TourVm> GetTourById(int tourId)
+        public async Task<TourVm> GetTourById(int tourId, int userId = 0)
         {
             if (!_context.Tours.Any(x => (x.Id == tourId)))
             {
                 return null;
             }
+
+            // check if tour in user's wish list
+            // var inWishList = _context.WishItems.Any(x => x.TourId == tourId && x.UserId == userId);
 
             var tour = await _context.Tours
                                    .Where(x => x.Id == tourId)                                 

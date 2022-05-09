@@ -9,6 +9,7 @@ using HappyVacation.Services.Email;
 using HappyVacation.Services.QRCodeGen;
 using HappyVacation.Utilities;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace HappyVacation.Repositories.Orders
@@ -26,7 +27,7 @@ namespace HappyVacation.Repositories.Orders
 
         public async Task<int> CreateOrder(int userId, CreateTourOrderRequest request)
         {
-            var start_end = await _context.Tours.Where(x => x.Id == request.TourId)
+            var tour_start_end = await _context.Tours.Where(x => x.Id == request.TourId)
                 .Select(x => new { startPoint = x.StartPoint, endPoint = x.EndPoint })
                 .FirstOrDefaultAsync();
 
@@ -34,9 +35,9 @@ namespace HappyVacation.Repositories.Orders
             {
                 UserId = userId,
                 TourId = request.TourId,
-                DepartureDate = DateTime.Parse(request.DepartureDate),
-                StartPoint = !String.IsNullOrEmpty(request.StartPoint) ? request.StartPoint : start_end.startPoint,
-                EndPoint = !String.IsNullOrEmpty(request.EndPoint) ? request.EndPoint : start_end.endPoint,
+                DepartureDate = DateTime.ParseExact(request.DepartureDate, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                StartPoint = !String.IsNullOrEmpty(request.StartPoint) ? request.StartPoint : tour_start_end.startPoint,
+                EndPoint = !String.IsNullOrEmpty(request.EndPoint) ? request.EndPoint : tour_start_end.endPoint,
                 Adults = request.Adults,
                 Children = request.Children,
                 TouristName = request.TouristName,
@@ -300,17 +301,17 @@ namespace HappyVacation.Repositories.Orders
                 var tourProviderAddress = order.Tour.Provider.Address;
 
                 var startPoint = order.StartPoint;
-                var isStartCustomerChoice = startPoint.Split('&').Last().Equals("CustomerPoint");
+                var isStartCustomerChoice = startPoint.Split('&')[0].Equals("CustomerPoint");
                 if (isStartCustomerChoice)
                 {
-                    startPoint = "your chosen place: " + startPoint.Replace("&CustomerPoint", String.Empty);
+                    startPoint = $"your chosen place: {startPoint.Split('&')[1]} in {startPoint.Split('&')[2]}";
                 }
                 
                 var endPoint = order.EndPoint;
-                var isEndCustomerChoice = endPoint.Split('&').Last().Equals("CustomerPoint");
+                var isEndCustomerChoice = endPoint.Split('&')[0].Equals("CustomerPoint");
                 if (isEndCustomerChoice)
                 {
-                    endPoint = "your chosen place: " + endPoint.Replace("&CustomerPoint", String.Empty);
+                    endPoint = $"your chosen place: {endPoint.Split('&')[1]} in {endPoint.Split('&')[2]}";
                 }
 
                 // create QR code
