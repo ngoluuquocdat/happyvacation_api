@@ -14,7 +14,11 @@ namespace HappyVacation.Database.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             builder.Property(x => x.PlaceName).IsRequired().HasMaxLength(30);
+            builder.Property(x => x.Description).IsRequired(false);
             builder.Property(x => x.ThumbnailUrl).IsRequired();
+
+            builder.Property(x => x.Latitude).HasPrecision(18, 9);
+            builder.Property(x => x.Longitude).HasPrecision(18, 9);
 
         }
     }

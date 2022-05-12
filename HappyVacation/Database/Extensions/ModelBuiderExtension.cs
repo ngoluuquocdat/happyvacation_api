@@ -158,21 +158,223 @@ namespace HappyVacation.Database.Extensions
             );
             // data seeding for Places
             modelBuilder.Entity<Place>().HasData(
-                new Place { Id = 1, PlaceName = "Da Nang", IsTop = true, ThumbnailUrl = "/storage/danang.jpg"},
-                new Place { Id = 2, PlaceName = "Hue", IsTop = true, ThumbnailUrl = "/storage/hue.jpg" },
-                new Place { Id = 3, PlaceName = "Hoi An", IsTop = true, ThumbnailUrl = "/storage/hoian.jpg" },
-                new Place { Id = 4, PlaceName = "Ha Long", IsTop = false, ThumbnailUrl = "/storage/halong.jpg" },
-                new Place { Id = 5, PlaceName = "Ha Noi", IsTop = true, ThumbnailUrl = "/storage/hanoi.jpg" },
-                new Place { Id = 6, PlaceName = "Ho Chi Minh", IsTop = true, ThumbnailUrl = "/storage/hochiminh.jpg" },
-                new Place { Id = 7, PlaceName = "Da Lat", IsTop = false, ThumbnailUrl = "/storage/dalat.jpg" },
-                new Place { Id = 8, PlaceName = "Nha Trang", IsTop = true, ThumbnailUrl = "/storage/nhatrang.jpg" },
-                new Place { Id = 9, PlaceName = "Phu Quoc", IsTop = false, ThumbnailUrl = "/storage/phuquoc.jpg" },
-                new Place { Id = 10, PlaceName = "Quy Nhon", IsTop = false, ThumbnailUrl = "/storage/quynhon.jpg" },
-                new Place { Id = 11, PlaceName = "Sa Pa", IsTop = false, ThumbnailUrl = "/storage/sapa.jpg" },
-                new Place { Id = 12, PlaceName = "Vung Tau", IsTop = false, ThumbnailUrl = "/storage/vungtau.jpg" },
-                new Place { Id = 13, PlaceName = "Mui Ne", IsTop = false, ThumbnailUrl = "/storage/muine.jpg" },
-                new Place { Id = 14, PlaceName = "Con Dao", IsTop = false, ThumbnailUrl = "/storage/condao.jpg" },
-                new Place { Id = 15, PlaceName = "Trang An", IsTop = false, ThumbnailUrl = "/storage/trangan.jpg" }
+                new Place { 
+                    Id = 1, 
+                    PlaceName = "Da Nang", 
+                    ThumbnailUrl = "/storage/danang.jpg",
+                    Latitude = 16.047079M,
+                    Longitude = 108.206230M,
+                    OverviewVideoUrl = "/storage/DaNang360.mp4"
+                },
+                new Place { 
+                    Id = 2, 
+                    PlaceName = "Hue", 
+                    ThumbnailUrl = "/storage/hue.jpg",
+                    Latitude = 16.463713M,
+                    Longitude = 107.590866M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 3, 
+                    PlaceName = "Hoi An", 
+                    ThumbnailUrl = "/storage/hoian.jpg",
+                    Description = "Possibly the most beautiful town in Vietnam and definitely the most atmospheric heritage town, Hoi An (which means ‘peaceful place’ in Vietnamese) has the perfect combination of old-world charm and modern-day comforts and luxuries. This historical town is gloriously devoid of high-rises and ugly concrete buildings thanks to its Unesco World Heritage Site status. Chinese merchant shop fronts dating as far back as the 15th Century encase shops, restaurants, art galleries, museums and especially tailors, ensuring Hoi An has something to suit all tastes.&" +
+                    "What really makes Hoi An live up to its ‘peaceful place’ name is the blissful ban on motorbikes and scooters in the old town during certain parts of the day and most of the evening.&" +
+                    "The Venice of Vietnam.&" + "One of the biggest factors in creating the rich cultural history that brings such a special ambience to Hoi An, is the river that it’s built around. The ‘Thu Bon’ river has been responsible for bringing in foreign traders and settlers from far-flung places for hundreds of years and brings a beautiful, romantic, ‘Venice of Vietnam’ quality to the town.",
+                    Latitude = 15.87944M,
+                    Longitude = 108.335M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 4, 
+                    PlaceName = "Ha Long", 
+                    ThumbnailUrl = "/storage/halong.jpg",
+                    Latitude = 20.959902M,
+                    Longitude = 107.042542M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 5, 
+                    PlaceName = "Ha Noi", 
+                    ThumbnailUrl = "/storage/hanoi.jpg",
+                    Latitude = 21.028511M,
+                    Longitude = 105.804817M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 6, 
+                    PlaceName = "Ho Chi Minh", 
+                    ThumbnailUrl = "/storage/hochiminh.jpg",
+                    Latitude = 10.762622M,
+                    Longitude = 106.660172M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 7, 
+                    PlaceName = "Da Lat", 
+                    ThumbnailUrl = "/storage/dalat.jpg",
+                    Latitude = 11.940419M,
+                    Longitude = 108.458313M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 8, 
+                    PlaceName = "Nha Trang", 
+                    ThumbnailUrl = "/storage/nhatrang.jpg",
+                    Latitude = 12.24507M,
+                    Longitude = 109.19432M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 9, 
+                    PlaceName = "Phu Quoc", 
+                    ThumbnailUrl = "/storage/phuquoc.jpg",
+                    Latitude = 10.289879M,
+                    Longitude = 103.98402M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 10, 
+                    PlaceName = "Quy Nhon", 
+                    ThumbnailUrl = "/storage/quynhon.jpg",
+                    Latitude = 13.759660M,
+                    Longitude = 109.206123M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 11, 
+                    PlaceName = "Sa Pa", 
+                    ThumbnailUrl = "/storage/sapa.jpg",
+                    Latitude = 22.356464M,
+                    Longitude = 103.873802M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 12, 
+                    PlaceName = "Vung Tau", 
+                    ThumbnailUrl = "/storage/vungtau.jpg",
+                    Latitude = 10.541740M,
+                    Longitude = 107.242998M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 13, 
+                    PlaceName = "Mui Ne", 
+                    ThumbnailUrl = "/storage/muine.jpg",
+                    Latitude = 10.933211M,
+                    Longitude = 108.287184M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 14, 
+                    PlaceName = "Con Dao", 
+                    ThumbnailUrl = "/storage/condao.jpg",
+                    Latitude = 8.68327M,
+                    Longitude = 106.606M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                },
+                new Place { 
+                    Id = 15, 
+                    PlaceName = "Trang An", 
+                    ThumbnailUrl = "/storage/trangan.jpg",
+                    Latitude = 20.256667M,
+                    Longitude = 105.896389M,
+                    OverviewVideoUrl = "/storage/HoiAn360.mp4"
+                }
+            );
+            // data seeding for Place Images
+            modelBuilder.Entity<PlaceImage>().HasData(
+                new PlaceImage { Id = 1, Url = "/storage/hoian.jpg", PlaceId = 3 },
+                new PlaceImage { Id = 2, Url = "/storage/hoian2.jpg", PlaceId = 3 },
+                new PlaceImage { Id = 3, Url = "/storage/hoian3.jpg", PlaceId = 3 },
+                new PlaceImage { Id = 4, Url = "/storage/hoian4.jpg", PlaceId = 3 }
+            );
+            // data seeding for Tourist Sites
+            modelBuilder.Entity<SubTouristSite>().HasData(
+                new SubTouristSite 
+                { 
+                    Id = 1,
+                    PlaceId = 3,
+                    SiteName = "Tra Que Vegetable Village",
+                    Description = "Tra Que Vegetable Village is a land formed from the 17th to 18th centuries, located in Tra Que village, Cam Ha commune, about 2.5km north of the center of Hoi An ancient town." +
+                    "The village is famous for many aromatic products with strong flavors grown by traditional intensive farming methods, fertilized with seaweed from Tra Que lagoon, so it has turned the green vegetables here green and fragrant.&" +
+                    "Coming to Tra Que vegetable village, visitors will enjoy the rustic and peaceful natural picture of a vast vegetable-growing area, participate in farmer experience tours with farm work: hoeing. soil, fertilizing weeds, watering dandruff, manually processing and enjoying delicious rustic dishes made from green vegetables.",
+                    HighLights = "highlights",
+                    Province = "Quang Nam",
+                    District = "Hoi An",
+                    Ward = "Cam Ha",
+                    Address = "",
+                    OpenCloseTime = "8:00 AM - 6:00 PM",
+                    Latitude = 15.9024202M,
+                    Longitude = 108.3375933M
+                },
+                new SubTouristSite
+                {
+                    Id = 2,
+                    PlaceId = 3,
+                    SiteName = "Thanh Ha Pottery Village",
+                    Description = "Thanh Ha Pottery Village is located on the banks of the Thu Bon River, about 3 km west of Hoi An center. This is a stopover for tourists on their travel journey connecting Hoi An Ancient Town to My Son Temples. The village was formed at the end of the 15th century, associated with the migration process from Thanh Hoa, Hai Duong and Nam Dinh localities, bringing with them the traditional pottery craft from the ancestral homeland. Thanks to favorable terrain and rich clay raw materials, the first inhabitants of Thanh Ha village gave birth to pottery making here.&" +
+                    "Today, coming to Thanh Ha Pottery Village, visitors can visit a traditional Vietnamese village space that is preserved in its original state in terms of landscape with banyan trees, water wharf, communal courtyard, religious monuments, children tiled alleys… and admire first-hand the talented and skillful hands of the inhabitants of the pottery village who are hard at work creating valuable, characteristic products of the craft village. You will find here gifts that are rustic but attractive.",
+                    HighLights = "highlights",
+                    Province = "Quang Nam",
+                    District = "Hoi An",
+                    Ward = "Thanh Ha",
+                    Address = "",
+                    OpenCloseTime = "8:00 AM - 6:00 PM",
+                    Latitude = 15.8768065M,
+                    Longitude = 108.2989103M
+                },
+                new SubTouristSite
+                {
+                    Id = 3,
+                    PlaceId = 3,
+                    SiteName = "Hoi An Ancient Town",
+                    Description = "Formed and developed from the sixteenth to seventeenth centuries, the ancient town of Hoi An used to be one of the busiest international trading ports in Southeast Asia. This place is considered as the center of goods exchange of Eurasian traders from China, Japan, Siam, India or the Netherlands, Spain, England, France... organized by form of international fairs from 4 to 6 consecutive months per year according to the monsoon regime. Therefore, Hoi An is considered a land of convergence, interference and acculturation of many East - West cultures.&" +
+                    "Experiencing many ups and downs of history, the flow of time covers Hoi An with a peaceful and contemplative beauty. Hoi An impresses visitors with mossy yin-yang tiled houses, ancient dusty walls and colorful lanterns. Walking around the old town, visitors will have the opportunity to visit relics dating back hundreds of years, immerse themselves in the festive atmosphere of \"Old Town Night\" with folk games, listen to chants and sing songs. huts, ho drills... or simply, stop at a small roadside shop to enjoy the specialties of Hoi An.&",
+                    HighLights = "highlights",
+                    Province = "Quang Nam",
+                    District = "Hoi An",
+                    Ward = "Minh An",
+                    Address = "",
+                    OpenCloseTime = "8:00 AM - 10:00 PM",
+                    Latitude = 15.878223M,
+                    Longitude = 108.3282151M
+                },
+                new SubTouristSite
+                {
+                    Id = 4,
+                    PlaceId = 3,
+                    SiteName = "Hoi An Museum of History and Culture",
+                    Description = "Hoi An Museum of History - Culture is a large-scale work, located at 10B Tran Hung Dao, Hoi An city, where displays more than 800 original artifacts and valuable documents in ceramics, porcelain, bronze. iron, paper, wood...reflecting the development stages of the urban - commercial port of Hoi An from the period of Sa Huynh culture (from the 2nd century AD) to the period of Champa culture (from the 1st century AD) II to 15th century) to the period of Dai Viet and Dai Nam cultures (from the 15th to the 19th century), as well as the history of the city's people's revolutionary struggle (since the French colonialists invaded to invade Vietnam). 1858 to the great victory in the spring of 1975).&" +
+                    "Hoi An Museum of History - Culture will help visitors get an overview of the historical process as well as the cultural thickness of the land of Hoi An. The museum is currently open every day of the week, and is closed on the 25th of every month to carry out professional work.",
+                    HighLights = "highlights",
+                    Province = "Quang Nam",
+                    District = "Hoi An",
+                    Ward = "Minh An",
+                    Address = "10B Tran Hung Dao",
+                    OpenCloseTime = "8:00 AM - 6:00 PM",
+                    Latitude = 15.88036M,
+                    Longitude = 108.32951M
+                }
+            );
+            // data seeding for Tourist Sites Images
+            modelBuilder.Entity<SubTouristSiteImage>().HasData(
+                new SubTouristSiteImage { Id = 1, Url = "/storage/traque1.jpg", SubTouristSiteId = 1 },
+                new SubTouristSiteImage { Id = 2, Url = "/storage/traque2.jpg", SubTouristSiteId = 1 },
+                new SubTouristSiteImage { Id = 3, Url = "/storage/traque3.jpg", SubTouristSiteId = 1 },
+                new SubTouristSiteImage { Id = 4, Url = "/storage/traque4.jpg", SubTouristSiteId = 1 },
+                new SubTouristSiteImage { Id = 5, Url = "/storage/thanhha1.jpg", SubTouristSiteId = 2 },
+                new SubTouristSiteImage { Id = 6, Url = "/storage/thanhha2.jpg", SubTouristSiteId = 2 },
+                new SubTouristSiteImage { Id = 7, Url = "/storage/thanhha3.jpg", SubTouristSiteId = 2 },
+                new SubTouristSiteImage { Id = 8, Url = "/storage/thanhha4.jpg", SubTouristSiteId = 2 },
+                new SubTouristSiteImage { Id = 9, Url = "/storage/phocoha1.jpg", SubTouristSiteId = 3 },
+                new SubTouristSiteImage { Id = 10, Url = "/storage/phocoha2.jpg", SubTouristSiteId = 3 },
+                new SubTouristSiteImage { Id = 11, Url = "/storage/phocoha3.jpg", SubTouristSiteId = 3 },
+                new SubTouristSiteImage { Id = 12, Url = "/storage/phocoha4.jpg", SubTouristSiteId = 3 },
+                new SubTouristSiteImage { Id = 13, Url = "/storage/baotangha1.jpg", SubTouristSiteId = 4 },
+                new SubTouristSiteImage { Id = 14, Url = "/storage/baotangha2.jpg", SubTouristSiteId = 4 },
+                new SubTouristSiteImage { Id = 15, Url = "/storage/baotangha3.jpg", SubTouristSiteId = 4 },
+                new SubTouristSiteImage { Id = 16, Url = "/storage/baotangha4.jpg", SubTouristSiteId = 4 }
             );
             // data seeding for Tours
             modelBuilder.Entity<Tour>().HasData(

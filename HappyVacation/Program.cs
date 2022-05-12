@@ -2,6 +2,7 @@ using HappyVacation.Database;
 using HappyVacation.Repositories.Authen;
 using HappyVacation.Repositories.Hotels;
 using HappyVacation.Repositories.Orders;
+using HappyVacation.Repositories.Places;
 using HappyVacation.Repositories.Providers;
 using HappyVacation.Repositories.Tours;
 using HappyVacation.Repositories.Users;
@@ -90,7 +91,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // services cors
 builder.Services.AddCors(p => p.AddPolicy("MyCorsPolicy", builder =>
 {
-    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+    builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
 }));
 
 // add my services and repositories
@@ -101,6 +102,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<IAuthenRepository, AuthenRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
 builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
@@ -117,10 +119,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("MyCorsPolicy");
+
 // add this to enable access static files in wwwroot via url
 app.UseStaticFiles();
-
-app.UseCors("MyCorsPolicy");
 
 app.UseAuthentication();
 

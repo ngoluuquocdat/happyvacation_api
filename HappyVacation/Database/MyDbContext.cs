@@ -19,6 +19,9 @@ namespace HappyVacation.Database
             // configuration for tour booking
             modelBuilder.ApplyConfiguration(new PlaceConfiguration());
             modelBuilder.ApplyConfiguration(new TourPlaceConfiguration());
+            modelBuilder.ApplyConfiguration(new PlaceImageConfiguration());
+            modelBuilder.ApplyConfiguration(new SubTouristSiteConfiguration());
+            modelBuilder.ApplyConfiguration(new SubTouristSiteImageConfiguration());
 
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new TourCategoryConfiguration());
@@ -46,7 +49,11 @@ namespace HappyVacation.Database
             modelBuilder.Seed();
         }
 
+        // place and tourist sites
         public DbSet<Place> Places { get; set; }
+        public DbSet<SubTouristSite> SubTouristSites { get; set; }
+        // ...
+        // ------------------------------------
         public DbSet<Category> Categories { get; set; }
         public DbSet<TourCategory> TourCategories { get; set; }
         public DbSet<TourPlace> TourPlaces { get; set; }

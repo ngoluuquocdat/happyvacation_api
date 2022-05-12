@@ -4,6 +4,7 @@ using HappyVacation.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HappyVacation.Database.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220510023214_Place_SubTouristSite_Table")]
+    partial class Place_SubTouristSite_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -869,10 +871,6 @@ namespace HappyVacation.Database.Migrations
                         .HasPrecision(18, 9)
                         .HasColumnType("decimal(18,9)");
 
-                    b.Property<string>("OverviewVideoUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PlaceName")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -892,7 +890,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 1,
                             Latitude = 16.047079m,
                             Longitude = 108.206230m,
-                            OverviewVideoUrl = "/storage/DaNang360.mp4",
                             PlaceName = "Da Nang",
                             ThumbnailUrl = "/storage/danang.jpg"
                         },
@@ -901,17 +898,14 @@ namespace HappyVacation.Database.Migrations
                             Id = 2,
                             Latitude = 16.463713m,
                             Longitude = 107.590866m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Hue",
                             ThumbnailUrl = "/storage/hue.jpg"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Possibly the most beautiful town in Vietnam and definitely the most atmospheric heritage town, Hoi An (which means ‘peaceful place’ in Vietnamese) has the perfect combination of old-world charm and modern-day comforts and luxuries. This historical town is gloriously devoid of high-rises and ugly concrete buildings thanks to its Unesco World Heritage Site status. Chinese merchant shop fronts dating as far back as the 15th Century encase shops, restaurants, art galleries, museums and especially tailors, ensuring Hoi An has something to suit all tastes.&What really makes Hoi An live up to its ‘peaceful place’ name is the blissful ban on motorbikes and scooters in the old town during certain parts of the day and most of the evening.&The Venice of Vietnam.&One of the biggest factors in creating the rich cultural history that brings such a special ambience to Hoi An, is the river that it’s built around. The ‘Thu Bon’ river has been responsible for bringing in foreign traders and settlers from far-flung places for hundreds of years and brings a beautiful, romantic, ‘Venice of Vietnam’ quality to the town.",
                             Latitude = 15.87944m,
                             Longitude = 108.335m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Hoi An",
                             ThumbnailUrl = "/storage/hoian.jpg"
                         },
@@ -920,7 +914,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 4,
                             Latitude = 20.959902m,
                             Longitude = 107.042542m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Ha Long",
                             ThumbnailUrl = "/storage/halong.jpg"
                         },
@@ -929,7 +922,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 5,
                             Latitude = 21.028511m,
                             Longitude = 105.804817m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Ha Noi",
                             ThumbnailUrl = "/storage/hanoi.jpg"
                         },
@@ -938,7 +930,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 6,
                             Latitude = 10.762622m,
                             Longitude = 106.660172m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Ho Chi Minh",
                             ThumbnailUrl = "/storage/hochiminh.jpg"
                         },
@@ -947,7 +938,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 7,
                             Latitude = 11.940419m,
                             Longitude = 108.458313m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Da Lat",
                             ThumbnailUrl = "/storage/dalat.jpg"
                         },
@@ -956,7 +946,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 8,
                             Latitude = 12.24507m,
                             Longitude = 109.19432m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Nha Trang",
                             ThumbnailUrl = "/storage/nhatrang.jpg"
                         },
@@ -965,7 +954,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 9,
                             Latitude = 10.289879m,
                             Longitude = 103.98402m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Phu Quoc",
                             ThumbnailUrl = "/storage/phuquoc.jpg"
                         },
@@ -974,7 +962,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 10,
                             Latitude = 13.759660m,
                             Longitude = 109.206123m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Quy Nhon",
                             ThumbnailUrl = "/storage/quynhon.jpg"
                         },
@@ -983,7 +970,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 11,
                             Latitude = 22.356464m,
                             Longitude = 103.873802m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Sa Pa",
                             ThumbnailUrl = "/storage/sapa.jpg"
                         },
@@ -992,7 +978,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 12,
                             Latitude = 10.541740m,
                             Longitude = 107.242998m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Vung Tau",
                             ThumbnailUrl = "/storage/vungtau.jpg"
                         },
@@ -1001,7 +986,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 13,
                             Latitude = 10.933211m,
                             Longitude = 108.287184m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Mui Ne",
                             ThumbnailUrl = "/storage/muine.jpg"
                         },
@@ -1010,7 +994,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 14,
                             Latitude = 8.68327m,
                             Longitude = 106.606m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Con Dao",
                             ThumbnailUrl = "/storage/condao.jpg"
                         },
@@ -1019,7 +1002,6 @@ namespace HappyVacation.Database.Migrations
                             Id = 15,
                             Latitude = 20.256667m,
                             Longitude = 105.896389m,
-                            OverviewVideoUrl = "/storage/HoiAn360.mp4",
                             PlaceName = "Trang An",
                             ThumbnailUrl = "/storage/trangan.jpg"
                         });
@@ -1045,32 +1027,32 @@ namespace HappyVacation.Database.Migrations
                     b.HasIndex("PlaceId");
 
                     b.ToTable("PlaceImages", (string)null);
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            PlaceId = 3,
-                            Url = "/storage/hoian.jpg"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            PlaceId = 3,
-                            Url = "/storage/hoian2.jpg"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            PlaceId = 3,
-                            Url = "/storage/hoian3.jpg"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            PlaceId = 3,
-                            Url = "/storage/hoian4.jpg"
-                        });
+            modelBuilder.Entity("HappyVacation.Database.Entities.PlaceOverviewVideo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlaceId");
+
+                    b.ToTable("PlaceOverviewVideos", (string)null);
                 });
 
             modelBuilder.Entity("HappyVacation.Database.Entities.Provider", b =>
@@ -1288,68 +1270,6 @@ namespace HappyVacation.Database.Migrations
                     b.HasIndex("PlaceId");
 
                     b.ToTable("SubTouristSites", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "",
-                            Description = "Tra Que Vegetable Village is a land formed from the 17th to 18th centuries, located in Tra Que village, Cam Ha commune, about 2.5km north of the center of Hoi An ancient town.The village is famous for many aromatic products with strong flavors grown by traditional intensive farming methods, fertilized with seaweed from Tra Que lagoon, so it has turned the green vegetables here green and fragrant.&Coming to Tra Que vegetable village, visitors will enjoy the rustic and peaceful natural picture of a vast vegetable-growing area, participate in farmer experience tours with farm work: hoeing. soil, fertilizing weeds, watering dandruff, manually processing and enjoying delicious rustic dishes made from green vegetables.",
-                            District = "Hoi An",
-                            HighLights = "highlights",
-                            Latitude = 15.9024202m,
-                            Longitude = 108.3375933m,
-                            OpenCloseTime = "8:00 AM - 6:00 PM",
-                            PlaceId = 3,
-                            Province = "Quang Nam",
-                            SiteName = "Tra Que Vegetable Village",
-                            Ward = "Cam Ha"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "",
-                            Description = "Thanh Ha Pottery Village is located on the banks of the Thu Bon River, about 3 km west of Hoi An center. This is a stopover for tourists on their travel journey connecting Hoi An Ancient Town to My Son Temples. The village was formed at the end of the 15th century, associated with the migration process from Thanh Hoa, Hai Duong and Nam Dinh localities, bringing with them the traditional pottery craft from the ancestral homeland. Thanks to favorable terrain and rich clay raw materials, the first inhabitants of Thanh Ha village gave birth to pottery making here.&Today, coming to Thanh Ha Pottery Village, visitors can visit a traditional Vietnamese village space that is preserved in its original state in terms of landscape with banyan trees, water wharf, communal courtyard, religious monuments, children tiled alleys… and admire first-hand the talented and skillful hands of the inhabitants of the pottery village who are hard at work creating valuable, characteristic products of the craft village. You will find here gifts that are rustic but attractive.",
-                            District = "Hoi An",
-                            HighLights = "highlights",
-                            Latitude = 15.8768065m,
-                            Longitude = 108.2989103m,
-                            OpenCloseTime = "8:00 AM - 6:00 PM",
-                            PlaceId = 3,
-                            Province = "Quang Nam",
-                            SiteName = "Thanh Ha Pottery Village",
-                            Ward = "Thanh Ha"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Address = "",
-                            Description = "Formed and developed from the sixteenth to seventeenth centuries, the ancient town of Hoi An used to be one of the busiest international trading ports in Southeast Asia. This place is considered as the center of goods exchange of Eurasian traders from China, Japan, Siam, India or the Netherlands, Spain, England, France... organized by form of international fairs from 4 to 6 consecutive months per year according to the monsoon regime. Therefore, Hoi An is considered a land of convergence, interference and acculturation of many East - West cultures.&Experiencing many ups and downs of history, the flow of time covers Hoi An with a peaceful and contemplative beauty. Hoi An impresses visitors with mossy yin-yang tiled houses, ancient dusty walls and colorful lanterns. Walking around the old town, visitors will have the opportunity to visit relics dating back hundreds of years, immerse themselves in the festive atmosphere of \"Old Town Night\" with folk games, listen to chants and sing songs. huts, ho drills... or simply, stop at a small roadside shop to enjoy the specialties of Hoi An.&",
-                            District = "Hoi An",
-                            HighLights = "highlights",
-                            Latitude = 15.878223m,
-                            Longitude = 108.3282151m,
-                            OpenCloseTime = "8:00 AM - 10:00 PM",
-                            PlaceId = 3,
-                            Province = "Quang Nam",
-                            SiteName = "Hoi An Ancient Town",
-                            Ward = "Minh An"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Address = "10B Tran Hung Dao",
-                            Description = "Hoi An Museum of History - Culture is a large-scale work, located at 10B Tran Hung Dao, Hoi An city, where displays more than 800 original artifacts and valuable documents in ceramics, porcelain, bronze. iron, paper, wood...reflecting the development stages of the urban - commercial port of Hoi An from the period of Sa Huynh culture (from the 2nd century AD) to the period of Champa culture (from the 1st century AD) II to 15th century) to the period of Dai Viet and Dai Nam cultures (from the 15th to the 19th century), as well as the history of the city's people's revolutionary struggle (since the French colonialists invaded to invade Vietnam). 1858 to the great victory in the spring of 1975).&Hoi An Museum of History - Culture will help visitors get an overview of the historical process as well as the cultural thickness of the land of Hoi An. The museum is currently open every day of the week, and is closed on the 25th of every month to carry out professional work.",
-                            District = "Hoi An",
-                            HighLights = "highlights",
-                            Latitude = 15.88036m,
-                            Longitude = 108.32951m,
-                            OpenCloseTime = "8:00 AM - 6:00 PM",
-                            PlaceId = 3,
-                            Province = "Quang Nam",
-                            SiteName = "Hoi An Museum of History and Culture",
-                            Ward = "Minh An"
-                        });
                 });
 
             modelBuilder.Entity("HappyVacation.Database.Entities.SubTouristSiteImage", b =>
@@ -1372,104 +1292,6 @@ namespace HappyVacation.Database.Migrations
                     b.HasIndex("SubTouristSiteId");
 
                     b.ToTable("TouristSiteImages", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            SubTouristSiteId = 1,
-                            Url = "/storage/traque1.jpg"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            SubTouristSiteId = 1,
-                            Url = "/storage/traque2.jpg"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            SubTouristSiteId = 1,
-                            Url = "/storage/traque3.jpg"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            SubTouristSiteId = 1,
-                            Url = "/storage/traque4.jpg"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            SubTouristSiteId = 2,
-                            Url = "/storage/thanhha1.jpg"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            SubTouristSiteId = 2,
-                            Url = "/storage/thanhha2.jpg"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            SubTouristSiteId = 2,
-                            Url = "/storage/thanhha3.jpg"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            SubTouristSiteId = 2,
-                            Url = "/storage/thanhha4.jpg"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            SubTouristSiteId = 3,
-                            Url = "/storage/phocoha1.jpg"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            SubTouristSiteId = 3,
-                            Url = "/storage/phocoha2.jpg"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            SubTouristSiteId = 3,
-                            Url = "/storage/phocoha3.jpg"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            SubTouristSiteId = 3,
-                            Url = "/storage/phocoha4.jpg"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            SubTouristSiteId = 4,
-                            Url = "/storage/baotangha1.jpg"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            SubTouristSiteId = 4,
-                            Url = "/storage/baotangha2.jpg"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            SubTouristSiteId = 4,
-                            Url = "/storage/baotangha3.jpg"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            SubTouristSiteId = 4,
-                            Url = "/storage/baotangha4.jpg"
-                        });
                 });
 
             modelBuilder.Entity("HappyVacation.Database.Entities.Tour", b =>
@@ -1794,8 +1616,8 @@ namespace HappyVacation.Database.Migrations
                             FirstName = "Quoc Dat",
                             IsEnabled = true,
                             LastName = "Ngo Luu",
-                            PasswordHash = new byte[] { 170, 46, 183, 150, 212, 160, 205, 116, 54, 205, 140, 192, 190, 253, 17, 66, 150, 127, 49, 63, 222, 102, 233, 191, 154, 191, 112, 101, 70, 101, 72, 230, 215, 3, 188, 232, 154, 204, 157, 44, 173, 122, 212, 224, 186, 253, 5, 121, 182, 137, 14, 160, 78, 76, 127, 140, 184, 124, 169, 47, 129, 123, 78, 100 },
-                            PasswordSalt = new byte[] { 140, 138, 36, 250, 243, 5, 237, 81, 232, 174, 16, 94, 251, 74, 7, 1, 31, 131, 227, 168, 74, 65, 22, 121, 134, 175, 12, 201, 200, 104, 235, 165, 232, 180, 174, 86, 48, 209, 88, 184, 48, 62, 202, 133, 10, 21, 24, 233, 136, 33, 16, 16, 12, 55, 58, 150, 24, 30, 234, 112, 163, 139, 146, 87, 246, 105, 61, 167, 8, 244, 80, 35, 16, 53, 156, 84, 199, 109, 174, 114, 238, 250, 222, 98, 45, 48, 54, 111, 220, 34, 228, 36, 236, 204, 80, 24, 76, 131, 101, 116, 20, 254, 41, 84, 57, 149, 133, 233, 234, 57, 95, 185, 4, 179, 86, 114, 160, 104, 153, 25, 131, 88, 210, 42, 131, 136, 97, 200 },
+                            PasswordHash = new byte[] { 153, 97, 90, 36, 1, 236, 177, 161, 180, 221, 193, 170, 53, 246, 183, 194, 12, 182, 71, 29, 76, 112, 78, 67, 58, 152, 111, 107, 138, 142, 192, 183, 85, 23, 228, 141, 197, 22, 215, 138, 88, 78, 99, 65, 202, 92, 197, 22, 123, 5, 45, 141, 114, 222, 49, 59, 33, 154, 155, 172, 118, 193, 207, 135 },
+                            PasswordSalt = new byte[] { 99, 82, 52, 82, 166, 185, 206, 69, 103, 97, 222, 192, 105, 51, 96, 184, 202, 26, 173, 152, 6, 17, 188, 243, 14, 5, 21, 188, 236, 127, 15, 205, 11, 93, 108, 125, 57, 134, 219, 212, 227, 237, 83, 26, 72, 125, 231, 196, 16, 80, 163, 177, 226, 22, 42, 59, 252, 157, 84, 237, 244, 19, 119, 144, 80, 214, 202, 59, 141, 4, 211, 172, 217, 122, 6, 17, 65, 169, 239, 95, 21, 69, 99, 97, 157, 175, 102, 52, 92, 209, 112, 212, 94, 187, 196, 84, 89, 19, 69, 94, 228, 85, 26, 89, 24, 58, 169, 119, 7, 170, 88, 105, 88, 122, 65, 200, 28, 183, 202, 35, 23, 180, 80, 89, 127, 183, 43, 78 },
                             Phone = "0905553859",
                             Username = "admin"
                         },
@@ -1807,8 +1629,8 @@ namespace HappyVacation.Database.Migrations
                             FirstName = "Quoc Tuan",
                             IsEnabled = true,
                             LastName = "Dang",
-                            PasswordHash = new byte[] { 79, 242, 108, 121, 197, 33, 73, 107, 242, 47, 8, 28, 32, 14, 225, 171, 223, 204, 28, 96, 163, 230, 133, 195, 134, 64, 196, 44, 97, 135, 234, 139, 146, 43, 207, 91, 155, 177, 89, 230, 104, 1, 86, 105, 145, 143, 179, 254, 217, 52, 70, 133, 101, 153, 144, 227, 253, 184, 181, 154, 201, 145, 238, 96 },
-                            PasswordSalt = new byte[] { 140, 138, 36, 250, 243, 5, 237, 81, 232, 174, 16, 94, 251, 74, 7, 1, 31, 131, 227, 168, 74, 65, 22, 121, 134, 175, 12, 201, 200, 104, 235, 165, 232, 180, 174, 86, 48, 209, 88, 184, 48, 62, 202, 133, 10, 21, 24, 233, 136, 33, 16, 16, 12, 55, 58, 150, 24, 30, 234, 112, 163, 139, 146, 87, 246, 105, 61, 167, 8, 244, 80, 35, 16, 53, 156, 84, 199, 109, 174, 114, 238, 250, 222, 98, 45, 48, 54, 111, 220, 34, 228, 36, 236, 204, 80, 24, 76, 131, 101, 116, 20, 254, 41, 84, 57, 149, 133, 233, 234, 57, 95, 185, 4, 179, 86, 114, 160, 104, 153, 25, 131, 88, 210, 42, 131, 136, 97, 200 },
+                            PasswordHash = new byte[] { 29, 134, 41, 79, 113, 138, 114, 51, 143, 11, 146, 251, 92, 22, 24, 8, 90, 50, 136, 203, 198, 177, 179, 130, 169, 32, 86, 105, 198, 96, 139, 32, 63, 58, 18, 99, 130, 239, 32, 101, 14, 115, 246, 180, 41, 205, 178, 160, 135, 211, 250, 89, 148, 123, 35, 76, 12, 254, 39, 156, 117, 214, 149, 16 },
+                            PasswordSalt = new byte[] { 99, 82, 52, 82, 166, 185, 206, 69, 103, 97, 222, 192, 105, 51, 96, 184, 202, 26, 173, 152, 6, 17, 188, 243, 14, 5, 21, 188, 236, 127, 15, 205, 11, 93, 108, 125, 57, 134, 219, 212, 227, 237, 83, 26, 72, 125, 231, 196, 16, 80, 163, 177, 226, 22, 42, 59, 252, 157, 84, 237, 244, 19, 119, 144, 80, 214, 202, 59, 141, 4, 211, 172, 217, 122, 6, 17, 65, 169, 239, 95, 21, 69, 99, 97, 157, 175, 102, 52, 92, 209, 112, 212, 94, 187, 196, 84, 89, 19, 69, 94, 228, 85, 26, 89, 24, 58, 169, 119, 7, 170, 88, 105, 88, 122, 65, 200, 28, 183, 202, 35, 23, 180, 80, 89, 127, 183, 43, 78 },
                             Phone = "0921231220",
                             ProviderId = 1,
                             Username = "quoctuan"
@@ -1821,8 +1643,8 @@ namespace HappyVacation.Database.Migrations
                             FirstName = "Cong Tai",
                             IsEnabled = true,
                             LastName = "Dinh",
-                            PasswordHash = new byte[] { 218, 111, 73, 85, 212, 162, 46, 38, 114, 251, 97, 119, 178, 179, 50, 88, 47, 180, 2, 144, 152, 156, 103, 8, 202, 146, 110, 229, 15, 54, 158, 255, 104, 26, 234, 93, 37, 48, 49, 90, 221, 171, 233, 70, 29, 41, 222, 70, 92, 153, 6, 106, 37, 76, 113, 184, 39, 8, 101, 114, 186, 89, 146, 55 },
-                            PasswordSalt = new byte[] { 140, 138, 36, 250, 243, 5, 237, 81, 232, 174, 16, 94, 251, 74, 7, 1, 31, 131, 227, 168, 74, 65, 22, 121, 134, 175, 12, 201, 200, 104, 235, 165, 232, 180, 174, 86, 48, 209, 88, 184, 48, 62, 202, 133, 10, 21, 24, 233, 136, 33, 16, 16, 12, 55, 58, 150, 24, 30, 234, 112, 163, 139, 146, 87, 246, 105, 61, 167, 8, 244, 80, 35, 16, 53, 156, 84, 199, 109, 174, 114, 238, 250, 222, 98, 45, 48, 54, 111, 220, 34, 228, 36, 236, 204, 80, 24, 76, 131, 101, 116, 20, 254, 41, 84, 57, 149, 133, 233, 234, 57, 95, 185, 4, 179, 86, 114, 160, 104, 153, 25, 131, 88, 210, 42, 131, 136, 97, 200 },
+                            PasswordHash = new byte[] { 216, 202, 101, 19, 195, 143, 152, 152, 146, 114, 70, 63, 33, 112, 137, 103, 75, 6, 56, 115, 220, 48, 64, 45, 92, 98, 157, 202, 165, 239, 9, 234, 254, 167, 138, 88, 255, 108, 242, 159, 91, 80, 58, 158, 227, 0, 193, 152, 78, 171, 242, 189, 61, 101, 63, 140, 222, 237, 140, 18, 208, 50, 197, 49 },
+                            PasswordSalt = new byte[] { 99, 82, 52, 82, 166, 185, 206, 69, 103, 97, 222, 192, 105, 51, 96, 184, 202, 26, 173, 152, 6, 17, 188, 243, 14, 5, 21, 188, 236, 127, 15, 205, 11, 93, 108, 125, 57, 134, 219, 212, 227, 237, 83, 26, 72, 125, 231, 196, 16, 80, 163, 177, 226, 22, 42, 59, 252, 157, 84, 237, 244, 19, 119, 144, 80, 214, 202, 59, 141, 4, 211, 172, 217, 122, 6, 17, 65, 169, 239, 95, 21, 69, 99, 97, 157, 175, 102, 52, 92, 209, 112, 212, 94, 187, 196, 84, 89, 19, 69, 94, 228, 85, 26, 89, 24, 58, 169, 119, 7, 170, 88, 105, 88, 122, 65, 200, 28, 183, 202, 35, 23, 180, 80, 89, 127, 183, 43, 78 },
                             Phone = "0945501905",
                             Username = "congtai"
                         },
@@ -1834,8 +1656,8 @@ namespace HappyVacation.Database.Migrations
                             FirstName = "Quoc Dat",
                             IsEnabled = true,
                             LastName = "Ngo Luu",
-                            PasswordHash = new byte[] { 34, 203, 62, 187, 25, 87, 116, 215, 181, 149, 254, 236, 72, 213, 136, 3, 226, 68, 188, 129, 60, 243, 229, 43, 147, 73, 242, 193, 104, 23, 147, 61, 240, 242, 147, 184, 84, 255, 198, 72, 55, 113, 231, 137, 64, 85, 145, 121, 115, 241, 93, 43, 85, 28, 245, 166, 202, 14, 229, 125, 228, 166, 30, 51 },
-                            PasswordSalt = new byte[] { 140, 138, 36, 250, 243, 5, 237, 81, 232, 174, 16, 94, 251, 74, 7, 1, 31, 131, 227, 168, 74, 65, 22, 121, 134, 175, 12, 201, 200, 104, 235, 165, 232, 180, 174, 86, 48, 209, 88, 184, 48, 62, 202, 133, 10, 21, 24, 233, 136, 33, 16, 16, 12, 55, 58, 150, 24, 30, 234, 112, 163, 139, 146, 87, 246, 105, 61, 167, 8, 244, 80, 35, 16, 53, 156, 84, 199, 109, 174, 114, 238, 250, 222, 98, 45, 48, 54, 111, 220, 34, 228, 36, 236, 204, 80, 24, 76, 131, 101, 116, 20, 254, 41, 84, 57, 149, 133, 233, 234, 57, 95, 185, 4, 179, 86, 114, 160, 104, 153, 25, 131, 88, 210, 42, 131, 136, 97, 200 },
+                            PasswordHash = new byte[] { 47, 145, 166, 140, 162, 3, 237, 239, 32, 27, 244, 119, 94, 80, 113, 3, 41, 170, 4, 121, 235, 32, 109, 72, 1, 52, 23, 87, 250, 148, 229, 230, 37, 159, 118, 213, 213, 109, 186, 192, 38, 90, 149, 55, 138, 182, 93, 94, 19, 207, 224, 168, 228, 212, 215, 101, 20, 91, 44, 176, 239, 170, 134, 150 },
+                            PasswordSalt = new byte[] { 99, 82, 52, 82, 166, 185, 206, 69, 103, 97, 222, 192, 105, 51, 96, 184, 202, 26, 173, 152, 6, 17, 188, 243, 14, 5, 21, 188, 236, 127, 15, 205, 11, 93, 108, 125, 57, 134, 219, 212, 227, 237, 83, 26, 72, 125, 231, 196, 16, 80, 163, 177, 226, 22, 42, 59, 252, 157, 84, 237, 244, 19, 119, 144, 80, 214, 202, 59, 141, 4, 211, 172, 217, 122, 6, 17, 65, 169, 239, 95, 21, 69, 99, 97, 157, 175, 102, 52, 92, 209, 112, 212, 94, 187, 196, 84, 89, 19, 69, 94, 228, 85, 26, 89, 24, 58, 169, 119, 7, 170, 88, 105, 88, 122, 65, 200, 28, 183, 202, 35, 23, 180, 80, 89, 127, 183, 43, 78 },
                             Phone = "0905553859",
                             Username = "quocdat"
                         },
@@ -1848,8 +1670,8 @@ namespace HappyVacation.Database.Migrations
                             HotelId = 1,
                             IsEnabled = true,
                             LastName = "Lam",
-                            PasswordHash = new byte[] { 219, 97, 58, 151, 250, 240, 36, 191, 132, 170, 99, 249, 92, 158, 233, 2, 101, 125, 58, 29, 254, 74, 28, 37, 163, 229, 211, 200, 101, 36, 72, 199, 117, 90, 57, 65, 81, 106, 232, 80, 164, 179, 180, 177, 67, 176, 88, 44, 119, 44, 45, 65, 96, 80, 224, 198, 111, 168, 67, 221, 95, 138, 228, 60 },
-                            PasswordSalt = new byte[] { 140, 138, 36, 250, 243, 5, 237, 81, 232, 174, 16, 94, 251, 74, 7, 1, 31, 131, 227, 168, 74, 65, 22, 121, 134, 175, 12, 201, 200, 104, 235, 165, 232, 180, 174, 86, 48, 209, 88, 184, 48, 62, 202, 133, 10, 21, 24, 233, 136, 33, 16, 16, 12, 55, 58, 150, 24, 30, 234, 112, 163, 139, 146, 87, 246, 105, 61, 167, 8, 244, 80, 35, 16, 53, 156, 84, 199, 109, 174, 114, 238, 250, 222, 98, 45, 48, 54, 111, 220, 34, 228, 36, 236, 204, 80, 24, 76, 131, 101, 116, 20, 254, 41, 84, 57, 149, 133, 233, 234, 57, 95, 185, 4, 179, 86, 114, 160, 104, 153, 25, 131, 88, 210, 42, 131, 136, 97, 200 },
+                            PasswordHash = new byte[] { 21, 247, 218, 27, 25, 3, 44, 103, 113, 4, 172, 4, 181, 246, 205, 20, 12, 177, 152, 7, 255, 252, 189, 178, 145, 241, 55, 189, 175, 202, 80, 122, 119, 67, 174, 159, 136, 58, 61, 99, 81, 213, 185, 26, 118, 193, 184, 41, 34, 172, 5, 231, 107, 110, 116, 17, 140, 228, 177, 183, 238, 160, 203, 86 },
+                            PasswordSalt = new byte[] { 99, 82, 52, 82, 166, 185, 206, 69, 103, 97, 222, 192, 105, 51, 96, 184, 202, 26, 173, 152, 6, 17, 188, 243, 14, 5, 21, 188, 236, 127, 15, 205, 11, 93, 108, 125, 57, 134, 219, 212, 227, 237, 83, 26, 72, 125, 231, 196, 16, 80, 163, 177, 226, 22, 42, 59, 252, 157, 84, 237, 244, 19, 119, 144, 80, 214, 202, 59, 141, 4, 211, 172, 217, 122, 6, 17, 65, 169, 239, 95, 21, 69, 99, 97, 157, 175, 102, 52, 92, 209, 112, 212, 94, 187, 196, 84, 89, 19, 69, 94, 228, 85, 26, 89, 24, 58, 169, 119, 7, 170, 88, 105, 88, 122, 65, 200, 28, 183, 202, 35, 23, 180, 80, 89, 127, 183, 43, 78 },
                             Phone = "0764132745",
                             Username = "thaiduy"
                         },
@@ -1862,8 +1684,8 @@ namespace HappyVacation.Database.Migrations
                             HotelId = 2,
                             IsEnabled = true,
                             LastName = "Mai",
-                            PasswordHash = new byte[] { 210, 57, 75, 70, 120, 64, 111, 154, 7, 222, 239, 12, 242, 170, 207, 178, 32, 58, 246, 46, 0, 245, 59, 233, 10, 208, 74, 41, 56, 190, 145, 63, 227, 48, 171, 252, 150, 51, 244, 46, 230, 203, 116, 133, 145, 77, 156, 8, 192, 48, 131, 100, 124, 241, 218, 114, 252, 226, 190, 222, 166, 105, 114, 124 },
-                            PasswordSalt = new byte[] { 140, 138, 36, 250, 243, 5, 237, 81, 232, 174, 16, 94, 251, 74, 7, 1, 31, 131, 227, 168, 74, 65, 22, 121, 134, 175, 12, 201, 200, 104, 235, 165, 232, 180, 174, 86, 48, 209, 88, 184, 48, 62, 202, 133, 10, 21, 24, 233, 136, 33, 16, 16, 12, 55, 58, 150, 24, 30, 234, 112, 163, 139, 146, 87, 246, 105, 61, 167, 8, 244, 80, 35, 16, 53, 156, 84, 199, 109, 174, 114, 238, 250, 222, 98, 45, 48, 54, 111, 220, 34, 228, 36, 236, 204, 80, 24, 76, 131, 101, 116, 20, 254, 41, 84, 57, 149, 133, 233, 234, 57, 95, 185, 4, 179, 86, 114, 160, 104, 153, 25, 131, 88, 210, 42, 131, 136, 97, 200 },
+                            PasswordHash = new byte[] { 91, 85, 194, 99, 48, 165, 199, 176, 42, 176, 86, 136, 194, 245, 54, 68, 94, 22, 202, 26, 235, 156, 158, 85, 42, 110, 228, 40, 118, 138, 178, 32, 224, 154, 113, 250, 147, 116, 77, 32, 148, 70, 93, 215, 223, 194, 163, 211, 96, 44, 66, 157, 74, 230, 105, 234, 246, 23, 35, 37, 110, 110, 198, 185 },
+                            PasswordSalt = new byte[] { 99, 82, 52, 82, 166, 185, 206, 69, 103, 97, 222, 192, 105, 51, 96, 184, 202, 26, 173, 152, 6, 17, 188, 243, 14, 5, 21, 188, 236, 127, 15, 205, 11, 93, 108, 125, 57, 134, 219, 212, 227, 237, 83, 26, 72, 125, 231, 196, 16, 80, 163, 177, 226, 22, 42, 59, 252, 157, 84, 237, 244, 19, 119, 144, 80, 214, 202, 59, 141, 4, 211, 172, 217, 122, 6, 17, 65, 169, 239, 95, 21, 69, 99, 97, 157, 175, 102, 52, 92, 209, 112, 212, 94, 187, 196, 84, 89, 19, 69, 94, 228, 85, 26, 89, 24, 58, 169, 119, 7, 170, 88, 105, 88, 122, 65, 200, 28, 183, 202, 35, 23, 180, 80, 89, 127, 183, 43, 78 },
                             Phone = "0783803087",
                             Username = "xuantoan"
                         });
@@ -2053,6 +1875,17 @@ namespace HappyVacation.Database.Migrations
                     b.Navigation("Place");
                 });
 
+            modelBuilder.Entity("HappyVacation.Database.Entities.PlaceOverviewVideo", b =>
+                {
+                    b.HasOne("HappyVacation.Database.Entities.Place", "Place")
+                        .WithMany("PlaceOverviewVideos")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Place");
+                });
+
             modelBuilder.Entity("HappyVacation.Database.Entities.Review", b =>
                 {
                     b.HasOne("HappyVacation.Database.Entities.Tour", "Tour")
@@ -2222,6 +2055,8 @@ namespace HappyVacation.Database.Migrations
                     b.Navigation("Hotels");
 
                     b.Navigation("PlaceImages");
+
+                    b.Navigation("PlaceOverviewVideos");
 
                     b.Navigation("SubTouristSites");
 

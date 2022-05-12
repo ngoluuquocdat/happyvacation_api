@@ -40,7 +40,7 @@ namespace HappyVacation.Controllers
         {
             var currentUser = HttpContext.User;
             var userId = 0;
-            if (currentUser != null)
+            if (currentUser != null && currentUser.FindFirst("id") != null)
             {
                 userId = Int32.Parse(currentUser.FindFirst("id").Value);
             }
