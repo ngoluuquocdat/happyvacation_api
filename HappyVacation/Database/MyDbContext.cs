@@ -20,6 +20,7 @@ namespace HappyVacation.Database
             modelBuilder.ApplyConfiguration(new PlaceConfiguration());
             modelBuilder.ApplyConfiguration(new TourPlaceConfiguration());
             modelBuilder.ApplyConfiguration(new PlaceImageConfiguration());
+            modelBuilder.ApplyConfiguration(new TravelTipConfiguration());
             modelBuilder.ApplyConfiguration(new SubTouristSiteConfiguration());
             modelBuilder.ApplyConfiguration(new SubTouristSiteImageConfiguration());
 
@@ -51,6 +52,7 @@ namespace HappyVacation.Database
 
         // place and tourist sites
         public DbSet<Place> Places { get; set; }
+        public DbSet<TravelTip> TravelTip { get; set; }
         public DbSet<SubTouristSite> SubTouristSites { get; set; }
         // ...
         // ------------------------------------

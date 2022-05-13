@@ -19,8 +19,9 @@ namespace HappyVacation.Database.Entities
         public List<Hotel> Hotels { get; set; }
         // 1 place - n place images
         public List<PlaceImage> PlaceImages { get; set; }
-
         // 1 place - n tourist sites
         public List<SubTouristSite> SubTouristSites { get; set; }
+        // 1 place - n travel tips
+        public List<TravelTip> TravelTips { get; set; }
     }
 }

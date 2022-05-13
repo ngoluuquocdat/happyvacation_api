@@ -14,7 +14,7 @@ namespace HappyVacation.Database.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             builder.Property(x => x.CategoryName).IsRequired().HasMaxLength(20);
-            
+           
         }
     }
 }

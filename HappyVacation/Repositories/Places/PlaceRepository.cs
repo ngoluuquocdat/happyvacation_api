@@ -35,6 +35,12 @@ namespace HappyVacation.Repositories.Places
                                     {
                                         Id = img.Id,
                                         Url = img.Url
+                                    }),
+                                    TravelTips = x.TravelTips.Select(tip => new TravelTipVm()
+                                    {
+                                        Id = tip.Id,
+                                        Title = tip.Title,
+                                        Content = tip.Content
                                     })
                                 }).FirstOrDefaultAsync();
 

@@ -8,6 +8,7 @@
         public IEnumerable<string> Description { get; set; }    // list of paragraphs
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
+        public IEnumerable<TravelTipVm> TravelTips { get; set; }
         public IEnumerable<PlaceImageVm> Images { get; set; }
     }
 }

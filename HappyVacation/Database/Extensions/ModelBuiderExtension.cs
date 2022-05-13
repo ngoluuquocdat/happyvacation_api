@@ -282,6 +282,37 @@ namespace HappyVacation.Database.Extensions
                     OverviewVideoUrl = "/storage/HoiAn360.mp4"
                 }
             );
+            // data seeding for Travel Tips
+            modelBuilder.Entity<TravelTip>().HasData(
+                new TravelTip
+                {
+                    Id = 1,
+                    Title = "Transportations in Hoi An",
+                    Content = "You can visit Hoi An by taxi, motorbike, bicycle, cyclo, or walking. If you choose to use a motorbike, remember to know clearly about some streets where the motorbikes are crossing prohibited. In the evening, it will be great if you walk along the Thu Bon river to admire the stunning beauty of Hoi An at night. Another choice that you can go by cyclo but when walking you can save your expenses and enjoy street foods here.",
+                    PlaceId = 3
+                },
+                new TravelTip
+                {
+                    Id = 2,
+                    Title = "Should pay in VND",
+                    Content = "Some hotels, restaurants, and shops may accept payment in USD, but you should always pay in VND. If something is priced in VND, then you should definitely pay for it in VND because using any other currency will lead to terrible exchange rates. As advised, the best place to get VND in Hoi An is at gold/jewelry shops and banks, or from ATMs.",
+                    PlaceId = 3
+                },
+                new TravelTip
+                {
+                    Id = 3,
+                    Title = "Weather in Hoi An",
+                    Content = "If you are visiting during the hot summer months, don’t forget to hydrate. In summer, the temperature can reach 34-37C. Made sure each of us had 2L bottle of water and drank all of it by the end of each day. The best time to visit Hoi An is from February to July, with low rainfall and amicable weather. The period from May to July can be extremely hot, but with the cool breeze from the ocean and the low intensity of buildings, Hoi An is just as nice to visit.",
+                    PlaceId = 3
+                },
+                new TravelTip
+                {
+                    Id = 4,
+                    Title = "Dress sensibly",
+                    Content = "T-shirts and shorts are okay almost anywhere, but it’s preferable to wear longer trousers and cover your shoulders if you’re visiting temples and other holy places. Likewise, bikinis and swim-shorts are fine on the beach, but refrain from dressing scantily in towns or on the street.",
+                    PlaceId = 3
+                }
+            );
             // data seeding for Place Images
             modelBuilder.Entity<PlaceImage>().HasData(
                 new PlaceImage { Id = 1, Url = "/storage/hoian.jpg", PlaceId = 3 },
