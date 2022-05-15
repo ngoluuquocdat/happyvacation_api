@@ -30,9 +30,9 @@ namespace HappyVacation.Controllers
 
         [HttpGet("{placeId}/touristSites")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetTouristSitesInPlace(int placeId)
+        public async Task<ActionResult> GetTouristSitesInPlace(int placeId, [FromQuery] int page, int perPage)
         {
-            var result = await _placeRepository.GetTouristSitesInPlace(placeId);
+            var result = await _placeRepository.GetTouristSitesInPlace(placeId, page, perPage);
             if (result == null)
             {
                 return NotFound();
