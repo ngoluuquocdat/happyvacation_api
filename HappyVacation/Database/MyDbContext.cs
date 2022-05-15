@@ -52,6 +52,7 @@ namespace HappyVacation.Database
 
         // place and tourist sites
         public DbSet<Place> Places { get; set; }
+        public DbSet<PlaceImage> PlaceImages { get; set; }
         public DbSet<TravelTip> TravelTip { get; set; }
         public DbSet<SubTouristSite> SubTouristSites { get; set; }
         // ...

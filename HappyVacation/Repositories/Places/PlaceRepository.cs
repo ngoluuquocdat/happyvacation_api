@@ -17,6 +17,47 @@ namespace HappyVacation.Repositories.Places
             _storageService = storageService;
         }
 
+        public async Task<List<PlaceVm>> GetPlaces(int count, string? sort)
+        {
+            var requestDate = DateTime.Now.AddMonths(-3);       // 3 months ago from current date
+
+            var places = await _context.Places.AsNoTracking()
+                             .Select(place => new PlaceVm()
+                             {
+                                 Id = place.Id,
+                                 PlaceName = place.PlaceName,
+                                 ThumbnailUrl = (place.PlaceImages.Count() > 0) ? place.PlaceImages[0].Url : place.ThumbnailUrl
+                             }).AsSplitQuery().ToListAsync();
+
+            if (!String.IsNullOrEmpty(sort))
+            {
+                for(int i = 0; i < places.Count; i++)
+                {
+                    places[i].OrderCount = await GetOrderCount(places[i].Id, requestDate);
+                }
+                // order places by orders count
+                places = places.OrderByDescending(p => p.OrderCount).ToList();
+            }                              
+
+            if(count != 0)
+            {
+                places = places.Take(count).ToList();
+            }
+
+            return places;
+        }
+
+        public async Task<int> GetOrderCount(int placeId, DateTime requestDate)
+        {
+            var tours = await _context.Tours.Where(x => x.TourPlaces.Any(tp => tp.PlaceId == placeId)).AsNoTracking()
+                                    .Select(x => new
+                                    {
+                                        TourId = x.Id,
+                                        OrderCount = x.Orders.Where(o => o.OrderDate.Date >= requestDate && o.State.Equals("confirmed")).Count()
+                                    }).ToListAsync();
+            return tours.Sum(x => x.OrderCount);
+        }
+
         public async Task<PlaceDetailVm> GetPlaceById(int placeId)
         {
             if (!_context.Places.Any(x => (x.Id == placeId)))

@@ -15,6 +15,14 @@ namespace HappyVacation.Controllers
             _placeRepository = placeRepository;
         }
 
+        [HttpGet()]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetPlaces([FromQuery] int count, string? sort)
+        {
+            var result = await _placeRepository.GetPlaces(count, sort);
+            return Ok(result);
+        }
+
         [HttpGet("{placeId}")]
         [AllowAnonymous]
         public async Task<ActionResult> GetPlaceById(int placeId)

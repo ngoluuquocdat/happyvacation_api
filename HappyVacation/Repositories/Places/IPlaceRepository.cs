@@ -6,6 +6,7 @@ namespace HappyVacation.Repositories.Places
     public interface IPlaceRepository
     {
         // place
+        Task<List<PlaceVm>> GetPlaces(int count, string? sort);
         Task<PlaceDetailVm> GetPlaceById(int placeId);
 
         // tourist site
