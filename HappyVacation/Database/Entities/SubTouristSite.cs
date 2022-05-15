@@ -13,6 +13,7 @@
         public string OpenCloseTime { get; set; }   // Ex: 9:00 AM - 10:30 PM
         public decimal Longitude { get; set; }
         public decimal Latitude { get; set; }
+        public string OverviewVideoUrl { get; set; }
         public int PlaceId { get; set; }
 
         // navigation props

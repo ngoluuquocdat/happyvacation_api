@@ -10,5 +10,8 @@
         public decimal Latitude { get; set; }
         public IEnumerable<TravelTipVm> TravelTips { get; set; }
         public IEnumerable<PlaceImageVm> Images { get; set; }
+        public string OverviewVideoUrl { get; set; }
+        public int TourCount { get; set; }
+        public int SubTouristSiteCount { get; set; }
     }
 }

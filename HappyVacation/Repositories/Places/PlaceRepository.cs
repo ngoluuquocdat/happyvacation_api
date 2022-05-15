@@ -1,4 +1,5 @@
 ﻿using HappyVacation.Database;
+using HappyVacation.DTOs.Common;
 using HappyVacation.DTOs.Places;
 using HappyVacation.Services.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,10 @@ namespace HappyVacation.Repositories.Places
                                         Id = tip.Id,
                                         Title = tip.Title,
                                         Content = tip.Content
-                                    })
+                                    }),
+                                    OverviewVideoUrl = x.OverviewVideoUrl,
+                                    TourCount = x.TourPlaces.Count(),
+                                    SubTouristSiteCount = x.SubTouristSites.Count()
                                 }).FirstOrDefaultAsync();
 
             place.Description = (await _context.Places.Where(x => x.Id == placeId).AsNoTracking()
@@ -62,6 +66,8 @@ namespace HappyVacation.Repositories.Places
                                 {   
                                     Id = x.Id,
                                     SiteName = x.SiteName,
+                                    PlaceId = x.PlaceId,
+                                    PlaceName = x.Place.PlaceName,
                                     Address = !String.IsNullOrEmpty(x.Address) ? $"{x.Address}, {x.Ward}, {x.District}, {x.Province}" 
                                                                               : $"{x.Ward}, {x.District}, {x.Province}",
                                     OpenCloseTime = x.OpenCloseTime,
@@ -71,7 +77,8 @@ namespace HappyVacation.Repositories.Places
                                     {
                                         Id = img.Id,
                                         Url = img.Url
-                                    })
+                                    }),
+                                    OverviewVideoUrl = x.OverviewVideoUrl
                                 }).FirstOrDefaultAsync();
 
             touristSite.Description = (await _context.SubTouristSites.Where(x => x.Id == touristSiteId).AsNoTracking()
@@ -83,21 +90,32 @@ namespace HappyVacation.Repositories.Places
             return touristSite;
         }
 
-        public async Task<List<TouristSiteMainInfoVm>> GetTouristSitesInPlace(int placeId)
+        public async Task<PagedResult<TouristSiteMainInfoVm>> GetTouristSitesInPlace(int placeId, int page, int perPage)
         {
             if (!_context.Places.Any(x => (x.Id == placeId)))
             {
                 return null;
             }
-            var touristSites = await _context.SubTouristSites.Where(x => x.PlaceId == placeId).AsNoTracking()
-                               .Select(x => new TouristSiteMainInfoVm()
-                               {
-                                   Id = x.Id,
-                                   SiteName = x.SiteName,
-                                   ThumbnailUrl = (x.SubTouristSiteImages.Count() > 0) ? x.SubTouristSiteImages[0].Url : String.Empty
-                               }).ToListAsync();
+            var query = _context.SubTouristSites.Where(x => x.PlaceId == placeId).AsNoTracking();
 
-            return touristSites;
+            // paging
+            int totalCount = query.Count();
+            int totalPages = ((totalCount - 1) / perPage) + 1;
+            query = query.Skip((page - 1) * perPage).Take(perPage);
+
+            var touristSites = await query.Select(x => new TouristSiteMainInfoVm()
+                                           {
+                                               Id = x.Id,
+                                               SiteName = x.SiteName,
+                                               ThumbnailUrl = (x.SubTouristSiteImages.Count() > 0) ? x.SubTouristSiteImages[0].Url : String.Empty
+                                           }).ToListAsync();
+
+            return new PagedResult<TouristSiteMainInfoVm>()
+            {
+                TotalCount = totalCount,
+                TotalPage = totalPages,
+                Items = touristSites
+            };
         }
     }
 }

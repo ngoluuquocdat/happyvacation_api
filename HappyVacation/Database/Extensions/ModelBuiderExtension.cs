@@ -162,6 +162,11 @@ namespace HappyVacation.Database.Extensions
                     Id = 1, 
                     PlaceName = "Da Nang", 
                     ThumbnailUrl = "/storage/danang.jpg",
+                    Description = "Da Nang’s fast reinventing itself as Vietnam’s most hip and modern city and is building an impressive collection of superlatives; one of the best beaches in the world (as voted for by Forbes Magazine); the longest cable car in the world at Ba Na Hill Station; some of the rarest monkeys in the world atop Monkey Mountain; one of the tallest Lady Buddha statues in Vietnam; one of the highest wheels in the world-The Sun Wheel , plus the highest Sky Bar in Vietnam, on the 35th floor of the gleaming Novatel Da Nang Han River Hotel.&" +
+                    "The Fire-breathing Dragon.&" +
+                    "Vietnam’s third biggest city is home to no less than 8 modern bridges, the most impressive of which is The Dragon Bridge (Cau Rong), who guards the city and breathes fire at weekends. The city’s clean, coconut-tree-fringed, river-side boulevard is lined with ultra-modern hotels, apartments and restaurants.&" +
+                    "Beaches, Buddhas, Monkeys and Mountains.&" +
+                    "Over the eastside of the city is where the stunning My Khe Beach stretches around 40kms from the foot of Monkey Mountain to the ancient town of Hoi An. To the north is Monkey Mountain, home to some of the rarest monkeys in the world; and Vietnam’s version of Rio’s ‘Christ the Redeemer’, a Lady Buddha statue that stands at nearly 70 meters tall. To the south are the five Marble Mountains and a smattering of luxurious, beachside 5 star hotels. All the way in between is a sublime stretch of coastline, gloriously devoid of tourists, with a wide selection of seafood restaurants located close to the sea.",
                     Latitude = 16.047079M,
                     Longitude = 108.206230M,
                     OverviewVideoUrl = "/storage/DaNang360.mp4"
@@ -337,23 +342,26 @@ namespace HappyVacation.Database.Extensions
                     Address = "",
                     OpenCloseTime = "8:00 AM - 6:00 PM",
                     Latitude = 15.9024202M,
-                    Longitude = 108.3375933M
+                    Longitude = 108.3375933M,
+                    OverviewVideoUrl = "/storage/ChuaCau360p.mp4"
                 },
                 new SubTouristSite
                 {
                     Id = 2,
                     PlaceId = 3,
-                    SiteName = "Thanh Ha Pottery Village",
-                    Description = "Thanh Ha Pottery Village is located on the banks of the Thu Bon River, about 3 km west of Hoi An center. This is a stopover for tourists on their travel journey connecting Hoi An Ancient Town to My Son Temples. The village was formed at the end of the 15th century, associated with the migration process from Thanh Hoa, Hai Duong and Nam Dinh localities, bringing with them the traditional pottery craft from the ancestral homeland. Thanks to favorable terrain and rich clay raw materials, the first inhabitants of Thanh Ha village gave birth to pottery making here.&" +
-                    "Today, coming to Thanh Ha Pottery Village, visitors can visit a traditional Vietnamese village space that is preserved in its original state in terms of landscape with banyan trees, water wharf, communal courtyard, religious monuments, children tiled alleys… and admire first-hand the talented and skillful hands of the inhabitants of the pottery village who are hard at work creating valuable, characteristic products of the craft village. You will find here gifts that are rustic but attractive.",
+                    SiteName = "Japanese Covered Bridge",
+                    Description = "Covered Bridge, located adjacent to Nguyen Thi Minh Khai Street and Tran Phu Street - Hoi An, also known as Japanese Bridge, is a work built by Japanese merchants who came to Hoi An to trade in the early seventeenth century. More than 400 years ago. Experiencing the ups and downs of time, the building still retains great values of architecture, culture and history, showing the connection between Vietnamese-Japanese communities-- Flowers at the ancient trading port of Hoi An are invaluable assets of generations of Hoi An people and have been officially chosen as the symbol of the city.&" +
+                    "The bridge has a roof with a rather unique architecture, in the middle is a rainbow-style passageway, on both sides there is a narrow corridor, used as a place for trade and relaxation. The main side of the pagoda faces the poetic Hoai River. It's called the pagoda, but the residents worship the Bac De god Tran Vo - the god associated with the water treatment function, bringing a peaceful life, favorable rain and wind for the residents. resident community. The pagoda and bridge are made of wood, painted with lipstick and carved with elaborate and harmonious motifs. The two ends of the bridge have two pairs of wooden statues, one end is a dog statue, one end is a monkey statue with many unique interpretations of local residents. In 1719, on a weekly tour to Hoi An, Lord Nguyen Phuc Chu bestowed three words \"Lai Vien Kieu\" with the meaning of welcoming guests from afar, which is still solemnly placed at the entrance of the temple today.&" +
+                    "Covered Bridge relic was recognized as a national historical - cultural relic in 1990. Currently, Covered Bridge is an indispensable attraction of any visitor when coming to Hoi An ancient town. The image of the project was also selected to be printed on the VND 20,000 banknote issued by the State Bank of Vietnam in 2006.",
                     HighLights = "highlights",
                     Province = "Quang Nam",
                     District = "Hoi An",
-                    Ward = "Thanh Ha",
-                    Address = "",
-                    OpenCloseTime = "8:00 AM - 6:00 PM",
-                    Latitude = 15.8768065M,
-                    Longitude = 108.2989103M
+                    Ward = "Minh An",
+                    Address = "Tran Phu St",
+                    OpenCloseTime = "8:00 AM - 9:30 PM",
+                    Latitude = 15.87719M,
+                    Longitude = 108.309301M,
+                    OverviewVideoUrl = "/storage/ChuaCau360.mp4"
                 },
                 new SubTouristSite
                 {
@@ -361,7 +369,9 @@ namespace HappyVacation.Database.Extensions
                     PlaceId = 3,
                     SiteName = "Hoi An Ancient Town",
                     Description = "Formed and developed from the sixteenth to seventeenth centuries, the ancient town of Hoi An used to be one of the busiest international trading ports in Southeast Asia. This place is considered as the center of goods exchange of Eurasian traders from China, Japan, Siam, India or the Netherlands, Spain, England, France... organized by form of international fairs from 4 to 6 consecutive months per year according to the monsoon regime. Therefore, Hoi An is considered a land of convergence, interference and acculturation of many East - West cultures.&" +
-                    "Experiencing many ups and downs of history, the flow of time covers Hoi An with a peaceful and contemplative beauty. Hoi An impresses visitors with mossy yin-yang tiled houses, ancient dusty walls and colorful lanterns. Walking around the old town, visitors will have the opportunity to visit relics dating back hundreds of years, immerse themselves in the festive atmosphere of \"Old Town Night\" with folk games, listen to chants and sing songs. huts, ho drills... or simply, stop at a small roadside shop to enjoy the specialties of Hoi An.&",
+                    "Hoi An ancient town is famous for its typical architecture of the traditional trading port of Asia, which is preserved almost intact. According to statistics, Hoi An currently preserves 1,360 relics relatively intact, including many types: houses, clan churches, communal houses, pagodas, temples, assembly halls, ancient wells, harbors, markets.&" +
+                    "Experiencing many ups and downs of history, the flow of time covers Hoi An with a peaceful and contemplative beauty. Hoi An impresses visitors with mossy yin-yang tiled houses, ancient dusty walls and colorful lanterns. Walking around the old town, visitors will have the opportunity to visit relics dating back hundreds of years, immerse themselves in the festive atmosphere of \"Old Town Night\" with folk games, listen to chants and sing songs. huts, ho drills... or simply, stop at a small roadside shop to enjoy the specialties of Hoi An.&" +
+                    "On December 4, 1999, Hoi An Ancient Town was registered by UNESCO in the list of world cultural heritages. Up to now, Hoi An has become a famous destination in the journey of discovering Vietnam and the Central region of domestic and foreign tourists.",
                     HighLights = "highlights",
                     Province = "Quang Nam",
                     District = "Hoi An",
@@ -369,7 +379,8 @@ namespace HappyVacation.Database.Extensions
                     Address = "",
                     OpenCloseTime = "8:00 AM - 10:00 PM",
                     Latitude = 15.878223M,
-                    Longitude = 108.3282151M
+                    Longitude = 108.3282151M,
+                    OverviewVideoUrl = "/storage/PhoCo360.mp4"
                 },
                 new SubTouristSite
                 {
@@ -385,7 +396,25 @@ namespace HappyVacation.Database.Extensions
                     Address = "10B Tran Hung Dao",
                     OpenCloseTime = "8:00 AM - 6:00 PM",
                     Latitude = 15.88036M,
-                    Longitude = 108.32951M
+                    Longitude = 108.32951M,
+                    OverviewVideoUrl = "/storage/ChuaCau360.mp4"
+                },
+                new SubTouristSite
+                {
+                    Id = 5,
+                    PlaceId = 3,
+                    SiteName = "Thanh Ha Pottery Village",
+                    Description = "Thanh Ha Pottery Village is located on the banks of the Thu Bon River, about 3 km west of Hoi An center. This is a stopover for tourists on their travel journey connecting Hoi An Ancient Town to My Son Temples. The village was formed at the end of the 15th century, associated with the migration process from Thanh Hoa, Hai Duong and Nam Dinh localities, bringing with them the traditional pottery craft from the ancestral homeland. Thanks to favorable terrain and rich clay raw materials, the first inhabitants of Thanh Ha village gave birth to pottery making here.&" +
+                    "Today, coming to Thanh Ha Pottery Village, visitors can visit a traditional Vietnamese village space that is preserved in its original state in terms of landscape with banyan trees, water wharf, communal courtyard, religious monuments, children tiled alleys… and admire first-hand the talented and skillful hands of the inhabitants of the pottery village who are hard at work creating valuable, characteristic products of the craft village. You will find here gifts that are rustic but attractive.",
+                    HighLights = "highlights",
+                    Province = "Quang Nam",
+                    District = "Hoi An",
+                    Ward = "Thanh Ha",
+                    Address = "",
+                    OpenCloseTime = "8:00 AM - 6:00 PM",
+                    Latitude = 15.8768065M,
+                    Longitude = 108.2989103M,
+                    OverviewVideoUrl = "/storage/ChuaCau360p.mp4"
                 }
             );
             // data seeding for Tourist Sites Images
