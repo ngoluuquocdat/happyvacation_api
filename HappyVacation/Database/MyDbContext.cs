@@ -34,6 +34,7 @@ namespace HappyVacation.Database
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
 
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderMemberConfiguration());
             modelBuilder.ApplyConfiguration(new ProviderConfiguration());
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());

@@ -12,6 +12,7 @@
         public int Children { get; set; }
         public string State { get; set; }
         public string? CancelReason { get; set; }
+        public string TouristIdentityNum { get; set; }
         public string TouristName { get; set; }
         public string TouristPhone { get; set; }
         public string TouristEmail { get; set; }
@@ -22,6 +23,7 @@
         // navigation props
         public Tour Tour { get; set; }
         public User User { get; set; }
+        public List<OrderMember> OrderMembers { get; set; }
         //public Provider Provider { get; set; }
     }
 }

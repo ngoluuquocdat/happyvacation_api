@@ -14,6 +14,7 @@ namespace HappyVacation.Database.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             builder.Property(x => x.TouristName).IsRequired().HasMaxLength(60);
+            builder.Property(x => x.TouristIdentityNum).IsRequired(false);
             builder.Property(x => x.TouristPhone).IsRequired().HasMaxLength(15);
             builder.Property(x => x.TouristEmail).IsRequired().HasMaxLength(62);
             builder.Property(x => x.State).IsRequired().HasMaxLength(10);

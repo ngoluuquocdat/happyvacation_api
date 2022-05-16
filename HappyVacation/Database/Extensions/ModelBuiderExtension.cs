@@ -674,6 +674,44 @@ namespace HappyVacation.Database.Extensions
                     UserId = 3
                 }
             );
+            // data seeding for Order Members
+            modelBuilder.Entity<OrderMember>().HasData(
+                new OrderMember { Id = 1, OrderId = 1, DateOfBirth = new DateTime(2000, 05, 19), FullName = "Dinh Cong Tai", IdentityNum = "201788301", IsChild = false},
+                new OrderMember { Id = 2, OrderId = 1, DateOfBirth = new DateTime(2000, 06, 20), FullName = "Ho Thao Khanh", IdentityNum = "201877103", IsChild = false },
+                new OrderMember { Id = 3, OrderId = 1, DateOfBirth = new DateTime(2015, 07, 21), FullName = "Dinh Cong Khoi", IdentityNum = "", IsChild = true },
+                new OrderMember { Id = 4, OrderId = 2, DateOfBirth = new DateTime(2000, 05, 19), FullName = "Dinh Cong Tai", IdentityNum = "201788301", IsChild = false },
+                new OrderMember { Id = 5, OrderId = 2, DateOfBirth = new DateTime(2000, 06, 20), FullName = "Ho Thao Khanh", IdentityNum = "201877103", IsChild = false },
+                new OrderMember { Id = 6, OrderId = 5, DateOfBirth = new DateTime(2000, 05, 19), FullName = "Dinh Cong Tai", IdentityNum = "201788301", IsChild = false },
+                new OrderMember { Id = 7, OrderId = 5, DateOfBirth = new DateTime(2000, 06, 20), FullName = "Ho Thao Khanh", IdentityNum = "201877103", IsChild = false },
+                new OrderMember { Id = 8, OrderId = 5, DateOfBirth = new DateTime(2000, 10, 19), FullName = "Ngo Quoc Dat", IdentityNum = "206286537", IsChild = false },
+                new OrderMember { Id = 9, OrderId = 5, DateOfBirth = new DateTime(2015, 07, 21), FullName = "Dinh Cong Khoi", IdentityNum = "", IsChild = true },
+                new OrderMember { Id = 10, OrderId = 6, DateOfBirth = new DateTime(2000, 05, 19), FullName = "Dinh Cong Tai", IdentityNum = "201788301", IsChild = false },
+                new OrderMember { Id = 11, OrderId = 6, DateOfBirth = new DateTime(2000, 06, 20), FullName = "Ho Thao Khanh", IdentityNum = "201877103", IsChild = false },
+                new OrderMember { Id = 12, OrderId = 10, DateOfBirth = new DateTime(2000, 09, 10), FullName = "Ho Van An", IdentityNum = "203676201", IsChild = false },
+                new OrderMember { Id = 13, OrderId = 10, DateOfBirth = new DateTime(2000, 08, 20), FullName = "Nguyen Van Bao", IdentityNum = "203979301", IsChild = false },
+                new OrderMember { Id = 14, OrderId = 10, DateOfBirth = new DateTime(2000, 10, 19), FullName = "Ngo Quoc Dat", IdentityNum = "206286537", IsChild = false },
+                new OrderMember { Id = 15, OrderId = 10, DateOfBirth = new DateTime(2016, 07, 21), FullName = "Ho Van Thanh", IdentityNum = "", IsChild = true },
+                new OrderMember { Id = 16, OrderId = 11, DateOfBirth = new DateTime(2000, 09, 10), FullName = "Ho Van An", IdentityNum = "203676201", IsChild = false },
+                new OrderMember { Id = 17, OrderId = 11, DateOfBirth = new DateTime(2000, 08, 20), FullName = "Nguyen Van Bao", IdentityNum = "203979301", IsChild = false },
+                new OrderMember { Id = 18, OrderId = 11, DateOfBirth = new DateTime(2016, 07, 21), FullName = "Ho Van Thanh", IdentityNum = "", IsChild = true },
+                new OrderMember { Id = 19, OrderId = 12, DateOfBirth = new DateTime(2000, 09, 10), FullName = "Ho Van An", IdentityNum = "203676201", IsChild = false },
+                new OrderMember { Id = 20, OrderId = 12, DateOfBirth = new DateTime(2000, 08, 20), FullName = "Nguyen Van Bao", IdentityNum = "203979301", IsChild = false },
+                new OrderMember { Id = 21, OrderId = 12, DateOfBirth = new DateTime(2016, 07, 21), FullName = "Ho Van Thanh", IdentityNum = "", IsChild = true },
+                new OrderMember { Id = 22, OrderId = 16, DateOfBirth = new DateTime(2000, 02, 01), FullName = "Anh Tai Ngo Dien", IdentityNum = "203979301", IsChild = false },
+                new OrderMember { Id = 23, OrderId = 17, DateOfBirth = new DateTime(2000, 03, 30), FullName = "Quang Bao Pham", IdentityNum = "203979301", IsChild = false },
+                new OrderMember { Id = 24, OrderId = 20, DateOfBirth = new DateTime(2000, 03, 30), FullName = "Quang Bao Pham", IdentityNum = "203979301", IsChild = false },
+                new OrderMember { Id = 25, OrderId = 20, DateOfBirth = new DateTime(2002, 04, 28), FullName = "Phuong Nguyen Thi", IdentityNum = "204797102", IsChild = false },
+                new OrderMember { Id = 26, OrderId = 62, DateOfBirth = new DateTime(2000, 03, 30), FullName = "Quang Bao Pham", IdentityNum = "203979301", IsChild = false },
+                new OrderMember { Id = 27, OrderId = 62, DateOfBirth = new DateTime(2002, 04, 28), FullName = "Phuong Nguyen Thi", IdentityNum = "204797102", IsChild = false },
+                new OrderMember { Id = 28, OrderId = 62, DateOfBirth = new DateTime(2015, 04, 28), FullName = "Quang Minh Pham", IdentityNum = "", IsChild = true },
+                new OrderMember { Id = 29, OrderId = 63, DateOfBirth = new DateTime(2000, 03, 30), FullName = "Quang Bao Pham", IdentityNum = "203979301", IsChild = false },
+                new OrderMember { Id = 30, OrderId = 63, DateOfBirth = new DateTime(2002, 04, 28), FullName = "Phuong Nguyen Thi", IdentityNum = "204797102", IsChild = false },
+                new OrderMember { Id = 31, OrderId = 63, DateOfBirth = new DateTime(2015, 04, 28), FullName = "Quang Minh Pham", IdentityNum = "", IsChild = true },
+                new OrderMember { Id = 32, OrderId = 64, DateOfBirth = new DateTime(2000, 10, 18), FullName = "Quoc Dat Ngo Luu", IdentityNum = "206282345", IsChild = false },
+                new OrderMember { Id = 33, OrderId = 64, DateOfBirth = new DateTime(2000, 09, 08), FullName = "Xuan Toan Mai", IdentityNum = "204362562", IsChild = false },
+                new OrderMember { Id = 34, OrderId = 64, DateOfBirth = new DateTime(2015, 04, 28), FullName = "Quang Minh Pham", IdentityNum = "", IsChild = true },
+                new OrderMember { Id = 35, OrderId = 64, DateOfBirth = new DateTime(2015, 05, 10), FullName = "Xuan Khai Mai", IdentityNum = "", IsChild = true }
+            );
             // data seeding for Hotels
             modelBuilder.Entity<Hotel>().HasData(
                new Hotel
