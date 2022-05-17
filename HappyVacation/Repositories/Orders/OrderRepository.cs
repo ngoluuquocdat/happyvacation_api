@@ -48,6 +48,30 @@ namespace HappyVacation.Repositories.Orders
                 State = "pending"
             };
 
+            // order members
+            var orderMembers = new List<OrderMember>();
+            foreach(var item in request.AdultsList)
+            {
+                orderMembers.Add(new OrderMember()
+                {
+                    IdentityNum = item.IdentityNumber,
+                    FullName = $"{item.FirstName} {item.LastName}",
+                    DateOfBirth = DateTime.ParseExact(item.Dob, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    IsChild = false,
+                });
+            }
+            foreach (var item in request.ChildrenList)
+            {
+                orderMembers.Add(new OrderMember()
+                {
+                    IdentityNum = item.IdentityNumber,
+                    FullName = $"{item.FirstName} {item.LastName}",
+                    DateOfBirth = DateTime.ParseExact(item.Dob, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    IsChild = true,
+                });
+            }
+            order.OrderMembers = orderMembers;
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
@@ -115,7 +139,103 @@ namespace HappyVacation.Repositories.Orders
                 TouristPhone = x.TouristPhone,
                 TouristEmail = x.TouristEmail,
                 StartPoint = x.StartPoint,
-                EndPoint = x.EndPoint
+                EndPoint = x.EndPoint,
+            }).FirstOrDefaultAsync();
+
+            return order;
+        }
+
+        public async Task<OrderManageDetailVm> GetOrderDetailManage(int userId, int orderId)
+        {
+            var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
+
+            if (!_context.Orders.Any(x => (x.Id == orderId) && (x.Tour.ProviderId == providerId)))
+            {
+                return null;
+            }
+
+            var query = _context.Orders.Where(x => x.Id == orderId).AsNoTracking();
+
+            var order = await query.Select(x => new OrderManageDetailVm()
+            {
+                Id = x.Id,
+                TourId = x.TourId,
+                TourName = x.Tour.TourName,
+                DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
+                ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
+                Duration = x.Tour.Duration,
+                IsPrivate = x.Tour.IsPrivate,
+                Adults = x.Adults,
+                Children = x.Children,
+                PricePerAdult = x.Tour.PricePerAdult,
+                PricePerChild = x.Tour.PricePerChild,
+                TotalPrice = x.Adults * x.Tour.PricePerAdult + x.Children * x.Tour.PricePerChild,
+                ThumbnailUrl = (x.Tour.TourImages.Count() > 0) ? x.Tour.TourImages[0].Url : String.Empty,
+                State = x.State,
+                TouristName = x.TouristName,
+                TouristPhone = x.TouristPhone,
+                TouristEmail = x.TouristEmail,
+                StartPoint = x.StartPoint,
+                EndPoint = x.EndPoint,
+                AdultsList = x.OrderMembers.Where(om => om.IsChild == false).Select(om => new AdultVm()
+                {
+                    IdentityNumber = om.IdentityNum,
+                    FullName = om.FullName,
+                    Dob = om.DateOfBirth.ToString("dd/MM/yyyy")
+                }),
+                ChildrenList = x.OrderMembers.Where(om => om.IsChild == true).Select(om => new ChildVm()
+                {
+                    IdentityNumber = om.IdentityNum,
+                    FullName = om.FullName,
+                    Dob = om.DateOfBirth.ToString("dd/MM/yyyy")
+                })
+            }).FirstOrDefaultAsync();
+
+            return order;
+        }
+        public async Task<OrderDetailVm> GetOrderDetail(int userId, int orderId)
+        {
+            if (!_context.Orders.Any(x => (x.Id == orderId) && (x.UserId == userId)))
+            {
+                return null;
+            }
+
+            var query = _context.Orders.Where(x => x.Id == orderId).AsNoTracking();
+
+            var order = await query.Select(x => new OrderDetailVm()
+            {
+                Id = x.Id,
+                TourId = x.TourId,
+                TourName = x.Tour.TourName,
+                OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
+                DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
+                Duration = x.Tour.Duration,
+                IsPrivate = x.Tour.IsPrivate,
+                Adults = x.Adults,
+                Children = x.Children,
+                PricePerAdult = x.Tour.PricePerAdult,
+                PricePerChild = x.Tour.PricePerChild,
+                TotalPrice = x.Adults * x.Tour.PricePerAdult + x.Children * x.Tour.PricePerChild,
+                ThumbnailUrl = (x.Tour.TourImages.Count() > 0) ? x.Tour.TourImages[0].Url : String.Empty,
+                State = x.State,
+                StartPoint = x.StartPoint,
+                EndPoint = x.EndPoint,
+                AdultsList = x.OrderMembers.Where(om => om.IsChild == false).Select(om => new AdultVm()
+                {
+                    IdentityNumber = om.IdentityNum,
+                    FullName = om.FullName,
+                    Dob = om.DateOfBirth.ToString("dd/MM/yyyy")
+                }),
+                ChildrenList = x.OrderMembers.Where(om => om.IsChild == true).Select(om => new ChildVm()
+                {
+                    IdentityNumber = om.IdentityNum,
+                    FullName = om.FullName,
+                    Dob = om.DateOfBirth.ToString("dd/MM/yyyy")
+                }),
+                ProviderId = x.Tour.ProviderId,
+                ProviderName = x.Tour.Provider.ProviderName,                
             }).FirstOrDefaultAsync();
 
             return order;
@@ -408,5 +528,6 @@ namespace HappyVacation.Repositories.Orders
                 return 0;
             }
         }
+       
     }
 }

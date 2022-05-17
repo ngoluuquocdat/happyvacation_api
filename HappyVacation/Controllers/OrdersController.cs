@@ -77,6 +77,53 @@ namespace HappyVacation.Controllers
             }
         }
 
+
+        [HttpGet("{orderId:int}/detail")]
+        [Authorize]
+        public async Task<ActionResult> GetOrderDetail(int orderId)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _orderRepository.GetOrderDetail(userId, orderId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("{orderId:int}/detail-manage")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetOrderDetailManage(int orderId)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _orderRepository.GetOrderDetailManage(userId, orderId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
         [HttpPut("{orderId:int}/confirm")]
         [Authorize(Roles = "Provider")]
         public async Task<ActionResult> ConfirmOrder(int orderId)
