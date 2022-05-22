@@ -8,10 +8,12 @@
         public List<AdultDTO> AdultsList { get; set; }
         public int Children { get; set; }
         public List<ChildDTO> ChildrenList { get; set; }
+        public string TouristIdentity { get; set; }
         public string TouristName { get; set; }
         public string TouristPhone { get; set; }
         public string TouristEmail { get; set; }
         public string? StartPoint { get; set; }
         public string? EndPoint { get; set; }
+        public string TransactionId { get; set; }
     }
 }

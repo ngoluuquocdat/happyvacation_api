@@ -16,6 +16,7 @@
         public string TouristName { get; set; }
         public string TouristPhone { get; set; }
         public string TouristEmail { get; set; }
+        public string TransactionId { get; set; }
         public int TourId { get; set; }
         //public int ProviderId { get; set; }
         public int UserId { get; set; }

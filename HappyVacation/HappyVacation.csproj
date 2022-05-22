@@ -22,6 +22,8 @@
     </PackageReference>
     <PackageReference Include="MimeKit" Version="3.2.0" />
     <PackageReference Include="NPOI" Version="2.5.5" />
+    <PackageReference Include="PayPal" Version="1.9.1" />
+    <PackageReference Include="PayPalCheckoutSdk" Version="1.0.4" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>

@@ -653,6 +653,7 @@ namespace HappyVacation.Database.Extensions
                     TouristName = "Dinh Cong Tai",
                     TouristPhone = "0945501905",
                     TouristEmail = "braddinh1952000@gmail.com",
+                    TransactionId = "",
                     TourId = 1,
                     UserId = 3
                 },
@@ -670,6 +671,7 @@ namespace HappyVacation.Database.Extensions
                     TouristName = "Dinh Cong Tai",
                     TouristPhone = "0945501905",
                     TouristEmail = "braddinh1952000@gmail.com",
+                    TransactionId = "",
                     TourId = 2,
                     UserId = 3
                 }

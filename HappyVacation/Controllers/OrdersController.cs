@@ -39,6 +39,49 @@ namespace HappyVacation.Controllers
             }
         }
 
+        //[HttpPost]
+        //[Authorize]
+        //public async Task<ActionResult> CreateOrderPayment(CreateTourOrderRequest request)
+        //{
+        //    try
+        //    {
+        //        var claimsPrincipal = this.User;
+        //        var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+        //        // get payment url
+        //        var paymentUrl = await _orderRepository.CreateOrderPayment(userId, request);
+
+        //        return Ok(paymentUrl);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+        //        return StatusCode(500);
+        //    }
+        //}
+
+        [HttpPatch("{orderId:int}/confirm-transaction")]
+        [Authorize]
+        public async Task<ActionResult> ConfirmOrderTransaction(int orderId, [FromQuery] string transactionId)
+        {
+            try
+            {
+                // get payment url
+                var result = await _orderRepository.ConfirmOrderTransaction(orderId, transactionId);
+                if(result == null)
+                {
+                    return BadRequest("Something wrong.");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
         [HttpGet("me")]
         [Authorize]
         public async Task<ActionResult> GetUserOrders([FromQuery] string? state, int page, int perPage)

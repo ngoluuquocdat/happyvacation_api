@@ -22,7 +22,7 @@ namespace HappyVacation.Database.Configurations
             builder.HasOne(orderMember => orderMember.Order)
                     .WithMany(order => order.OrderMembers)
                     .HasForeignKey(orderMember => orderMember.OrderId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
