@@ -7,6 +7,7 @@
         public string TourName { get; set; }
         public string OrderDate { get; set; }
         public string DepartureDate { get; set; }
+        public bool HasDeparted { get; set; }
         public string ModifiedDate { get; set; }
         public float Duration { get; set; }
         public bool IsPrivate { get; set; }

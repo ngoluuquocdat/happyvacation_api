@@ -226,5 +226,31 @@ namespace HappyVacation.Controllers
                 return StatusCode(500);
             }
         }
+
+        [HttpPut("{orderId:int}/departure")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> ChangeDepartureDate(int orderId, [FromBody] ChangeDepartureDateRequest request)
+        {
+            try
+            {
+
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _orderRepository.ChangeDepartureDate(userId, orderId, request.NewDate);
+                if (result == -1)
+                {
+                    return Forbid();
+                }
+
+                var updatedOrder = await _orderRepository.GetOrderById(result);
+                return Ok(updatedOrder);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
     }
 }

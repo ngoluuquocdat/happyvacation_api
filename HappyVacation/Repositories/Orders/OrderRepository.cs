@@ -318,7 +318,8 @@ namespace HappyVacation.Repositories.Orders
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
-                OrderDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                HasDeparted = x.DepartureDate.Date < DateTime.Now,
+                OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
                 IsPrivate = x.Tour.IsPrivate,
@@ -356,6 +357,7 @@ namespace HappyVacation.Repositories.Orders
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                HasDeparted = x.DepartureDate.Date < DateTime.Now,
                 OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
@@ -404,6 +406,7 @@ namespace HappyVacation.Repositories.Orders
                 TourName = x.Tour.TourName,
                 OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                HasDeparted = x.DepartureDate.Date < DateTime.Now,
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
                 IsPrivate = x.Tour.IsPrivate,
@@ -503,6 +506,7 @@ namespace HappyVacation.Repositories.Orders
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                HasDeparted = x.DepartureDate.Date < DateTime.Now,
                 OrderDate = x.DepartureDate.ToString("dd/MM/yyyy"),
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
@@ -564,6 +568,7 @@ namespace HappyVacation.Repositories.Orders
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                HasDeparted = x.DepartureDate.Date < DateTime.Now,
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
                 IsPrivate = x.Tour.IsPrivate,
@@ -910,6 +915,23 @@ namespace HappyVacation.Repositories.Orders
             string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
             // Response is a message ID string.
             Console.WriteLine("Successfully sent message: " + response);
+        }
+
+        public async Task<int> ChangeDepartureDate(int userId, int orderId, string newDate)
+        {
+            var NOT_FOUND_ERROR = -1;
+            var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
+            var order = await _context.Orders.Include(x => x.Tour).ThenInclude(t => t.Provider).AsSplitQuery().FirstOrDefaultAsync(x => x.Id == orderId && x.Tour.ProviderId == providerId);
+            // check if provider has this order
+            if (order == null)
+            {
+                return NOT_FOUND_ERROR;
+            }
+
+            order.DepartureDate = DateTime.ParseExact(newDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            await _context.SaveChangesAsync();
+
+            return order.Id;
         }
     }
 }
