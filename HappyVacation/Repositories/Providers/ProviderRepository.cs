@@ -8,7 +8,6 @@ using HappyVacation.Services.Storage;
 using HappyVacation.Services.XLSX;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace HappyVacation.Repositories.Providers
 {
     public class ProviderRepository : IProviderRepository
@@ -308,6 +307,38 @@ namespace HappyVacation.Repositories.Providers
             
 
             return exportFilePath;
+        }
+
+        public async Task<List<TourSimpleVm>> GetSimplifiedTours(int userId)
+        {
+            var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
+            if (providerId == null || providerId == 0)
+            {
+                return null;
+            }
+            // get tours
+            var query = _context.Tours.Where(x => (x.ProviderId == providerId));
+
+            // 1. filtering
+            // by tour id:
+            //if (request.TourId != 0)
+            //{
+            //    query = query.Where(x => x.Id == request.TourId);
+            //}
+
+            //// by tour name:
+            //if (!String.IsNullOrEmpty(request.TourName))
+            //{
+            //    query = query.Where(x => x.TourName.ToLower().Contains(request.TourName.ToLower()));
+            //}
+
+            var tours = await query.Select(x => new TourSimpleVm()
+            {
+                Id = x.Id,
+                TourName = x.TourName
+            }).ToListAsync();
+
+            return tours;
         }
     }
 }

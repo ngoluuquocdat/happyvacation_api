@@ -318,7 +318,7 @@ namespace HappyVacation.Repositories.Orders
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
-                HasDeparted = x.DepartureDate.Date < DateTime.Now,
+                HasDeparted = x.DepartureDate.Date < DateTime.Now.Date,
                 OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
@@ -357,7 +357,7 @@ namespace HappyVacation.Repositories.Orders
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
-                HasDeparted = x.DepartureDate.Date < DateTime.Now,
+                HasDeparted = x.DepartureDate.Date < DateTime.Now.Date,
                 OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
@@ -406,7 +406,7 @@ namespace HappyVacation.Repositories.Orders
                 TourName = x.Tour.TourName,
                 OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
-                HasDeparted = x.DepartureDate.Date < DateTime.Now,
+                HasDeparted = x.DepartureDate.Date < DateTime.Now.Date,
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
                 IsPrivate = x.Tour.IsPrivate,
@@ -432,7 +432,9 @@ namespace HappyVacation.Repositories.Orders
                     Dob = om.DateOfBirth.ToString("dd/MM/yyyy")
                 }),
                 ProviderId = x.Tour.ProviderId,
-                ProviderName = x.Tour.Provider.ProviderName,                
+                ProviderName = x.Tour.Provider.ProviderName,     
+                ProviderPhone = x.Tour.Provider.ProviderPhone,
+                ProviderEmail = x.Tour.Provider.ProviderEmail
             }).FirstOrDefaultAsync();
 
             return order;
@@ -506,7 +508,7 @@ namespace HappyVacation.Repositories.Orders
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
-                HasDeparted = x.DepartureDate.Date < DateTime.Now,
+                HasDeparted = x.DepartureDate.Date < DateTime.Now.Date,
                 OrderDate = x.DepartureDate.ToString("dd/MM/yyyy"),
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
@@ -568,7 +570,7 @@ namespace HappyVacation.Repositories.Orders
                 TourId = x.TourId,
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
-                HasDeparted = x.DepartureDate.Date < DateTime.Now,
+                HasDeparted = x.DepartureDate.Date < DateTime.Now.Date,
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
                 IsPrivate = x.Tour.IsPrivate,
@@ -932,6 +934,60 @@ namespace HappyVacation.Repositories.Orders
             await _context.SaveChangesAsync();
 
             return order.Id;
+        }
+
+        public async Task<OrderedTouristCollect> GetOrderedTouristCollection(int userId, int tourId, string departureDateStr)
+        {
+            var depatureDate = DateTime.ParseExact(departureDateStr, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
+            var tour = await _context.Tours.Where(x => x.Id == tourId && x.ProviderId == providerId)
+                                           .Select(x => new
+                                           { 
+                                               Id = x.Id,
+                                               TourName = x.TourName
+                                           }).FirstOrDefaultAsync();
+            // check if provider has this tour
+            if (tour == null)
+            {
+                return null;
+            }
+
+            // get ordered tourist collection
+            var orderedTouristCollect = new OrderedTouristCollect()
+            {
+                TourId = tour.Id,
+                TourName = tour.TourName,
+                DepartureDate = departureDateStr
+            };
+
+            // get orders by tour id and depature date
+            orderedTouristCollect.TouristGroups = await _context.Orders.Where(x => x.TourId == tourId && x.DepartureDate.Date == depatureDate.Date)
+                                        .AsNoTracking()
+                                        //.Skip(1)
+                                        //.Take(2)
+                                        .Select(x => new OrderedTourists
+                                        {
+                                            OrderId = x.Id,
+                                            StartPoint = x.StartPoint,
+                                            EndPoint = x.EndPoint,
+                                            AdultsList = x.OrderMembers.Where(om => om.IsChild == false).Select(om => new AdultVm()
+                                            {
+                                                IdentityNumber = om.IdentityNum,
+                                                FullName = om.FullName,
+                                                Dob = om.DateOfBirth.ToString("dd/MM/yyyy")
+                                            }),
+                                            ChildrenList = x.OrderMembers.Where(om => om.IsChild == true).Select(om => new ChildVm()
+                                            {
+                                                IdentityNumber = om.IdentityNum,
+                                                FullName = om.FullName,
+                                                Dob = om.DateOfBirth.ToString("dd/MM/yyyy")
+                                            }),
+                                        }).ToListAsync();
+
+            orderedTouristCollect.TotalCount = orderedTouristCollect.TouristGroups.Sum(item => item.AdultsList.Count() + item.ChildrenList.Count());
+
+            return orderedTouristCollect;
         }
     }
 }

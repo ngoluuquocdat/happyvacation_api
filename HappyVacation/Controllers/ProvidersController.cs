@@ -85,7 +85,7 @@ namespace HappyVacation.Controllers
 
             return Ok(result);
         }
-
+       
         [HttpGet("me/tours")]
         [Authorize(Roles = "Provider")]
         public async Task<ActionResult> GetToursManage([FromQuery] GetTourManageRequest request)
@@ -96,6 +96,29 @@ namespace HappyVacation.Controllers
                 var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
 
                 var result = await _providerRepository.GetToursManage(userId, request);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("me/tours/simple")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetSimplifiedTours()
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _providerRepository.GetSimplifiedTours(userId);
                 if (result == null)
                 {
                     return NotFound();

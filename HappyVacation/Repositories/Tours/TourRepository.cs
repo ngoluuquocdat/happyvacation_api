@@ -113,7 +113,8 @@ namespace HappyVacation.Repositories.Tours
                 TotalPage = totalPages,
                 Items = tours
             };
-        }
+        }       
+
         public async Task<TourVm> GetTourById(int tourId, int userId = 0)
         {
             if (!_context.Tours.Any(x => (x.Id == tourId)))

@@ -20,6 +20,8 @@
         public string State { get; set; }
         public int ProviderId { get; set; }
         public string ProviderName { get; set; }
+        public string ProviderPhone { get; set; }
+        public string ProviderEmail { get; set; }
         public string StartPoint { get; set; }
         public string EndPoint { get; set; }
         public IEnumerable<AdultVm> AdultsList { get; set; }

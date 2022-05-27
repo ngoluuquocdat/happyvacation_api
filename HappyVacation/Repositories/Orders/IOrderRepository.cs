@@ -18,5 +18,8 @@ namespace HappyVacation.Repositories.Orders
         Task<int> CancelOrder(int userId, int orderId);
 
         Task<int> ChangeDepartureDate(int userId, int orderId, string newDate);
+
+        // get ordered tourists list by tour id and depature date
+        Task<OrderedTouristCollect> GetOrderedTouristCollection(int userId, int tourId, string departureDateStr);
     }
 }

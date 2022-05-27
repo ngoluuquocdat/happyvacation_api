@@ -39,27 +39,6 @@ namespace HappyVacation.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Authorize]
-        //public async Task<ActionResult> CreateOrderPayment(CreateTourOrderRequest request)
-        //{
-        //    try
-        //    {
-        //        var claimsPrincipal = this.User;
-        //        var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
-
-        //        // get payment url
-        //        var paymentUrl = await _orderRepository.CreateOrderPayment(userId, request);
-
-        //        return Ok(paymentUrl);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
-        //        return StatusCode(500);
-        //    }
-        //}
-
         [HttpPatch("{orderId:int}/confirm-transaction")]
         [Authorize]
         public async Task<ActionResult> ConfirmOrderTransaction(int orderId, [FromQuery] string transactionId)
@@ -245,6 +224,32 @@ namespace HappyVacation.Controllers
 
                 var updatedOrder = await _orderRepository.GetOrderById(result);
                 return Ok(updatedOrder);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+
+        [HttpGet("tourists")]
+        [Authorize]
+        public async Task<ActionResult> GetOrderedTouristCollection([FromQuery] int tourId, string departureDateStr)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _orderRepository.GetOrderedTouristCollection(userId, tourId, departureDateStr);
+
+                if(result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
