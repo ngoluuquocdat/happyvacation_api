@@ -27,6 +27,11 @@ namespace HappyVacation.Database.Configurations
 
             // relationship config
 
+            // 1-1: user - provider registration
+            builder.HasOne(user => user.ProviderRegistration)
+                .WithOne(registration => registration.User)
+                .HasForeignKey<ProviderRegistration>(registration => registration.UserId);
+
             // 1-1: user - provider
             builder.HasOne(user => user.Provider)
                 .WithOne(provider => provider.User)

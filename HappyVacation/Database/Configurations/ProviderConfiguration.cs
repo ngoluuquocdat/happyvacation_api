@@ -17,7 +17,6 @@ namespace HappyVacation.Database.Configurations
             builder.Property(x => x.ProviderPhone).IsRequired().HasMaxLength(15);
             builder.Property(x => x.ProviderEmail).IsRequired().HasMaxLength(62);
             builder.Property(x => x.Address).IsRequired().HasMaxLength(100);
-
         }
     }
 }

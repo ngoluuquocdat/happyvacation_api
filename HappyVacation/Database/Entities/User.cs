@@ -20,6 +20,8 @@ namespace HappyVacation.Database.Entities
         public bool IsEnabled { get; set; }
 
         // navigation props
+        // 1 user - 1 provider registration
+        public ProviderRegistration ProviderRegistration { get; set; }
         // 1 tour provider - 1 user
         public Provider Provider { get; set; }
         // 1 hotel - 1 user
