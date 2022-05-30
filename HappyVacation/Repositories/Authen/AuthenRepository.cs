@@ -81,7 +81,8 @@ namespace HappyVacation.Repositories.Authen
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Phone = request.Phone,
-                AvatarUrl = "/storage/blank_avatar.png"
+                AvatarUrl = "/storage/blank_avatar.png",
+                IsEnabled = true
             };
             // assign 'Tourist' role to new user
             var userRoles = new List<UserRole>();

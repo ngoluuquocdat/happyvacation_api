@@ -20,5 +20,13 @@ namespace HappyVacation.Repositories.Providers
         // get order report
         Task<string> GetOrderExport(int userId, string startDate, string endDate);
 
+        // tour provider registration
+        Task<int> CreateProviderRegistration(int userId, ProviderRegistrationRequest request);
+        Task<ProviderRegistrationVm> GetProviderRegistration(int userId);   // get registration of a user
+        Task<ProviderRegistrationVm> GetProviderRegistrationById(int registrationId);
+        Task<PagedResult<ProviderRegistrationVm>> GetRegistrations(GetProviderRegistrationRequest request);
+
+        // admin's features
+        Task<int> ApproveProviderRegistration(int registrationId);
     }
 }

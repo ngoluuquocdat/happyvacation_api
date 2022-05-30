@@ -1,4 +1,5 @@
 ﻿using HappyVacation.Database;
+using HappyVacation.Database.Entities;
 using HappyVacation.DTOs.Common;
 using HappyVacation.DTOs.Orders;
 using HappyVacation.DTOs.Places;
@@ -44,12 +45,21 @@ namespace HappyVacation.Repositories.Providers
                                                 Description = x.Description,
                                                 TourAvailable = x.Tours.Count(),
                                             }).FirstOrDefaultAsync();
-            provider.AverageRating = (float)Math.Round(
-                                        (_context.Tours.Where(x => x.ProviderId == providerId)
-                                        .Select(x => (x.Reviews.Count() != 0) ? x.Reviews.Average(r => r.Rating) : -1)
-                                        .ToList())
-                                        .Where(x => x != -1)                                
-                                        .Average(), 2);
+
+            if(!_context.Tours.Any(x => x.ProviderId == providerId))
+            {
+                provider.AverageRating = 0;
+            } 
+            else
+            {
+                provider.AverageRating = (float)Math.Round(
+                                            (_context.Tours.Where(x => x.ProviderId == providerId)
+                                            .Select(x => (x.Reviews.Count() != 0) ? x.Reviews.Average(r => r.Rating) : -1)
+                                            .ToList())
+                                            .Where(x => x != -1)                                
+                                            .Average(), 2);
+            }
+
             return provider;
         }
 
@@ -319,19 +329,6 @@ namespace HappyVacation.Repositories.Providers
             // get tours
             var query = _context.Tours.Where(x => (x.ProviderId == providerId));
 
-            // 1. filtering
-            // by tour id:
-            //if (request.TourId != 0)
-            //{
-            //    query = query.Where(x => x.Id == request.TourId);
-            //}
-
-            //// by tour name:
-            //if (!String.IsNullOrEmpty(request.TourName))
-            //{
-            //    query = query.Where(x => x.TourName.ToLower().Contains(request.TourName.ToLower()));
-            //}
-
             var tours = await query.Select(x => new TourSimpleVm()
             {
                 Id = x.Id,
@@ -339,6 +336,167 @@ namespace HappyVacation.Repositories.Providers
             }).ToListAsync();
 
             return tours;
+        }
+
+        public async Task<int> CreateProviderRegistration(int userId, ProviderRegistrationRequest request)
+        {
+            var registration = new ProviderRegistration()
+            {
+                UserId = userId,
+                ProviderName = request.ProviderName,
+                ContactPersonName = request.ContactPersonName,
+                ProviderEmail = request.ProviderEmail,
+                ProviderPhone = request.ProviderPhone,
+                DateCreated = DateTime.Now,
+                IsApproved = false
+            };
+
+            _context.ProviderRegistrations.Add(registration);
+            await _context.SaveChangesAsync();
+
+            //return tour.Id;
+            return registration.Id;
+        }
+
+        public async Task<ProviderRegistrationVm> GetProviderRegistration(int userId)
+        {
+            var result = await _context.ProviderRegistrations.Where(x => x.UserId == userId).AsNoTracking()
+                                       .Select(x => new ProviderRegistrationVm()
+                                       {
+                                           Id = x.Id,
+                                           ProviderName = x.ProviderName,
+                                           ContactPersonName = x.ContactPersonName,
+                                           ProviderEmail = x.ProviderEmail,
+                                           ProviderPhone = x.ProviderPhone,
+                                           DateCreated = x.DateCreated.ToString("dd/MM/yyyy"),
+                                           IsApproved = x.IsApproved
+                                       })
+                                       .FirstOrDefaultAsync();
+
+            return result;
+        }
+
+        public async Task<ProviderRegistrationVm> GetProviderRegistrationById(int registrationId)
+        {
+            var result = await _context.ProviderRegistrations.Where(x => x.Id == registrationId).AsNoTracking()
+                                       .Select(x => new ProviderRegistrationVm()
+                                       {
+                                           Id = x.Id,
+                                           ProviderName = x.ProviderName,
+                                           ContactPersonName = x.ContactPersonName,
+                                           ProviderEmail = x.ProviderEmail,
+                                           ProviderPhone = x.ProviderPhone,
+                                           DateCreated = x.DateCreated.ToString("dd/MM/yyyy"),
+                                           IsApproved = x.IsApproved
+                                       })
+                                       .FirstOrDefaultAsync();
+
+            return result;
+        }
+
+        public async Task<PagedResult<ProviderRegistrationVm>> GetRegistrations(GetProviderRegistrationRequest request)
+        {
+            var query = _context.ProviderRegistrations.AsNoTracking();
+
+            // fitler
+            // by Id
+            if (request.RegistrationId != 0)
+            {
+                query = query.Where(x => x.Id == request.RegistrationId);
+            }
+            // by provider name
+            if (!String.IsNullOrEmpty(request.ProviderName))
+            {
+                query = query.Where(x => x.ProviderName.Contains(request.ProviderName));
+            }
+            // by contact person name
+            if (!String.IsNullOrEmpty(request.ContactPersonName))
+            {
+                query = query.Where(x => x.ContactPersonName.Contains(request.ContactPersonName));
+            }
+            // by provider email
+            if (!String.IsNullOrEmpty(request.ProviderEmail))
+            {
+                query = query.Where(x => x.ProviderEmail.Contains(request.ProviderEmail));
+            }
+            // by provider phone
+            if (!String.IsNullOrEmpty(request.ProviderPhone))
+            {
+                query = query.Where(x => x.ProviderPhone.Contains(request.ProviderPhone));
+            }
+
+            // sort by date created
+            query = query.OrderByDescending(x => x.DateCreated);
+
+            // paging
+            int totalCount = query.Count();
+            int totalPages = ((totalCount - 1) / request.PerPage) + 1;
+            query = query.Skip((request.Page - 1) * request.PerPage).Take(request.PerPage);
+
+            var registrations = await query.Select(x => new ProviderRegistrationVm()
+            {
+                Id = x.Id,
+                UserId = x.UserId,
+                ProviderName = x.ProviderName,
+                ContactPersonName = x.ContactPersonName, 
+                ProviderEmail = x.ProviderEmail,
+                ProviderPhone = x.ProviderPhone,
+                DateCreated = x.DateCreated.ToString("dd/MM/yyyy"),
+                IsApproved = x.IsApproved
+            }).ToListAsync();
+
+            return new PagedResult<ProviderRegistrationVm>()
+            {
+                TotalCount = totalCount,
+                TotalPage = totalPages,
+                Items = registrations
+            };
+        }
+
+        public async Task<int> ApproveProviderRegistration(int registrationId)
+        {
+            var NOT_FOUND_ERROR = -1;
+
+
+            var registration = await _context.ProviderRegistrations.FirstOrDefaultAsync(x => x.Id == registrationId);
+            if(registration == null)
+            {
+                return NOT_FOUND_ERROR;
+            }
+
+            if(registration.IsApproved == false)
+            {
+                registration.IsApproved = true;
+
+                // add "Provider" role to the user
+                _context.UserRoles.Add(new UserRole() { UserId = registration.UserId, RoleId = 2 });
+                
+                // create new provider with default information
+                var newProvider = new Provider()
+                {
+                    ProviderName = registration.ProviderName,
+                    Description = "_Please update this information_",
+                    ProviderEmail = registration.ProviderEmail,
+                    ProviderPhone = registration.ProviderPhone,
+                    Address = "_Please update this information_",
+                    AvatarUrl = "/storage/default-provider-avatar.png",
+                    DateCreated = DateTime.Now,
+                    IsEnabled = true               
+                };
+                _context.Providers.Add(newProvider);
+
+                // associate new provider to the user
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == registration.UserId);
+                user.Provider = newProvider;
+
+                await _context.SaveChangesAsync();
+
+                return registration.Id;
+            }
+            else
+            {
+                return 0;
+            }           
         }
     }
 }

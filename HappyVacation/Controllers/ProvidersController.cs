@@ -49,6 +49,80 @@ namespace HappyVacation.Controllers
             return Ok(result);
         }
 
+        [HttpGet("registrations")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetRegistrations([FromQuery] GetProviderRegistrationRequest request)
+        {
+            var result = await _providerRepository.GetRegistrations(request);
+
+            return Ok(result);
+        }
+
+        [HttpPut("registrations/{registrationId}/approve")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> ApproveProviderRegistration(int registrationId)
+        {
+            var NOT_FOUND_ERROR = -1;
+
+            try
+            {
+                var result = await _providerRepository.ApproveProviderRegistration(registrationId);
+                if (result == NOT_FOUND_ERROR)
+                {
+                    return NotFound();
+                }
+                if(result == 0)
+                {
+                    return BadRequest("Something wrong");
+                }
+
+                var updatedRegistration = await _providerRepository.GetProviderRegistrationById(result);
+
+                return Ok(updatedRegistration);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("registration")]
+        [Authorize(Roles = "Tourist")]
+        public async Task<ActionResult> ProviderRegistration(ProviderRegistrationRequest request)
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var newRegistrationId = await _providerRepository.CreateProviderRegistration(userId, request);
+
+            if (newRegistrationId == 0)
+            {
+                return Forbid();
+            }
+
+            var newRegistration = await _providerRepository.GetProviderRegistrationById(newRegistrationId);
+
+            return Ok(newRegistration);
+        }
+
+        [HttpGet("me/registration")]
+        [Authorize(Roles = "Tourist")]
+        public async Task<ActionResult> GetProviderRegistration()
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _providerRepository.GetProviderRegistration(userId);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
         [HttpPut("me")]
         [Authorize(Roles = "Provider")]
         public async Task<IActionResult> UpdateProviderMe([FromForm] UpdateProviderRequest request)

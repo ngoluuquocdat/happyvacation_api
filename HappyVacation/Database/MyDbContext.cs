@@ -35,6 +35,8 @@ namespace HappyVacation.Database
 
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new OrderMemberConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ProviderRegistrationConfiguration());
             modelBuilder.ApplyConfiguration(new ProviderConfiguration());
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
@@ -68,6 +70,7 @@ namespace HappyVacation.Database
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Provider> Providers { get; set; }
+        public DbSet<ProviderRegistration> ProviderRegistrations { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
