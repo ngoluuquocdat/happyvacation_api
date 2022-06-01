@@ -22,6 +22,49 @@ namespace HappyVacation.Repositories.Authen
             _storageService = storageService;
         }
 
+        public async Task<AuthenVm> AdminLogin(LoginRequest request)
+        {
+            if(!request.Username.Equals("admin"))
+            {
+                return null;
+            }
+            var user = await _context.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+                                        .Where(u => u.Username.Equals(request.Username))
+                                        .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            // check password
+            // algorithm for password encoding, with key specified by user's key
+            using var hmac = new HMACSHA512(user.PasswordSalt);
+            var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password));
+            // compare 2 arrays of byte: passwordHash from request vs PasswordHash from Db
+            for (int i = 0; i < passwordHash.Length; i++)
+            {
+                if (passwordHash[i] != user.PasswordHash[i])
+                {
+                    return null;
+                }
+            }
+
+            var token = _tokenService.CreateToken(user, user.UserRoles.Select(x => x.Role.RoleName).ToList());
+
+            return new AuthenVm()
+            {
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = user.Phone,
+                Email = user.Email,
+                AvatarUrl = !String.IsNullOrEmpty(user.AvatarUrl) ? user.AvatarUrl : String.Empty,
+                ProviderId = user.ProviderId != null ? user.ProviderId : 0,
+                Token = token
+            };
+        }
+
         public async Task<AuthenVm> Login(LoginRequest request)
         {
             var user = await _context.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role)

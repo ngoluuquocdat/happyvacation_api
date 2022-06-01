@@ -6,5 +6,6 @@ namespace HappyVacation.Repositories.Authen
     {
         Task<AuthenVm> Register(RegisterRequest request);
         Task<AuthenVm> Login(LoginRequest request);
+        Task<AuthenVm> AdminLogin(LoginRequest request);
     }
 }

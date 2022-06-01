@@ -16,6 +16,23 @@ namespace HappyVacation.Controllers
             _authenRepository = authenRepository;
         }
 
+        [HttpPost("login/admin")]
+        [AllowAnonymous]
+        public async Task<ActionResult> AdminLogin(LoginRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest();
+            }
+            var result = await _authenRepository.AdminLogin(request);
+            if (result == null)
+            {
+                return Forbid();
+            }
+
+            return Ok(result);
+        }
+
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult> Login(LoginRequest request)
