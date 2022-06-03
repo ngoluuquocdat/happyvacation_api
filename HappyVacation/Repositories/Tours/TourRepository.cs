@@ -22,7 +22,7 @@ namespace HappyVacation.Repositories.Tours
 
         public async Task<PagedResult<TourMainInfoVm>> GetTours(GetTourRequest request)
         {
-            var query = _context.Tours.Where(x => x.IsAvailable == true);
+            var query = _context.Tours.Where(x => x.IsAvailable == true && x.Provider.IsEnabled == true);
             
             // 1. Filtering
             // by place Id
@@ -147,6 +147,7 @@ namespace HappyVacation.Repositories.Tours
                                        ProviderId = x.ProviderId,
                                        ProviderName = x.Provider.ProviderName,
                                        ProviderAvatar = x.Provider.AvatarUrl,
+                                       IsProviderEnabled = x.Provider.IsEnabled,
                                        Itineraries = x.Itineraries.Select(i => new ItineraryVm()
                                        {
                                            Id = i.Id,

@@ -51,6 +51,11 @@ namespace HappyVacation.Controllers
                 return NotFound();
             }
 
+            if (result.IsProviderEnabled == false)
+            {
+                return NotFound("This tour provider is disabled.");
+            }
+
             return Ok(result);
         }
 

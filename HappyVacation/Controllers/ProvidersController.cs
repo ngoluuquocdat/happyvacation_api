@@ -1,4 +1,5 @@
 ﻿using HappyVacation.DTOs.Providers;
+using HappyVacation.DTOs.Providers.ProviderManage;
 using HappyVacation.DTOs.Tours;
 using HappyVacation.Repositories.Orders;
 using HappyVacation.Repositories.Providers;
@@ -47,44 +48,6 @@ namespace HappyVacation.Controllers
             }
 
             return Ok(result);
-        }
-
-        [HttpGet("registrations")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> GetRegistrations([FromQuery] GetProviderRegistrationRequest request)
-        {
-            var result = await _providerRepository.GetRegistrations(request);
-
-            return Ok(result);
-        }
-
-        [HttpPut("registrations/{registrationId}/approve")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> ApproveProviderRegistration(int registrationId)
-        {
-            var NOT_FOUND_ERROR = -1;
-
-            try
-            {
-                var result = await _providerRepository.ApproveProviderRegistration(registrationId);
-                if (result == NOT_FOUND_ERROR)
-                {
-                    return NotFound();
-                }
-                if(result == 0)
-                {
-                    return BadRequest("Something wrong");
-                }
-
-                var updatedRegistration = await _providerRepository.GetProviderRegistrationById(result);
-
-                return Ok(updatedRegistration);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
-                return StatusCode(500);
-            }
         }
 
         [HttpPost("registration")]
@@ -253,6 +216,134 @@ namespace HappyVacation.Controllers
                 Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
                 return StatusCode(500);
             }
+        }
+
+        [HttpGet("registrations")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetRegistrations([FromQuery] GetProviderRegistrationRequest request)
+        {
+            var result = await _providerRepository.GetRegistrations(request);
+
+            return Ok(result);
+        }
+
+        [HttpPut("registrations/{registrationId}/approve")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> ApproveProviderRegistration(int registrationId)
+        {
+            var NOT_FOUND_ERROR = -1;
+
+            try
+            {
+                var result = await _providerRepository.ApproveProviderRegistration(registrationId);
+                if (result == NOT_FOUND_ERROR)
+                {
+                    return NotFound();
+                }
+                if (result == 0)
+                {
+                    return BadRequest("Something wrong");
+                }
+
+                var updatedRegistration = await _providerRepository.GetProviderRegistrationById(result);
+
+                return Ok(updatedRegistration);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("{providerId}/disable")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> DisableProvider(int providerId)
+        {
+            try
+            {
+                var result = await _providerRepository.DisableProvider(providerId);
+                if (result == 0)
+                {
+                    return NotFound();
+                }
+
+                var updatedProvider = await _providerRepository.GetProviderById(result);
+
+                return Ok(updatedProvider);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("{providerId}/enable")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> EnableProvider(int providerId)
+        {
+            try
+            {
+                var result = await _providerRepository.EnableProvider(providerId);
+                if (result == 0)
+                {
+                    return NotFound();
+                }
+
+                var updatedProvider = await _providerRepository.GetProviderById(result);
+
+                return Ok(updatedProvider);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("manage")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetProvidersManage([FromQuery] GetProvidersManageRequest request)
+        {
+            var result = await _providerRepository.GetProvidersManage(request);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{providerId}/manage")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetProviderDetailManage(int providerId)
+        {
+            var result = await _providerRepository.GetProviderDetailManage(providerId);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{providerId}/manage/tours")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetToursAdmin(int providerId, [FromQuery] int page, int perPage)
+        {
+            var result = await _providerRepository.GetToursAdmin(providerId, page, perPage);
+            if(result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("{providerId}/manage/revenue")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetRevenueAdmin(int providerId, [FromQuery] int quarterIndex, int year)
+        {
+            var result = await _providerRepository.GetRevenueByQuarter(quarterIndex, year, userId: 0, providerId: providerId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
     }
 }

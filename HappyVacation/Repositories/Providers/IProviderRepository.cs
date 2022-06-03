@@ -1,5 +1,6 @@
 ﻿using HappyVacation.DTOs.Common;
 using HappyVacation.DTOs.Providers;
+using HappyVacation.DTOs.Providers.ProviderManage;
 using HappyVacation.DTOs.Tours;
 
 namespace HappyVacation.Repositories.Providers
@@ -19,6 +20,8 @@ namespace HappyVacation.Repositories.Providers
 
         // get order report
         Task<string> GetOrderExport(int userId, string startDate, string endDate);
+        // get revenue by quater 
+        Task<RevenueVm> GetRevenueByQuarter(int quarterIndex, int year, int userId = 0, int providerId = 0);
 
         // tour provider registration
         Task<int> CreateProviderRegistration(int userId, ProviderRegistrationRequest request);
@@ -28,5 +31,10 @@ namespace HappyVacation.Repositories.Providers
 
         // admin's features
         Task<int> ApproveProviderRegistration(int registrationId);
+        Task<int> DisableProvider(int providerId);
+        Task<int> EnableProvider(int providerId);
+        Task<PagedResult<ProviderManageMainInfoVm>> GetProvidersManage(GetProvidersManageRequest request);
+        Task<ProviderManageDetailVm> GetProviderDetailManage(int providerId);
+        Task<PagedResult<TourMainInfoManageVm>> GetToursAdmin(int providerId, int page = 1, int perPage = 4);
     }
 }
