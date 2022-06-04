@@ -8,5 +8,6 @@
         public string DepartureDate { get; set; }
         public List<OrderedTourists> TouristGroups { get; set; }    // tourist groups by order ids
         public int TotalCount { get; set; }
+        public string ExportFilePath { get; set; }
     }
 }

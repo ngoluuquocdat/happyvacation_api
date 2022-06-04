@@ -81,5 +81,104 @@ namespace HappyVacation.Services.XLSX
 
             return $"/report/TourProvider{providerId}/{exportFileName}.xlsx";
         }
+
+        public async Task<string> ExportOrderedTouristCollection(int providerId, string exportFileName, OrderedTouristCollect orderedTouristCollect)
+        {
+            // this provider's own report folder
+            var providerReportFolder = Path.Combine(_reportFolder, $"TourProvider{providerId}");
+            // create the report folder for this provider, if it does not exist
+            Directory.CreateDirectory(providerReportFolder);
+
+            // new workbook
+            XSSFWorkbook wb = new XSSFWorkbook();
+            // create bold font style
+            var bold_font = wb.CreateFont();
+            bold_font.IsBold = true;
+            // new worksheet
+            ISheet sheet = wb.CreateSheet();
+            // write to sheet
+            
+            // create top rows and write tourId, depature
+            sheet.CreateRow(0);
+            sheet.CreateRow(1);
+            sheet.CreateRow(2);
+
+            var cra0 = new NPOI.SS.Util.CellRangeAddress(0, 0, 0, 5);
+            var cra1 = new NPOI.SS.Util.CellRangeAddress(1, 1, 0, 5);
+            var cra2 = new NPOI.SS.Util.CellRangeAddress(2, 2, 0, 5);
+            sheet.AddMergedRegion(cra0);
+            sheet.AddMergedRegion(cra1);
+            sheet.AddMergedRegion(cra2);
+
+            var mergedCell = sheet.GetRow(0).CreateCell(0);
+            mergedCell.SetCellValue($"Tour ID: {orderedTouristCollect.TourId} - {orderedTouristCollect.TourName}");
+            mergedCell.CellStyle.Alignment = HorizontalAlignment.Center;
+
+            mergedCell = sheet.GetRow(1).CreateCell(0);
+            mergedCell.SetCellValue($"Departure: {orderedTouristCollect.DepartureDate}");
+            mergedCell.CellStyle.Alignment = HorizontalAlignment.Center;
+
+            mergedCell = sheet.GetRow(2).CreateCell(0);
+            mergedCell.SetCellValue($"Total: {orderedTouristCollect.TotalCount} tourists");
+            mergedCell.CellStyle.Alignment = HorizontalAlignment.Center;
+
+            // create header row
+            var header_row = sheet.CreateRow(4);
+            var header_titles = new List<string>() { "Identity", "Full Name", "Date of Birth", "Adult/Child", "Order ID", "Pick up/Drop off" };
+            var cell_index = 0;
+            foreach(var title in header_titles)
+            {
+                var header_cell = header_row.CreateCell(cell_index);
+                header_cell.CellStyle.SetFont(bold_font);
+                header_cell.SetCellValue(title);
+                cell_index++;
+            }
+
+            // write tourists
+            var row_index = 5;
+            foreach(var group in orderedTouristCollect.TouristGroups)
+            {
+                foreach(var adult in group.AdultsList)
+                {
+                    // create new row
+                    var newRow = sheet.CreateRow(row_index);
+                    // write to row
+                    newRow.CreateCell(0).SetCellValue(adult.IdentityNumber);
+                    newRow.CreateCell(1).SetCellValue(adult.FullName);
+                    newRow.CreateCell(2).SetCellValue(adult.Dob);
+                    newRow.CreateCell(3).SetCellValue("Adult");
+                    newRow.CreateCell(4).SetCellValue(group.OrderId);
+                    newRow.CreateCell(5).SetCellValue($"{group.StartPoint.Split('&')[1]}, {group.StartPoint.Split('&')[2]}");
+                    // increase row index
+                    row_index++;
+                }
+                foreach (var child in group.ChildrenList)
+                {
+                    // create new row
+                    var newRow = sheet.CreateRow(row_index);
+                    // write to row
+                    newRow.CreateCell(0).SetCellValue(child.IdentityNumber);
+                    newRow.CreateCell(1).SetCellValue(child.FullName);
+                    newRow.CreateCell(2).SetCellValue(child.Dob);
+                    newRow.CreateCell(3).SetCellValue("Child");
+                    newRow.CreateCell(4).SetCellValue(group.OrderId);
+                    newRow.CreateCell(5).SetCellValue($"{group.StartPoint.Split('&')[1]}, {group.StartPoint.Split('&')[2]}");
+                    // increase row index
+                    row_index++;
+                }
+                //row_index++;    // create a blank row between orders
+            }
+
+            // save the xlsx file
+            var exportFilePath = Path.Combine(providerReportFolder, $"{exportFileName}.xlsx");
+            if (File.Exists(exportFilePath))
+            {
+                File.Delete(exportFilePath);
+            }
+            FileStream fs = new FileStream(exportFilePath, FileMode.CreateNew);
+            wb.Write(fs);
+
+            return $"/report/TourProvider{providerId}/{exportFileName}.xlsx";
+        }
     }
 }

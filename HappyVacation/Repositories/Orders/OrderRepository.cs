@@ -18,6 +18,7 @@ using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using HappyVacation.Services.XLSX;
 
 namespace HappyVacation.Repositories.Orders
 {
@@ -27,16 +28,16 @@ namespace HappyVacation.Repositories.Orders
         private readonly IEmailService _emailService;
         private IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
-        //private readonly string _clientId;
-        //private readonly string _secretKey;
+        private readonly IXLSXService _xlsxService;
 
-        public OrderRepository(MyDbContext context, IEmailService emailService, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public OrderRepository(MyDbContext context, IEmailService emailService, IConfiguration configuration, 
+                                    IHttpClientFactory httpClientFactory, IXLSXService xlsxService)
         {
             _context = context;
             _emailService = emailService;
             _configuration = configuration;
             _httpClientFactory = httpClientFactory;
-
+            _xlsxService = xlsxService;
         }
 
         public async Task<int> CreateOrder(int userId, CreateTourOrderRequest request)
@@ -986,6 +987,10 @@ namespace HappyVacation.Repositories.Orders
                                         }).ToListAsync();
 
             orderedTouristCollect.TotalCount = orderedTouristCollect.TouristGroups.Sum(item => item.AdultsList.Count() + item.ChildrenList.Count());
+
+            // create report file
+            var exportFileName = $"Tourists_Tour{tourId}_{departureDateStr}";
+            orderedTouristCollect.ExportFilePath = await _xlsxService.ExportOrderedTouristCollection((int)providerId, exportFileName, orderedTouristCollect);
 
             return orderedTouristCollect;
         }
