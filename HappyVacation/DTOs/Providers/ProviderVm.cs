@@ -12,6 +12,6 @@
         public int TourAvailable { get; set; }
         public string Description { get; set; }
         public string AvatarUrl { get; set; }
-        public bool IsEnable { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }

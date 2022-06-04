@@ -50,6 +50,22 @@ namespace HappyVacation.Controllers
             return Ok(result);
         }
 
+        [HttpGet("me/check-enabled")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> CheckProviderEnabled()
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _providerRepository.CheckProviderEnabled(userId);
+            if (result == null)
+            {
+                return Forbid();
+            }
+
+            return Ok(new { isEnabled = result });
+        }
+
         [HttpPost("registration")]
         [Authorize(Roles = "Tourist")]
         public async Task<ActionResult> ProviderRegistration(ProviderRegistrationRequest request)

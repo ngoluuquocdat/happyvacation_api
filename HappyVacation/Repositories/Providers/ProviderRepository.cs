@@ -28,6 +28,15 @@ namespace HappyVacation.Repositories.Providers
             _xlsxService = xlsxService;
         }
 
+        public async Task<bool?> CheckProviderEnabled(int userId)
+        {
+            if (!_context.Providers.Any(x => (x.User.Id == userId)))
+            {
+                return null;
+            }
+
+            return await _context.Providers.Where(x => x.User.Id == userId).AsNoTracking().Select(x => x.IsEnabled).FirstOrDefaultAsync();
+        }
 
         public async Task<ProviderVm> GetProviderById(int providerId)
         {
@@ -48,7 +57,7 @@ namespace HappyVacation.Repositories.Providers
                                                 DateCreated = x.DateCreated.ToString("dd/MM/yyyy"),
                                                 Description = x.Description,
                                                 TourAvailable = x.Tours.Where(x => x.IsAvailable == true).Count(),
-                                                IsEnable = x.IsEnabled
+                                                IsEnabled = x.IsEnabled
                                             }).FirstOrDefaultAsync();
 
             if(!_context.Tours.Any(x => x.ProviderId == providerId))
@@ -85,7 +94,7 @@ namespace HappyVacation.Repositories.Providers
                                                 Email = x.ProviderEmail,
                                                 AvatarUrl = x.AvatarUrl,
                                                 Description = x.Description,
-                                                IsEnable = x.IsEnabled
+                                                IsEnabled = x.IsEnabled
                                             }).FirstOrDefaultAsync();
             return provider;
         }
@@ -634,7 +643,8 @@ namespace HappyVacation.Repositories.Providers
                                             Description = x.Description,
                                             OwnerUsername = x.User.Username,
                                             OwnerFullName = $"{x.User.FirstName} {x.User.LastName}",
-                                            TotalTourCount = x.Tours.Count()
+                                            TotalTourCount = x.Tours.Count(),
+                                            IsEnabled = x.IsEnabled
                                         }).FirstOrDefaultAsync();
 
             // calculate average rating

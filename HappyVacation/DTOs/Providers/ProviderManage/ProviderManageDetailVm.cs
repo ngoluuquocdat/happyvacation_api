@@ -13,6 +13,7 @@
         public float AverageRating { get; set; }
         public string Description { get; set; }
         public string AvatarUrl { get; set; }
+        public bool IsEnabled { get; set; }
 
         public int TotalTourCount { get; set; }
         public int TotalOrderCount { get; set; }

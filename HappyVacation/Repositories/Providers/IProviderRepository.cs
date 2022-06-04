@@ -7,6 +7,7 @@ namespace HappyVacation.Repositories.Providers
 {
     public interface IProviderRepository
     {
+        Task<bool?> CheckProviderEnabled(int userId);
         Task<ProviderVm> GetProviderById(int providerId);
         Task<ProviderProfileVm> GetProviderProfile(int userId);
         Task<bool?> UpdateProvider(int userId, UpdateProviderRequest request);
