@@ -174,7 +174,11 @@ namespace HappyVacation.Repositories.Tours
                                        {
                                            Id = tc.CategoryId,
                                            CategoryName = tc.Category.CategoryName
-                                       })
+                                       }),
+                                       IsInUserWishList = userId != 0 ? x.WishItems.Any(wishItem => wishItem.UserId == userId) : false,
+                                       IsOrderedByUser = userId != 0 ? x.Orders.Any(order => order.UserId == userId && 
+                                                                               order.State == "confirmed" && 
+                                                                               order.DepartureDate.Date < DateTime.Now.Date) : false
                                    }).FirstOrDefaultAsync();
 
             return tour;
