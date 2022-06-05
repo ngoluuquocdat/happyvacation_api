@@ -32,6 +32,7 @@ namespace HappyVacation.Database
             modelBuilder.ApplyConfiguration(new ExpenseConfiguration());
             modelBuilder.ApplyConfiguration(new TourImageConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
+            modelBuilder.ApplyConfiguration(new WishItemConfiguration());
 
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new OrderMemberConfiguration());
@@ -69,6 +70,7 @@ namespace HappyVacation.Database
         public DbSet<TourImage> TourImages { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<WishItem> WishItems { get; set; }
         public DbSet<Provider> Providers { get; set; }
         public DbSet<ProviderRegistration> ProviderRegistrations { get; set; }
         public DbSet<User> Users { get; set; }

@@ -35,5 +35,7 @@
         public List<Review> Reviews { get; set; }
         // 1 tour - n orders
         public List<Order> Orders { get; set; }
+        // 1 tour -n wish items
+        public List<WishItem> WishItems { get; set; }
     }
 }

@@ -34,5 +34,7 @@ namespace HappyVacation.Database.Entities
         public List<Order> Orders { get; set; }
         // 1 user - n hotel bookings
         public List<Booking> Bookings { get; set; }
+        // 1 user -n wish items
+        public List<WishItem> WishItems { get; set; }
     }
 }
