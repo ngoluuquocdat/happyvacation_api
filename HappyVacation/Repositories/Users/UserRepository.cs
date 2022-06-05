@@ -1,4 +1,5 @@
 ﻿using HappyVacation.Database;
+using HappyVacation.Database.Entities;
 using HappyVacation.DTOs.Users;
 using HappyVacation.Services.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -82,6 +83,49 @@ namespace HappyVacation.Repositories.Users
             }
 
             return true;
+        }
+
+        // wish list functions
+        public async Task<int> AddToWishList(int userId, int tourId)
+        {
+            if(_context.WishItems.Any(x => x.TourId == tourId))
+            {
+                return 0;
+            }
+            _context.WishItems.Add(new WishItem() { UserId = userId, TourId = tourId });
+
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> RemoveFromWishList(int userId, int tourId)
+        {
+            var NOT_FOUND_ERROR = -1;
+
+            var wishItem = await _context.WishItems.FirstOrDefaultAsync(x => x.UserId == userId && x.TourId == tourId);
+            if (wishItem == null)
+            {
+                return NOT_FOUND_ERROR;
+            }
+            _context.WishItems.Remove(wishItem);
+
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<WishItemVm>> GetWishList(int userId)
+        {
+            var wishList = await _context.WishItems.Where(x => x.UserId == userId).AsNoTracking()
+                                    .OrderByDescending(x => x.Date)
+                                    .Select(x => new WishItemVm()
+                                    {
+                                        Id = x.Id,
+                                        TourName = x.Tour.TourName,
+                                        ThumbnailPath = (x.Tour.TourImages.Count() > 0) ? x.Tour.TourImages[0].Url : String.Empty,
+                                        ProviderName = x.Tour.Provider.ProviderName,
+                                        ProviderAvatar = x.Tour.Provider.AvatarUrl
+                                    })    
+                                    .ToListAsync();
+
+            return wishList;
         }
     }
 }

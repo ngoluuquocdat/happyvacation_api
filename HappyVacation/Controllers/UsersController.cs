@@ -64,5 +64,78 @@ namespace HappyVacation.Controllers
                 return StatusCode(500);
             }
         }
+
+        [HttpGet("me/wish-list")]
+        [Authorize]
+        public async Task<IActionResult> GetWishList()
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _userRepository.GetWishList(userId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("me/wish-list")]
+        [Authorize]
+        public async Task<IActionResult> AddToWishList([FromQuery] int tourId)
+        {
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _userRepository.AddToWishList(userId, tourId);
+                if(result == 0)
+                {
+                    return Ok("Already in wish list");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpDelete("me/wish-list")]
+        [Authorize]
+        public async Task<IActionResult> RemoveFromWishList([FromQuery] int tourId)
+        {
+            var NOT_FOUND_ERROR = -1;
+            try
+            {
+                var claimsPrincipal = this.User;
+                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+                var result = await _userRepository.RemoveFromWishList(userId, tourId);
+                if(result == NOT_FOUND_ERROR)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
     }
 }

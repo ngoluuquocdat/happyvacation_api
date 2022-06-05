@@ -27,5 +27,8 @@ namespace HappyVacation.DTOs.Tours
         public int Reviews { get; set; }
         public float Rating { get; set; }
         public bool IsProviderEnabled { get; set; }
+
+        public bool IsInUserWishList { get; set; }
+        public bool IsOrderedByUser { get; set; }
     }
 }
