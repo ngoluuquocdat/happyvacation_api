@@ -11,6 +11,6 @@ namespace HappyVacation.Repositories.Users
         // wish list functions
         Task<int> AddToWishList(int userId, int tourId);
         Task<int> RemoveFromWishList(int userId, int tourId);
-        Task<List<WishItemVm>> GetWishList(int userId);
+        Task<List<WishItemVm>> GetWishList(int userId);       
     }
 }

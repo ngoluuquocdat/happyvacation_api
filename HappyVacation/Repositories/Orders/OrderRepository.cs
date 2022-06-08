@@ -112,7 +112,7 @@ namespace HappyVacation.Repositories.Orders
             var topic = $"Tour_Provider_{providerId}";
 
             // See documentation on defining a message payload.
-            var message = new Message()
+            var message = new FirebaseAdmin.Messaging.Message()
             {
                 Data = new Dictionary<string, string>()
                 {
@@ -899,7 +899,7 @@ namespace HappyVacation.Repositories.Orders
             var topic = $"Tour_Provider_{providerId}";
 
             // See documentation on defining a message payload.
-            var message = new Message()
+            var message = new FirebaseAdmin.Messaging.Message()
             {
                 Data = new Dictionary<string, string>()
                 {

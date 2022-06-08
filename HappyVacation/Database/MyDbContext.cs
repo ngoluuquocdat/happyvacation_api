@@ -44,6 +44,8 @@ namespace HappyVacation.Database
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
+            modelBuilder.ApplyConfiguration(new MessageConfiguration());
+
             // configuration for hotel booking
             modelBuilder.ApplyConfiguration(new HotelConfiguration());
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
@@ -76,6 +78,7 @@ namespace HappyVacation.Database
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         // hotel booking
         public DbSet<Hotel> Hotels { get; set; }

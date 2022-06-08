@@ -93,6 +93,7 @@ namespace HappyVacation.Repositories.Authen
 
             return new AuthenVm()
             {
+                Id = user.Id,
                 Username = user.Username,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -145,6 +146,7 @@ namespace HappyVacation.Repositories.Authen
 
             return new AuthenVm()
             {
+                Id = newUser.Id,
                 Username = newUser.Username,
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,

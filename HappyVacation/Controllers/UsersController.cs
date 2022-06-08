@@ -104,7 +104,7 @@ namespace HappyVacation.Controllers
                     return Ok("Already in wish list");
                 }
 
-                return Ok(result);
+                return Ok(new { IsInUserWishList = true });
             }
             catch (Exception ex)
             {
@@ -129,7 +129,7 @@ namespace HappyVacation.Controllers
                     return NotFound();
                 }
 
-                return Ok(result);
+                return Ok(new { IsInUserWishList = false });
             }
             catch (Exception ex)
             {

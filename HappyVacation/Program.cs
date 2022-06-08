@@ -1,6 +1,8 @@
 using HappyVacation.Database;
+using HappyVacation.Hubs;
 using HappyVacation.Repositories.Authen;
 using HappyVacation.Repositories.Hotels;
+using HappyVacation.Repositories.Messages;
 using HappyVacation.Repositories.Orders;
 using HappyVacation.Repositories.Places;
 using HappyVacation.Repositories.Providers;
@@ -73,6 +75,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddSignalR();
+
 // add Authentication service
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(option =>
@@ -91,7 +95,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // services cors
 builder.Services.AddCors(p => p.AddPolicy("MyCorsPolicy", builder =>
 {
-    builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+    builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
 }));
 
 // add my services and repositories
@@ -106,6 +110,7 @@ builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
 builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<IProviderRepository, ProviderRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 
 builder.Services.AddHttpClient();
@@ -131,5 +136,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chat");
 
 app.Run();

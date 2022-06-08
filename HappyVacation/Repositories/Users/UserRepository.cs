@@ -28,6 +28,7 @@ namespace HappyVacation.Repositories.Users
             var user = await _context.Users.Where(x => x.Id == userId).AsNoTracking()
                                         .Select(x => new UserVm()
                                         {
+                                            Id = x.Id,
                                             Username = x.Username,
                                             FirstName = x.FirstName,
                                             LastName = x.LastName,
@@ -88,7 +89,7 @@ namespace HappyVacation.Repositories.Users
         // wish list functions
         public async Task<int> AddToWishList(int userId, int tourId)
         {
-            if(_context.WishItems.Any(x => x.TourId == tourId))
+            if(_context.WishItems.Any(x => x.TourId == tourId && x.UserId == userId))
             {
                 return 0;
             }
@@ -118,11 +119,13 @@ namespace HappyVacation.Repositories.Users
                                     .Select(x => new WishItemVm()
                                     {
                                         Id = x.Id,
+                                        TourId = x.Tour.Id,
                                         TourName = x.Tour.TourName,
                                         ThumbnailPath = (x.Tour.TourImages.Count() > 0) ? x.Tour.TourImages[0].Url : String.Empty,
+                                        ProviderId = x.Tour.ProviderId,
                                         ProviderName = x.Tour.Provider.ProviderName,
                                         ProviderAvatar = x.Tour.Provider.AvatarUrl
-                                    })    
+                                    })
                                     .ToListAsync();
 
             return wishList;
