@@ -143,5 +143,21 @@ namespace HappyVacation.Repositories.Messages
             }
             return time;
         }
+
+        public async Task<int> DeleteConversation(int userId, string withUserId)
+        {
+            var providerId = await _context.Providers.Where(x => x.User.Id == userId).AsNoTracking()
+                                            .Select(x => x.Id).FirstOrDefaultAsync();
+
+            var provider_chat_id = $"provider{providerId}";
+
+            _context.Messages.RemoveRange(_context.Messages
+                                            .Where(x => (x.SenderId == provider_chat_id && x.ReceiverId == withUserId) ||
+                                                        (x.SenderId == withUserId && x.ReceiverId == provider_chat_id)
+                                                  )
+                                         );
+
+            return await _context.SaveChangesAsync();
+        }
     }
 }

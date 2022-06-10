@@ -10,6 +10,7 @@ namespace HappyVacation.Repositories.Messages
         Task<MessageVm> GetMessageById(int messageId);
         Task<int> CreateMessage(string userId, MessageDTO message);
 
-        Task<List<UserChatVm>> GetUserChatList(int userId);
+        Task<List<UserChatVm>> GetUserChatList(int userId);     // for provider
+        Task<int> DeleteConversation(int userId, string withUserId);    // for provider
     }
 }
