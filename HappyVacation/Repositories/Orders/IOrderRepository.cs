@@ -11,10 +11,10 @@ namespace HappyVacation.Repositories.Orders
         Task<OrderManageDetailVm> GetOrderDetailManage(int userId, int orderId);    // detail for provider
         Task<OrderDetailVm> GetOrderDetail(int userId, int orderId);          // detail for customer
         Task<int> CreateOrder(int userId, CreateTourOrderRequest request);
-        Task<string> CreateOrderPayment(int userId, CreateTourOrderRequest request);
-        Task<OrderPaymentInfoVm> ConfirmOrderTransaction(int orderId, string transactionId);       
+        //Task<string> CreateOrderPayment(int userId, CreateTourOrderRequest request);
+        //Task<OrderPaymentInfoVm> ConfirmOrderTransaction(int orderId, string transactionId);       
 
-        Task<int> ConfirmOrder(int userId, int orderId);
+        //Task<int> ConfirmOrder(int userId, int orderId);
         Task<int> CancelOrder(int userId, int orderId);
 
         Task<int> ChangeDepartureDate(int userId, int orderId, string newDate);

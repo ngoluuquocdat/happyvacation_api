@@ -10,6 +10,8 @@
         public string EndPoint { get; set; }
         public int Adults { get; set; }
         public int Children { get; set; }
+        public int PricePerAdult { get; set; }
+        public int PricePerChild { get; set; }
         public string State { get; set; }
         public string? CancelReason { get; set; }
         public string TouristIdentityNum { get; set; }

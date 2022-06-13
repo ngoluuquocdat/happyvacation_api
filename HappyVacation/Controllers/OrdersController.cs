@@ -39,27 +39,27 @@ namespace HappyVacation.Controllers
             }
         }
 
-        [HttpPatch("{orderId:int}/confirm-transaction")]
-        [Authorize]
-        public async Task<ActionResult> ConfirmOrderTransaction(int orderId, [FromQuery] string transactionId)
-        {
-            try
-            {
-                // get payment url
-                var result = await _orderRepository.ConfirmOrderTransaction(orderId, transactionId);
-                if(result == null)
-                {
-                    return BadRequest("Something wrong.");
-                }
+        //[HttpPatch("{orderId:int}/confirm-transaction")]
+        //[Authorize]
+        //public async Task<ActionResult> ConfirmOrderTransaction(int orderId, [FromQuery] string transactionId)
+        //{
+        //    try
+        //    {
+        //        // get payment url
+        //        var result = await _orderRepository.ConfirmOrderTransaction(orderId, transactionId);
+        //        if(result == null)
+        //        {
+        //            return BadRequest("Something wrong.");
+        //        }
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
-                return StatusCode(500);
-            }
-        }
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+        //        return StatusCode(500);
+        //    }
+        //}
 
         [HttpGet("me")]
         [Authorize]
@@ -146,35 +146,35 @@ namespace HappyVacation.Controllers
             }
         }
 
-        [HttpPut("{orderId:int}/confirm")]
-        [Authorize(Roles = "Provider")]
-        public async Task<ActionResult> ConfirmOrder(int orderId)
-        {
-            try
-            {
+        //[HttpPut("{orderId:int}/confirm")]
+        //[Authorize(Roles = "Provider")]
+        //public async Task<ActionResult> ConfirmOrder(int orderId)
+        //{
+        //    try
+        //    {
 
-                var claimsPrincipal = this.User;
-                var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+        //        var claimsPrincipal = this.User;
+        //        var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
 
-                var result = await _orderRepository.ConfirmOrder(userId, orderId);
-                if (result == -1)
-                {
-                    return Forbid();
-                }
-                if (result == 0)
-                {
-                    return BadRequest("Already in this state.");
-                }
+        //        var result = await _orderRepository.ConfirmOrder(userId, orderId);
+        //        if (result == -1)
+        //        {
+        //            return Forbid();
+        //        }
+        //        if (result == 0)
+        //        {
+        //            return BadRequest("Already in this state.");
+        //        }
 
-                var updatedOrder = await _orderRepository.GetOrderById(result);
-                return Ok(updatedOrder);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
-                return StatusCode(500);
-            }
-        }
+        //        var updatedOrder = await _orderRepository.GetOrderById(result);
+        //        return Ok(updatedOrder);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+        //        return StatusCode(500);
+        //    }
+        //}
 
         [HttpPut("{orderId:int}/cancel")]
         [Authorize(Roles = "Provider")]
