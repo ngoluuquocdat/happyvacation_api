@@ -1,4 +1,7 @@
-﻿namespace HappyVacation.DTOs.Providers
+﻿using HappyVacation.DTOs.Places;
+using HappyVacation.DTOs.Tours;
+
+namespace HappyVacation.DTOs.Providers
 {
     public class RevenueVm
     {
@@ -7,5 +10,7 @@
         public int TotalOrderCount { get; set; }
         public int ConfirmedOrderCount { get; set; }
         public int CanceledOrderCount { get; set; }
+        public List<CategoryVm> TopOrderedCategories { get; set; }
+        public List<PlaceVm> TopOrderedPlaces { get; set; }
     }
 }

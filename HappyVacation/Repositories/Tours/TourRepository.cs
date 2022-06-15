@@ -499,7 +499,7 @@ namespace HappyVacation.Repositories.Tours
                         {
                             Id = categoryGroup.Key,
                             CategoryName = categoryGroup.First().CategoryName,
-                            Count = categoryGroup.Count()
+                            OrderCount = categoryGroup.Count()
                         };
 
             //var resultCategories = new List<CategoryVm>();

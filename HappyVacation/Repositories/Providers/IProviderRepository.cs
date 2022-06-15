@@ -14,15 +14,27 @@ namespace HappyVacation.Repositories.Providers
 
         // get tours functions for user 
         Task<PagedResult<TourMainInfoVm>> GetTours(int providerId, string? sort, int page, int perPage);     
+
         // get tours functions for provider
         Task<PagedResult<TourMainInfoManageVm>> GetToursManage(int userId, GetTourManageRequest request);
+
         // get tour simple view model (id and name)
         Task<List<TourSimpleVm>> GetSimplifiedTours(int userId);
 
         // get order report
         Task<string> GetOrderExport(int userId, string startDate, string endDate);
-        // get revenue by quater 
+
+        // get revenue by quater (for admin and provider)
         Task<RevenueVm> GetRevenueByQuarter(int quarterIndex, int year, int userId = 0, int providerId = 0);
+
+        // get revenue by month (for provider)
+        Task<RevenueVm> GetRevenueByMonth(int month, int year, int userId = 0);
+
+        // get overall statistic (for provider)
+        Task<OverallStatisticVm> GetOverallStatistic(int userId);
+
+        // get statistic for provider
+        //Task<StatisticVm> GetStatisticByQuarter(int userId, int quarterIndex, string endDate);
 
         // tour provider registration
         Task<int> CreateProviderRegistration(int userId, ProviderRegistrationRequest request);

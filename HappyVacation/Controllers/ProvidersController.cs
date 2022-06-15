@@ -234,6 +234,57 @@ namespace HappyVacation.Controllers
             }
         }
 
+        [HttpGet("me/overall-statistic")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetOverallStatistic()
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _providerRepository.GetOverallStatistic(userId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("me/revenue/by-quarter")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetRevenueByQuarterProvider([FromQuery] int quarterIndex, int year)
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _providerRepository.GetRevenueByQuarter(quarterIndex, year, userId: userId, providerId: 0);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("me/revenue/by-month")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetRevenueByMonthProvider([FromQuery] int month, int year)
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _providerRepository.GetRevenueByMonth(month, year, userId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+
+        /* ADMIN */
+
         [HttpGet("registrations")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> GetRegistrations([FromQuery] GetProviderRegistrationRequest request)

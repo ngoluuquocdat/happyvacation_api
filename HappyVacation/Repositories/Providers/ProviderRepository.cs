@@ -667,12 +667,12 @@ namespace HappyVacation.Repositories.Providers
             provider.CanceledOrderCount = (await _context.Tours.Where(x => x.ProviderId == provider.Id).Select(x => x.Orders.Where(o => o.State == "canceled").Count()).ToListAsync()).Sum(el => el);
 
             // get top categories
-            provider.TopCategories = await GetTopCategories(provider.Id);
+            provider.TopCategories = await GetMainCategories(provider.Id);
 
             return provider;
         }
 
-        public async Task<List<string>> GetTopCategories(int providerId)
+        public async Task<List<string>> GetMainCategories(int providerId)   // ordered by category count
         {
             var query = from category in _context.Categories
                         join tourCategory in _context.TourCategories on category.Id equals tourCategory.CategoryId
@@ -685,10 +685,75 @@ namespace HappyVacation.Repositories.Providers
                         {
                             Id = categoryGroup.Key,
                             CategoryName = categoryGroup.First().CategoryName,
-                            Count = categoryGroup.Count()
+                            OrderCount = categoryGroup.Count()
                         };
 
-            return await query.Select(x => x.CategoryName).Take(2).ToListAsync();
+            return await query.Select(x => x.CategoryName).Take(3).ToListAsync();
+        }
+
+        public async Task<List<string>> GetMainPlaces(int providerId)   // ordered by place count
+        {
+            var query = from place in _context.Places
+                        join tourPlace in _context.TourPlaces on place.Id equals tourPlace.PlaceId
+                        join tour in _context.Tours on tourPlace.TourId equals tour.Id
+                        where tour.ProviderId.Equals(providerId)
+                        group place by place.Id into placeGroup
+                        orderby placeGroup.Count() descending
+
+                        select new CategoryVm
+                        {
+                            Id = placeGroup.Key,
+                            CategoryName = placeGroup.First().PlaceName,
+                            OrderCount = placeGroup.Count()
+                        };
+
+            return await query.Select(x => x.CategoryName).Take(3).ToListAsync();
+        }
+
+        public async Task<List<CategoryVm>> GetTopOrderedCategories(int providerId, int fromMonth, int toMonth, int year)   // ordered by orders count
+        {
+            var query = from category in _context.Categories
+                        join tourCategory in _context.TourCategories on category.Id equals tourCategory.CategoryId
+                        join tour in _context.Tours on tourCategory.TourId equals tour.Id
+                        join order in _context.Orders on tour.Id equals order.TourId
+                        where tour.ProviderId == providerId && 
+                        order.OrderDate.Year == year &&
+                        order.OrderDate.Month >= fromMonth &&
+                        order.OrderDate.Month <= toMonth &&
+                        order.State.Equals("confirmed")
+                        group category by category.Id into categoryGroup
+                        orderby categoryGroup.Count() descending
+                        select new CategoryVm
+                        {
+                            Id = categoryGroup.Key,
+                            CategoryName = categoryGroup.First().CategoryName,
+                            OrderCount = categoryGroup.Count()
+                        };
+
+            return await query.Take(3).ToListAsync();
+        }
+
+        public async Task<List<PlaceVm>> GetTopOrderedPlaces(int providerId, int fromMonth, int toMonth, int year)   // ordered by orders count
+        {
+            var query = from place in _context.Places
+                        join tourPlace in _context.TourPlaces on place.Id equals tourPlace.PlaceId
+                        join tour in _context.Tours on tourPlace.TourId equals tour.Id
+                        join order in _context.Orders on tour.Id equals order.TourId
+                        where tour.ProviderId == providerId &&
+                        order.OrderDate.Year == year &&
+                        order.OrderDate.Month >= fromMonth &&
+                        order.OrderDate.Month <= toMonth &&
+                        order.State.Equals("confirmed")
+                        group place by place.Id into placeGroup
+                        orderby placeGroup.Count() descending
+                        select new PlaceVm
+                        {
+                            Id = placeGroup.Key,
+                            PlaceName = placeGroup.First().PlaceName,
+                            OrderCount = placeGroup.Count()
+                        };
+
+            return await query.Take(3).ToListAsync();
         }
 
         public async Task<PagedResult<TourMainInfoManageVm>> GetToursAdmin(int providerId, int page = 1, int perPage = 4)
@@ -730,6 +795,7 @@ namespace HappyVacation.Repositories.Providers
         {
             //var _startDate = DateTime.Parse(startDate);
             //var _endDate = DateTime.Parse(endDate);
+            var adminMode = false;
 
             // get months in quarter
             var months = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
@@ -743,8 +809,10 @@ namespace HappyVacation.Repositories.Providers
             if (userId == 0 && providerId != 0)
             {
                 _providerId = providerId;
+                adminMode = true;
             }
 
+            // get revenue data
             var monthLabels = new List<string>();
             var listRevenue = new List<int>();
 
@@ -761,10 +829,129 @@ namespace HappyVacation.Repositories.Providers
                 );
             }
 
+            // get categories and places data
+            var categories = new List<CategoryVm>();
+            var places = new List<PlaceVm>();
+            var totalOrderCount = 0;
+            var confirmedOrderCount = 0;
+            var canceledOrderCount = 0;
+
+            if (!adminMode)
+            {
+                categories = await GetTopOrderedCategories(_providerId, months[0], months[^1], year);
+                places = await GetTopOrderedPlaces(_providerId, months[0], months[^1], year);
+                totalOrderCount = await GetOrdersCount(_providerId, String.Empty, months[0], months[^1], year);
+                confirmedOrderCount = await GetOrdersCount(_providerId, "confirmed", months[0], months[^1], year);
+                canceledOrderCount = await GetOrdersCount(_providerId, "canceled", months[0], months[^1], year);
+            } 
+
             return new RevenueVm()
             {
                 MonthLabels = monthLabels,
-                Revenue = listRevenue
+                Revenue = listRevenue,
+                TopOrderedCategories = categories,
+                TopOrderedPlaces = places,
+                TotalOrderCount = totalOrderCount,
+                ConfirmedOrderCount = confirmedOrderCount,
+                CanceledOrderCount = canceledOrderCount
+            };
+        }
+
+        public async Task<RevenueVm> GetRevenueByMonth(int month, int year, int userId)
+        {
+
+           var providerId = (await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync()).GetValueOrDefault();
+
+            // get revenue data
+            var monthLabels = new List<string>();
+            var listRevenue = new List<int>();
+
+            monthLabels.Add(DateTimeFormatInfo.CurrentInfo.GetMonthName(month));
+
+            listRevenue.Add(
+                    _context.Orders.Where(x => x.Tour.ProviderId == providerId &&
+                                               x.State == "confirmed" &&
+                                               x.OrderDate.Month == month &&
+                                               x.OrderDate.Year == year
+                                          ).Sum(x => x.Adults * x.Tour.PricePerAdult + x.Children * x.Tour.PricePerChild)
+                );
+
+            //foreach (var month in months)
+            //{
+            //    monthLabels.Add(DateTimeFormatInfo.CurrentInfo.GetMonthName(month));
+
+            //    listRevenue.Add(
+            //        _context.Orders.Where(x => x.Tour.ProviderId == _providerId &&
+            //                                   x.State == "confirmed" &&
+            //                                   x.OrderDate.Month == month &&
+            //                                   x.OrderDate.Year == year
+            //                              ).Sum(x => x.Adults * x.Tour.PricePerAdult + x.Children * x.Tour.PricePerChild)
+            //    );
+            //}
+
+            // get categories and places data
+            var categories = new List<CategoryVm>();
+            var places = new List<PlaceVm>();
+            var totalOrderCount = 0;
+            var confirmedOrderCount = 0;
+            var canceledOrderCount = 0;
+
+
+            categories = await GetTopOrderedCategories(providerId, month, month, year);
+            places = await GetTopOrderedPlaces(providerId, month, month, year);
+            totalOrderCount = await GetOrdersCount(providerId, String.Empty, month, month, year);
+            confirmedOrderCount = await GetOrdersCount(providerId, "confirmed", month, month, year);
+            canceledOrderCount = await GetOrdersCount(providerId, "canceled", month, month, year);
+            
+
+            return new RevenueVm()
+            {
+                MonthLabels = monthLabels,
+                Revenue = listRevenue,
+                TopOrderedCategories = categories,
+                TopOrderedPlaces = places,
+                TotalOrderCount = totalOrderCount,
+                ConfirmedOrderCount = confirmedOrderCount,
+                CanceledOrderCount = canceledOrderCount
+            };
+        }
+
+        public async Task<int> GetOrdersCount(int providerId, string? state, int fromMonth, int toMonth, int year)
+        {
+            var result = 0;
+            if (String.IsNullOrEmpty(state))
+            {
+                result = (await _context.Tours.Where(x => x.ProviderId == providerId)
+                                            .Select(x => x.Orders.Where(x => x.OrderDate.Month >= fromMonth &&
+                                                                             x.OrderDate.Month <= toMonth &&
+                                                                             x.OrderDate.Year == year).Count())
+                                            .ToListAsync()).Sum(el => el);
+            } 
+            else
+            {
+                result = (await _context.Tours.Where(x => x.ProviderId == providerId)
+                                            .Select(x => x.Orders.Where(x => x.State.Equals(state) &&
+                                                                             x.OrderDate.Month >= fromMonth &&
+                                                                             x.OrderDate.Month <= toMonth &&
+                                                                             x.OrderDate.Year == year).Count())
+                                            .ToListAsync()).Sum(el => el);
+            }
+
+            return result;
+        }
+
+        public async Task<OverallStatisticVm> GetOverallStatistic(int userId)
+        {
+            var providerId = (await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync()).GetValueOrDefault();
+            
+            return new OverallStatisticVm()
+            {
+                TotalTourCount = _context.Tours.Where(x => x.ProviderId == providerId).Count(),
+                MainCategories = await GetMainCategories(providerId),
+                MainPlaces = await GetMainPlaces(providerId),
+                TotalOrderCount = (await _context.Tours.Where(x => x.ProviderId == providerId).Select(x => x.Orders.Count()).ToListAsync()).Sum(el => el),
+                ConfirmedOrderCount = (await _context.Tours.Where(x => x.ProviderId == providerId).Select(x => x.Orders.Where(o => o.State == "confirmed").Count()).ToListAsync()).Sum(el => el),
+                CanceledOrderCount = (await _context.Tours.Where(x => x.ProviderId == providerId).Select(x => x.Orders.Where(o => o.State == "canceled").Count()).ToListAsync()).Sum(el => el)
             };
         }
     }

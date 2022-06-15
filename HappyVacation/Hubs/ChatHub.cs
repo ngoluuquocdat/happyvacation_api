@@ -23,7 +23,7 @@ namespace HappyVacation.Hubs
             //var new_chat_guid_obj = new { ChatGuid = "" };
             if (userId.Equals("ANONYMOUS"))
             {
-                var shortGuid = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Replace("/", String.Empty).Replace("+", String.Empty);
+                var shortGuid = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Replace("==", String.Empty).Replace("/", String.Empty).Replace("+", String.Empty);
                 shakeHandMessage = new { ChatGuid = shortGuid };
                 // add to group with group name = guid
                 groupName = shortGuid;
