@@ -1,10 +1,13 @@
 ﻿using HappyVacation.Database;
 using HappyVacation.Database.Entities;
+using HappyVacation.DTOs.Common;
 using HappyVacation.DTOs.Users;
 using HappyVacation.Services.Storage;
+using HappyVacation.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace HappyVacation.Repositories.Users
 {
@@ -36,6 +39,7 @@ namespace HappyVacation.Repositories.Users
                                             Email = x.Email,
                                             AvatarUrl = !String.IsNullOrEmpty(x.AvatarUrl) ? x.AvatarUrl : String.Empty,
                                             ProviderId = x.ProviderId != null ? x.ProviderId : 0,
+                                            IsEnabled = x.IsEnabled
                                         }).FirstOrDefaultAsync();
             return user;
         }
@@ -129,6 +133,106 @@ namespace HappyVacation.Repositories.Users
                                     .ToListAsync();
 
             return wishList;
+        }
+
+        public async Task<PagedResult<UserVm>> GetUsers(GetUsersManageRequest request)
+        {
+            var query = _context.Users.Where(x => x.Id > 1).AsNoTracking();
+
+            // filter by Id
+            if (request.UserId != 0)
+            {
+                query = query.Where(x => x.Id == request.UserId);
+            }
+            // filter by username
+            if (!string.IsNullOrEmpty(request.Username))
+            {
+                query = query.Where(x => x.Username == request.Username);
+            }
+            // filter by keyword user info
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                var phoneRegex = new Regex(@"\(?\d{3}\)?-? *\d{3}-? *-?\d{4}");
+                // by phone
+                if (phoneRegex.IsMatch(request.Keyword))
+                {
+                    query = query.Where(x => (x.Phone.Contains(request.Keyword)));
+                }
+                // by email
+                if (EmailValid.IsValid(request.Keyword))
+                {
+                    query = query.Where(x => (x.Email.Contains(request.Keyword)));
+                }
+                // by name
+                if (!EmailValid.IsValid(request.Keyword) && !phoneRegex.IsMatch(request.Keyword))
+                {
+                    query = query.Where(x => x.FirstName.Contains(request.Keyword) || x.LastName.Contains(request.Keyword));
+                }
+            }
+            // order by newest
+            query = query.OrderByDescending(x => x.Id);
+            // paging
+            int totalCount = query.Count();
+            int totalPages = ((totalCount - 1) / request.PerPage) + 1;
+            query = query.Skip((request.Page - 1) * request.PerPage).Take(request.PerPage);
+
+            var users = await query.Select(x => new UserVm()
+            {
+                Id = x.Id,
+                Username = x.Username,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Phone = x.Phone,
+                Email = x.Email,
+                AvatarUrl = !String.IsNullOrEmpty(x.AvatarUrl) ? x.AvatarUrl : String.Empty,
+                ProviderId = x.ProviderId != null ? x.ProviderId : 0,
+                IsEnabled = x.IsEnabled
+            }).ToListAsync();
+
+            return new PagedResult<UserVm>()
+            {
+                TotalCount = totalCount,
+                TotalPage = totalPages,
+                Items = users
+            };
+        }
+
+        public async Task<int> DisableUser(int userId)
+        {
+            var user = await _context.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return 0;
+            }
+
+            user.IsEnabled = false;
+            await _context.SaveChangesAsync();
+
+            return user.Id;
+        }
+
+        public async Task<int> EnableUser(int userId)
+        {
+            var user = await _context.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return 0;
+            }
+
+            user.IsEnabled = true;
+            await _context.SaveChangesAsync();
+
+            return user.Id;
+        }
+
+        public async Task<bool?> CheckUserEnabled(int userId)
+        {
+            if (!_context.Users.Any(x => x.Id == userId))
+            {
+                return null;
+            }
+
+            return await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.IsEnabled).FirstOrDefaultAsync();
         }
     }
 }

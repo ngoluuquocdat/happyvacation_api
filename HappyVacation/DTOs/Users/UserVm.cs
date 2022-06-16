@@ -10,5 +10,6 @@
         public string Phone { get; set; }
         public string AvatarUrl { get; set; }
         public int? ProviderId { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }

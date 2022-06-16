@@ -513,6 +513,7 @@ namespace HappyVacation.Repositories.Providers
                 return 0;
             }           
         }
+
         public async Task<int> DisableProvider(int providerId)
         {
             var provider = await _context.Providers.Where(x => x.Id == providerId).FirstOrDefaultAsync();
@@ -562,7 +563,7 @@ namespace HappyVacation.Repositories.Providers
                 // by phone
                 if (phoneRegex.IsMatch(request.Keyword))
                 {
-                    query = query.Where(x => (x.ProviderName.Contains(request.Keyword)));
+                    query = query.Where(x => (x.ProviderPhone.Contains(request.Keyword)));
                 }
                 // by email
                 if (EmailValid.IsValid(request.Keyword))

@@ -18,7 +18,7 @@ namespace HappyVacation.Controllers
 
         [HttpGet("me")]
         [Authorize]
-        public async Task<IActionResult> Get()                
+        public async Task<IActionResult> Get()
         {
             try
             {
@@ -65,6 +65,22 @@ namespace HappyVacation.Controllers
             }
         }
 
+        [HttpGet("me/check-enabled")]
+        [Authorize]
+        public async Task<ActionResult> CheckUserEnabled()
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _userRepository.CheckUserEnabled(userId);
+            if (result == null)
+            {
+                return Forbid();
+            }
+
+            return Ok(new { isEnabled = result });
+        }
+
         [HttpGet("me/wish-list")]
         [Authorize]
         public async Task<IActionResult> GetWishList()
@@ -99,7 +115,7 @@ namespace HappyVacation.Controllers
                 var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
 
                 var result = await _userRepository.AddToWishList(userId, tourId);
-                if(result == 0)
+                if (result == 0)
                 {
                     return Ok("Already in wish list");
                 }
@@ -124,12 +140,74 @@ namespace HappyVacation.Controllers
                 var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
 
                 var result = await _userRepository.RemoveFromWishList(userId, tourId);
-                if(result == NOT_FOUND_ERROR)
+                if (result == NOT_FOUND_ERROR)
                 {
                     return NotFound();
                 }
 
                 return Ok(new { IsInUserWishList = false });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        // ADMIN
+        [HttpGet("manage")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUsers([FromQuery] GetUsersManageRequest request)
+        {
+            try
+            {
+                var result = await _userRepository.GetUsers(request);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("{userId}/disable")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DisableUser(int userId)
+        {
+            try
+            {
+                var result = await _userRepository.DisableUser(userId);
+                if (result == 0)
+                {
+                    return NotFound();
+                }
+                var updatedUser = await _userRepository.GetUserById(result);
+
+                return Ok(updatedUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("{userId}/enable")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EnableUser(int userId)
+        {
+            try
+            {
+                var result = await _userRepository.EnableUser(userId);
+                if (result == 0)
+                {
+                    return NotFound();
+                }
+                var updatedUser = await _userRepository.GetUserById(result);
+
+                return Ok(updatedUser);
             }
             catch (Exception ex)
             {
