@@ -113,7 +113,8 @@ namespace HappyVacation.Repositories.Messages
                                                     Id = x.Id.ToString(),
                                                     FullName = $"{x.FirstName} {x.LastName}",
                                                     AvatarUrl = x.AvatarUrl,
-                                                    IsConversationDeletable = false
+                                                    IsConversationDeletable = false,
+                                                    IsUserEnabled = x.IsEnabled
                                                 }).FirstOrDefaultAsync());
                 }
                 else
@@ -123,7 +124,8 @@ namespace HappyVacation.Repositories.Messages
                         Id = id,
                         FullName = id,
                         AvatarUrl = DEFAULT_AVATAR_URL,
-                        IsConversationDeletable = (DateTime.Now > (await GetLastestMessageTime(userId.ToString(), id)).AddMinutes(1))
+                        IsConversationDeletable = (DateTime.Now > (await GetLastestMessageTime(userId.ToString(), id)).AddMinutes(1)),
+                        IsUserEnabled = true
                     });
                 }
             }

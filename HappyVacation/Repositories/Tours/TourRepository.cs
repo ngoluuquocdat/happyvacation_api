@@ -434,7 +434,7 @@ namespace HappyVacation.Repositories.Tours
                                         .Select(x => new ReviewVm()
                                         {
                                             Id = x.Id,
-                                            Date = x.DateModified.ToShortDateString(),
+                                            Date = x.DateModified.ToString("dd/MM/yyyy"),
                                             Content = x.Content,
                                             Rating = x.Rating,
                                             Username = x.User.Username,

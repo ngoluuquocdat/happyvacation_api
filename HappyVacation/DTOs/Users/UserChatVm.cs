@@ -7,5 +7,6 @@
         public string AvatarUrl { get; set; }
         public string LastestMessage { get; set; }
         public bool IsConversationDeletable { get; set; }
+        public bool IsUserEnabled { get; set; }
     }
 }
