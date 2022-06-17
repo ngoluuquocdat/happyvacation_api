@@ -12,5 +12,6 @@ namespace HappyVacation.DTOs.Providers
         public int CanceledOrderCount { get; set; }
         public List<CategoryVm> TopOrderedCategories { get; set; }
         public List<PlaceVm> TopOrderedPlaces { get; set; }
+        public List<TourStatisticVm> TopOrderedTours { get; set; }
     }
 }

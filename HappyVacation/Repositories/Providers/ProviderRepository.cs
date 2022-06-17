@@ -757,6 +757,34 @@ namespace HappyVacation.Repositories.Providers
             return await query.Take(3).ToListAsync();
         }
 
+        public async Task<List<TourStatisticVm>> GetTopOrderedTours(int providerId, int fromMonth, int toMonth, int year)
+        {
+            var result = await _context.Tours.Where(x => x.ProviderId == providerId).AsNoTracking()
+                                    .OrderByDescending(x => x.Orders.Where(o => o.OrderDate.Year == year &&
+                                                                                o.OrderDate.Month >= fromMonth &&
+                                                                                o.OrderDate.Month <= toMonth &&
+                                                                                o.State.Equals("confirmed")).Count())
+                                    .Take(3)
+                                    .Select(x => new TourStatisticVm()
+                                    {
+                                        TourId = x.Id,
+                                        TourName = x.TourName,
+                                        TotalOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
+                                                                                o.OrderDate.Month >= fromMonth &&
+                                                                                o.OrderDate.Month <= toMonth).Count(),
+                                        ConfirmedOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
+                                                                                o.OrderDate.Month >= fromMonth &&
+                                                                                o.OrderDate.Month <= toMonth &&
+                                                                                o.State.Equals("confirmed")).Count(),
+                                        CanceledOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
+                                                                                o.OrderDate.Month >= fromMonth &&
+                                                                                o.OrderDate.Month <= toMonth &&
+                                                                                o.State.Equals("canceled")).Count()
+                                    }).ToListAsync();
+            result = result.Where(x => x.TotalOrderCount > 0).ToList();
+            return result;
+        }
+
         public async Task<PagedResult<TourMainInfoManageVm>> GetToursAdmin(int providerId, int page = 1, int perPage = 4)
         {
             var provider = await _context.Providers.Where(x => x.Id == providerId).FirstOrDefaultAsync();
@@ -833,6 +861,7 @@ namespace HappyVacation.Repositories.Providers
             // get categories and places data
             var categories = new List<CategoryVm>();
             var places = new List<PlaceVm>();
+            var tours = new List<TourStatisticVm>();
             var totalOrderCount = 0;
             var confirmedOrderCount = 0;
             var canceledOrderCount = 0;
@@ -841,6 +870,7 @@ namespace HappyVacation.Repositories.Providers
             {
                 categories = await GetTopOrderedCategories(_providerId, months[0], months[^1], year);
                 places = await GetTopOrderedPlaces(_providerId, months[0], months[^1], year);
+                tours = await GetTopOrderedTours(_providerId, months[0], months[^1], year);
                 totalOrderCount = await GetOrdersCount(_providerId, String.Empty, months[0], months[^1], year);
                 confirmedOrderCount = await GetOrdersCount(_providerId, "confirmed", months[0], months[^1], year);
                 canceledOrderCount = await GetOrdersCount(_providerId, "canceled", months[0], months[^1], year);
@@ -852,6 +882,7 @@ namespace HappyVacation.Repositories.Providers
                 Revenue = listRevenue,
                 TopOrderedCategories = categories,
                 TopOrderedPlaces = places,
+                TopOrderedTours = tours,
                 TotalOrderCount = totalOrderCount,
                 ConfirmedOrderCount = confirmedOrderCount,
                 CanceledOrderCount = canceledOrderCount
@@ -893,6 +924,7 @@ namespace HappyVacation.Repositories.Providers
             // get categories and places data
             var categories = new List<CategoryVm>();
             var places = new List<PlaceVm>();
+            var tours = new List<TourStatisticVm>();
             var totalOrderCount = 0;
             var confirmedOrderCount = 0;
             var canceledOrderCount = 0;
@@ -900,6 +932,7 @@ namespace HappyVacation.Repositories.Providers
 
             categories = await GetTopOrderedCategories(providerId, month, month, year);
             places = await GetTopOrderedPlaces(providerId, month, month, year);
+            tours = await GetTopOrderedTours(providerId, month, month, year);
             totalOrderCount = await GetOrdersCount(providerId, String.Empty, month, month, year);
             confirmedOrderCount = await GetOrdersCount(providerId, "confirmed", month, month, year);
             canceledOrderCount = await GetOrdersCount(providerId, "canceled", month, month, year);
@@ -911,6 +944,7 @@ namespace HappyVacation.Repositories.Providers
                 Revenue = listRevenue,
                 TopOrderedCategories = categories,
                 TopOrderedPlaces = places,
+                TopOrderedTours = tours,
                 TotalOrderCount = totalOrderCount,
                 ConfirmedOrderCount = confirmedOrderCount,
                 CanceledOrderCount = canceledOrderCount
