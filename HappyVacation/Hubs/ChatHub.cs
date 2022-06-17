@@ -42,6 +42,7 @@ namespace HappyVacation.Hubs
                 SenderId = messageDto.SenderId,
                 ReceiverId = messageDto.ReceiverId,
                 Content = messageDto.Content,
+                ImageUrl = messageDto.ImageUrl
             };
 
             // create new message in database

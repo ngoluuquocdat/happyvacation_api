@@ -9,8 +9,13 @@ namespace HappyVacation.Repositories.Messages
     public class MessageRepository : IMessageRepository
     {
         private readonly MyDbContext _context;
-        public MessageRepository(MyDbContext context)
+        private readonly string _storageFolder;
+        private const string StorageFolderName = "message";
+        public MessageRepository(MyDbContext context, IWebHostEnvironment webHostEnvironment)
         {
+            _storageFolder = Path.Combine(webHostEnvironment.WebRootPath, StorageFolderName);
+            // create the folder if it does not exist
+            Directory.CreateDirectory(_storageFolder);
             _context = context;
         }
 
@@ -21,6 +26,7 @@ namespace HappyVacation.Repositories.Messages
                 SenderId = userId,
                 ReceiverId = message.ReceiverId,
                 Content = message.Content,
+                ImageUrl = message.ImageUrl,
                 DateTime = DateTime.Now
             };
 
@@ -37,6 +43,7 @@ namespace HappyVacation.Repositories.Messages
                                 {
                                     Id = x.Id,
                                     Content = x.Content,
+                                    ImageUrl = !String.IsNullOrEmpty(x.ImageUrl) ? x.ImageUrl : "",
                                     SenderId = x.SenderId,
                                     ReceiverId = x.ReceiverId,
                                     DateTime = x.DateTime
@@ -53,6 +60,7 @@ namespace HappyVacation.Repositories.Messages
                                                   {
                                                       Id = x.Id,
                                                       Content = x.Content,
+                                                      ImageUrl = !String.IsNullOrEmpty(x.ImageUrl) ? x.ImageUrl : "",
                                                       SenderId = x.SenderId,
                                                       ReceiverId = x.ReceiverId,
                                                       DateTime = x.DateTime
@@ -72,6 +80,7 @@ namespace HappyVacation.Repositories.Messages
                                                   {
                                                       Id = x.Id,
                                                       Content = x.Content,
+                                                      ImageUrl = !String.IsNullOrEmpty(x.ImageUrl) ? x.ImageUrl : "",
                                                       SenderId = x.SenderId,
                                                       ReceiverId = x.ReceiverId,
                                                       DateTime = x.DateTime
@@ -160,6 +169,27 @@ namespace HappyVacation.Repositories.Messages
                                          );
 
             return await _context.SaveChangesAsync();
+        }
+
+        public async Task<string> UploadImage(IFormFile image)
+        {
+            return await SaveImage(image);
+        }
+
+        public async Task<string> SaveImage(IFormFile image)
+        {
+            // create a new random file name, security issues, reference from Microsoft doc
+            var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+            // create new path to save file into storage
+            var newFilePath = Path.Combine(_storageFolder, newFileName);
+
+            // save image
+            using (var fileStream = new FileStream(newFilePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+
+            return $"/{StorageFolderName}/{newFileName}";
         }
     }
 }

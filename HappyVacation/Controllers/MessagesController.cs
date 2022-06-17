@@ -109,5 +109,24 @@ namespace HappyVacation.Controllers
                 return StatusCode(500);
             }
         }
+
+
+        // image upload endpoint
+        [HttpPost("images")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile image)
+        {
+            try
+            {
+                var imageUrl = await _messageRepository.UploadImage(image);
+
+                return Ok(new { ImageUrl = imageUrl });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
     }
 }
