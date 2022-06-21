@@ -95,7 +95,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // services cors
 builder.Services.AddCors(p => p.AddPolicy("MyCorsPolicy", builder =>
 {
-    builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+    builder.WithOrigins("http://localhost:3000", "https://curious-pavlova-30d110.netlify.app").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
     //builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 }));
 

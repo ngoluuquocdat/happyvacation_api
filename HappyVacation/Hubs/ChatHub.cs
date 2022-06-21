@@ -54,5 +54,10 @@ namespace HappyVacation.Hubs
             await Clients.Groups(groupNames)
                             .SendAsync("ReceiveMessage", newMessage);
         }
+
+        public async Task ChangeTypingState(bool isTyping, string senderId, string receiverId)
+        {
+            await Clients.Groups(receiverId).SendAsync("ChangeTypingState", new { senderId = senderId, isTyping = isTyping });
+        }
     }
 }
