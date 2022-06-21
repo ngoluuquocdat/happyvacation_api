@@ -328,7 +328,7 @@ namespace HappyVacation.Repositories.Tours
             var providerId = await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync();
             var tour = await _context.Tours.Include(x => x.TourPlaces)
                                             .Include(x => x.TourCategories)
-                                            .Include(x => x.TourImages)
+                                            //.Include(x => x.TourImages)
                                             .Include(x => x.Itineraries)
                                             .Include(x => x.Expenses)
                                             .FirstOrDefaultAsync(x => x.Id == tourId && x.ProviderId == providerId);
@@ -396,16 +396,16 @@ namespace HappyVacation.Repositories.Tours
             {
                 if(imageDto.Id > 0)
                 {
-                    if(imageDto.Deleted == true)
+                    var image = await _context.TourImages.FirstOrDefaultAsync(x => x.Id == imageDto.Id);
+                    if (imageDto.Deleted == true)
                     {
-                        var image = new TourImage() { Id = imageDto.Id };
                         _context.TourImages.Remove(image);
                     }
                     else
                     {
                         if(imageDto.File != null)
                         {
-                            var image = await _context.TourImages.FirstOrDefaultAsync(x => x.Id == imageDto.Id);
+                            //var image = await _context.TourImages.FirstOrDefaultAsync(x => x.Id == imageDto.Id);
                             image.Url = await _storageService.SaveImage(imageDto.File);
                         }
                     }
