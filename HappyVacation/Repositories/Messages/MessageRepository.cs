@@ -26,7 +26,7 @@ namespace HappyVacation.Repositories.Messages
                 SenderId = userId,
                 ReceiverId = message.ReceiverId,
                 Content = message.Content,
-                ImageUrl = message.ImageUrl,
+                ImageUrl = !String.IsNullOrEmpty(message.ImageUrl) ? message.ImageUrl : "",
                 DateTime = DateTime.Now
             };
 
@@ -171,6 +171,64 @@ namespace HappyVacation.Repositories.Messages
             return await _context.SaveChangesAsync();
         }
 
+        public async Task<List<UserChatVm>> GetProviderChatList(int userId)
+        {
+            // get list provider id from message table
+            var listIds = (await _context.Messages.Where(x => x.SenderId == userId.ToString() || x.ReceiverId == userId.ToString())
+                                           .AsNoTracking()
+                                           .OrderByDescending(x => x.Id)
+                                           .Select(x =>
+                                                        x.SenderId == userId.ToString()
+                                                        ? x.ReceiverId
+                                                        : x.SenderId)
+                                           .AsSplitQuery()
+                                           .ToListAsync())
+                                           .DistinctBy(result_value => result_value);
+
+            // get list provider
+            var chatProviders = new List<UserChatVm>();
+            foreach (var id in listIds)
+            {
+                chatProviders.Add(await _context.Providers.Where(x => "provider"+x.Id == id)
+                                                   .AsNoTracking()
+                                                   .Select(x => new UserChatVm()
+                                                   {
+                                                       Id = $"provider{ x.Id}",
+                                                       FullName = x.ProviderName,
+                                                       AvatarUrl = x.AvatarUrl,
+                                                       IsConversationDeletable = false,
+                                                       IsUserEnabled = x.IsEnabled
+                                                   }).FirstOrDefaultAsync());
+
+                //if (_context.Users.Any(x => x.Id.ToString() == id))
+                //{
+                //    chatUsers.Add(await _context.Users.Where(x => x.Id.ToString() == id)
+                //                                .AsNoTracking()
+                //                                .Select(x => new UserChatVm()
+                //                                {
+                //                                    Id = x.Id.ToString(),
+                //                                    FullName = $"{x.FirstName} {x.LastName}",
+                //                                    AvatarUrl = x.AvatarUrl,
+                //                                    IsConversationDeletable = false,
+                //                                    IsUserEnabled = x.IsEnabled
+                //                                }).FirstOrDefaultAsync());
+                //}
+                //else
+                //{
+                //    chatUsers.Add(new UserChatVm()
+                //    {
+                //        Id = id,
+                //        FullName = id,
+                //        AvatarUrl = DEFAULT_AVATAR_URL,
+                //        IsConversationDeletable = (DateTime.Now > (await GetLastestMessageTime(userId.ToString(), id)).AddMinutes(1)),
+                //        IsUserEnabled = true
+                //    });
+                //}
+            }
+
+            return chatProviders;
+        }
+
         public async Task<string> UploadImage(IFormFile image)
         {
             return await SaveImage(image);
@@ -190,6 +248,6 @@ namespace HappyVacation.Repositories.Messages
             }
 
             return $"/{StorageFolderName}/{newFileName}";
-        }
+        }     
     }
 }

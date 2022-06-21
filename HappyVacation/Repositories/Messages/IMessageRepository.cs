@@ -13,6 +13,8 @@ namespace HappyVacation.Repositories.Messages
         Task<List<UserChatVm>> GetUserChatList(int userId);     // for provider
         Task<int> DeleteConversation(int userId, string withUserId);    // for provider
 
+        Task<List<UserChatVm>> GetProviderChatList(int userId);     // for member
+
         Task<string> UploadImage(IFormFile image);
     }
 }
