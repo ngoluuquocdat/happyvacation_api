@@ -350,12 +350,17 @@ namespace HappyVacation.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> EnableProvider(int providerId)
         {
+            var MEMBER_DISABLED_ERROR = -2;
             try
             {
                 var result = await _providerRepository.EnableProvider(providerId);
                 if (result == 0)
                 {
                     return NotFound();
+                }
+                if(result == MEMBER_DISABLED_ERROR)
+                {
+                    return BadRequest("Associated member is disabled");
                 }
 
                 var updatedProvider = await _providerRepository.GetProviderById(result);

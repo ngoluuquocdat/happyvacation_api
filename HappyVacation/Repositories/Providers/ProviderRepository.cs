@@ -530,10 +530,17 @@ namespace HappyVacation.Repositories.Providers
 
         public async Task<int> EnableProvider(int providerId)
         {
-            var provider = await _context.Providers.Where(x => x.Id == providerId).FirstOrDefaultAsync();
+            var MEMBER_DISABLED_ERROR = -2;
+            var provider = await _context.Providers.Include(x => x.User).Where(x => x.Id == providerId).FirstOrDefaultAsync();
             if (provider == null)
             {
                 return 0;
+            }
+
+            // can not enable if associated member is disabled
+            if(provider.User.IsEnabled == false)
+            {
+                return MEMBER_DISABLED_ERROR;
             }
 
             provider.IsEnabled = true;

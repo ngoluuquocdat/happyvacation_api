@@ -204,8 +204,14 @@ namespace HappyVacation.Repositories.Users
             {
                 return 0;
             }
-
+            // disable user
             user.IsEnabled = false;
+            // disable associated provider 
+            if(user.ProviderId != null)
+            {
+                var provider = await _context.Providers.Where(x => x.Id == user.ProviderId).FirstOrDefaultAsync();
+                provider.IsEnabled = false;
+            }
             await _context.SaveChangesAsync();
 
             return user.Id;
@@ -218,7 +224,7 @@ namespace HappyVacation.Repositories.Users
             {
                 return 0;
             }
-
+            // enable
             user.IsEnabled = true;
             await _context.SaveChangesAsync();
 
