@@ -61,7 +61,7 @@ namespace HappyVacation.Controllers
             var result = await _authenRepository.Register(request);
             if (result == null)
             {
-                return BadRequest(error: "Username already exists.");
+                return BadRequest(error: "Username already exists or password not match");
             }
 
             return Ok(result);

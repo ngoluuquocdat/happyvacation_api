@@ -113,6 +113,11 @@ namespace HappyVacation.Repositories.Authen
                 return null;
             }
 
+            if(request.Password != request.ConfirmPassword)
+            {
+                return null;
+            }
+
             // algorithm for password encoding
             using var hmac = new HMACSHA512();
             // new user info
