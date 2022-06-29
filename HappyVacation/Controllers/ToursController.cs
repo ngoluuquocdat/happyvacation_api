@@ -17,6 +17,23 @@ namespace HappyVacation.Controllers
             _tourRepository = tourRepository;
         }
 
+        [HttpGet("categories")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetCategories()
+        {
+            try
+            {
+                var result = await _tourRepository.GetCategories();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+
+        }
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -159,6 +176,11 @@ namespace HappyVacation.Controllers
         [Authorize]
         public async Task<ActionResult> CreateReview(int tourId, ReviewDTO request)
         {
+            if(request.Rating == 0)
+            {
+                return BadRequest("Rating value is required");
+            }
+
             var currentUser = HttpContext.User;
             var userId = Int32.Parse(currentUser.FindFirst("id").Value);
 

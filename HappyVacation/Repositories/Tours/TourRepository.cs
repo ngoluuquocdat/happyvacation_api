@@ -20,6 +20,16 @@ namespace HappyVacation.Repositories.Tours
             _storageService = storageService;
         }
 
+        public async Task<List<CategoryVm>> GetCategories()
+        {
+            return await _context.Categories.Select(x => new CategoryVm()
+            {
+                Id = x.Id,
+                CategoryName = x.CategoryName,
+                OrderCount = 0
+            }).ToListAsync();
+        }
+
         public async Task<PagedResult<TourMainInfoVm>> GetTours(GetTourRequest request)
         {
             var query = _context.Tours.Where(x => x.Provider.IsEnabled == true);
@@ -439,7 +449,8 @@ namespace HappyVacation.Repositories.Tours
                                             Content = x.Content,
                                             Rating = x.Rating,
                                             Username = x.User.Username,
-                                            UserAvatar = x.User.AvatarUrl ?? String.Empty
+                                            UserAvatar = x.User.AvatarUrl ?? String.Empty,
+                                            IsUserEnabled = x.User.IsEnabled
                                         });
             // paging
             // default values
@@ -458,6 +469,7 @@ namespace HappyVacation.Repositories.Tours
         }
         public async Task<int> CreateReview(int userId, int tourId, ReviewDTO request)
         {
+
             var review = _context.Reviews.Where(x => (x.UserId == userId) && (x.TourId == tourId)).FirstOrDefault();
             if (review == null)
             {
