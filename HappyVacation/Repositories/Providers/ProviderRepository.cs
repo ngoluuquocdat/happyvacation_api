@@ -66,12 +66,25 @@ namespace HappyVacation.Repositories.Providers
             } 
             else
             {
-                provider.AverageRating = (float)Math.Round(
-                                            (_context.Tours.Where(x => x.ProviderId == providerId)
+                var non_zero_list_rating_values = (_context.Tours.Where(x => x.ProviderId == providerId)
                                             .Select(x => (x.Reviews.Count() != 0) ? x.Reviews.Average(r => r.Rating) : -1)
                                             .ToList())
-                                            .Where(x => x != -1)                                
-                                            .Average(), 2);
+                                            .Where(x => x != -1);
+                if(non_zero_list_rating_values.Count() > 0)
+                {
+                    provider.AverageRating = (float)Math.Round(non_zero_list_rating_values.Average(), 2);
+                } 
+                else
+                {
+                    provider.AverageRating = 0;
+                }
+
+                //provider.AverageRating = (float)Math.Round(
+                //                            (_context.Tours.Where(x => x.ProviderId == providerId)
+                //                            .Select(x => (x.Reviews.Count() != 0) ? x.Reviews.Average(r => r.Rating) : -1)
+                //                            .ToList())
+                //                            .Where(x => x != -1)                                
+                //                            .Average(), 2);
             }
 
             return provider;
@@ -363,14 +376,32 @@ namespace HappyVacation.Repositories.Providers
                 ProviderEmail = request.ProviderEmail,
                 ProviderPhone = request.ProviderPhone,
                 DateCreated = DateTime.Now,
-                IsApproved = false
+                IsApproved = false,
+                IsRejected = false
             };
 
             _context.ProviderRegistrations.Add(registration);
             await _context.SaveChangesAsync();
 
-            //return tour.Id;
             return registration.Id;
+        }
+
+        public async Task<int> DeleteProviderRegistration(int userId, int registrationId)
+        {
+            var NOT_FOUND_ERROR = -1;
+            var NOT_ALLOWED = -3;
+
+            var registration = await _context.ProviderRegistrations.Where(x => x.Id == registrationId).FirstOrDefaultAsync();
+            if (registration == null)
+            {
+                return NOT_FOUND_ERROR;
+            }
+            if(userId != registration.UserId)
+            {
+                return NOT_ALLOWED;
+            }
+            _context.ProviderRegistrations.Remove(registration);
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<ProviderRegistrationVm> GetProviderRegistration(int userId)
@@ -384,7 +415,8 @@ namespace HappyVacation.Repositories.Providers
                                            ProviderEmail = x.ProviderEmail,
                                            ProviderPhone = x.ProviderPhone,
                                            DateCreated = x.DateCreated.ToString("dd/MM/yyyy"),
-                                           IsApproved = x.IsApproved
+                                           IsApproved = x.IsApproved,
+                                           IsRejected = x.IsRejected
                                        })
                                        .FirstOrDefaultAsync();
 
@@ -402,7 +434,8 @@ namespace HappyVacation.Repositories.Providers
                                            ProviderEmail = x.ProviderEmail,
                                            ProviderPhone = x.ProviderPhone,
                                            DateCreated = x.DateCreated.ToString("dd/MM/yyyy"),
-                                           IsApproved = x.IsApproved
+                                           IsApproved = x.IsApproved,
+                                           IsRejected = x.IsRejected
                                        })
                                        .FirstOrDefaultAsync();
 
@@ -457,7 +490,8 @@ namespace HappyVacation.Repositories.Providers
                 ProviderEmail = x.ProviderEmail,
                 ProviderPhone = x.ProviderPhone,
                 DateCreated = x.DateCreated.ToString("dd/MM/yyyy"),
-                IsApproved = x.IsApproved
+                IsApproved = x.IsApproved,
+                IsRejected = x.IsRejected
             }).ToListAsync();
 
             return new PagedResult<ProviderRegistrationVm>()
@@ -471,7 +505,7 @@ namespace HappyVacation.Repositories.Providers
         public async Task<int> ApproveProviderRegistration(int registrationId)
         {
             var NOT_FOUND_ERROR = -1;
-
+            var MEMBER_IS_DISABLED = -2;
 
             var registration = await _context.ProviderRegistrations.FirstOrDefaultAsync(x => x.Id == registrationId);
             if(registration == null)
@@ -479,7 +513,14 @@ namespace HappyVacation.Repositories.Providers
                 return NOT_FOUND_ERROR;
             }
 
-            if(registration.IsApproved == false)
+            // check member is enable or not
+            var isMemberEnable = await _context.Users.Where(x => x.Id == registration.UserId).Select(x => x.IsEnabled).FirstOrDefaultAsync();
+            if(!isMemberEnable)
+            {
+                return MEMBER_IS_DISABLED;
+            }
+
+            if(registration.IsApproved == false && registration.IsRejected == false)
             {
                 registration.IsApproved = true;
 
@@ -512,6 +553,30 @@ namespace HappyVacation.Repositories.Providers
             {
                 return 0;
             }           
+        }
+
+        public async Task<int> RejectProviderRegistration(int registrationId)
+        {
+            var NOT_FOUND_ERROR = -1;
+
+            var registration = await _context.ProviderRegistrations.FirstOrDefaultAsync(x => x.Id == registrationId);
+            if (registration == null)
+            {
+                return NOT_FOUND_ERROR;
+            }
+
+            if (registration.IsRejected == false && registration.IsApproved == false)
+            {
+                registration.IsRejected = true;
+
+                await _context.SaveChangesAsync();
+
+                return registration.Id;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public async Task<int> DisableProvider(int providerId)
@@ -558,8 +623,13 @@ namespace HappyVacation.Repositories.Providers
             {
                 query = query.Where(x => x.Id == request.ProviderId);
             }
+            // filter by enable/disable
+            if (request.IsEnabled != null)
+            {
+                query = query.Where(x => (x.IsEnabled == request.IsEnabled));
+            }
             // filter by owner Id
-            if(request.OwnerId != 0)
+            if (request.OwnerId != 0)
             {
                 query = query.Where(x => x.User.Id == request.OwnerId);
             }
@@ -582,7 +652,7 @@ namespace HappyVacation.Repositories.Providers
                 {
                     query = query.Where(x => (x.ProviderName.Contains(request.Keyword)));
                 }
-            }
+            }        
 
             // order by modified date
             query = query.OrderByDescending(x => x.DateCreated);
@@ -612,14 +682,27 @@ namespace HappyVacation.Repositories.Providers
                 }
                 else
                 {
-                    providers[i].AverageRating = (float)Math.Round(
-                                                (
-                                                    _context.Tours.Where(x => x.ProviderId == providers[i].Id)
+                    var non_zero_list_rating_values = _context.Tours.Where(x => x.ProviderId == providers[i].Id)
                                                         .Select(x => (x.Reviews.Count() != 0) ? x.Reviews.Where(r => r.Rating != 0).Average(r => r.Rating) : -1)
                                                         .ToList()
-                                                )
-                                                .Where(x => x != -1)
-                                                .Average(), 2);
+                                                        .Where(x => x != -1);
+                    if(non_zero_list_rating_values.Count() > 0)
+                    {
+                        providers[i].AverageRating = (float)Math.Round(non_zero_list_rating_values.Average(), 2);
+                    }
+                    else
+                    {
+                        providers[i].AverageRating = 0;
+                    }
+
+                    //providers[i].AverageRating = (float)Math.Round(
+                    //                            (
+                    //                                _context.Tours.Where(x => x.ProviderId == providers[i].Id)
+                    //                                    .Select(x => (x.Reviews.Count() != 0) ? x.Reviews.Where(r => r.Rating != 0).Average(r => r.Rating) : -1)
+                    //                                    .ToList()
+                    //                            )
+                    //                            .Where(x => x != -1)
+                    //                            .Average(), 2);
                 }
             }
 
@@ -662,12 +745,24 @@ namespace HappyVacation.Repositories.Providers
             }
             else
             {
-                provider.AverageRating = (float)Math.Round(
-                                            (_context.Tours.Where(x => x.ProviderId == providerId)
+                var non_zero_list_rating_values = (_context.Tours.Where(x => x.ProviderId == providerId)
                                             .Select(x => (x.Reviews.Count() != 0) ? x.Reviews.Average(r => r.Rating) : -1)
                                             .ToList())
-                                            .Where(x => x != -1)
-                                            .Average(), 2);
+                                            .Where(x => x != -1);
+                if (non_zero_list_rating_values.Count() > 0)
+                {
+                    provider.AverageRating = (float)Math.Round(non_zero_list_rating_values.Average(), 2);
+                }
+                else
+                {
+                    provider.AverageRating = 0;
+                }
+                //provider.AverageRating = (float)Math.Round(
+                //                            (_context.Tours.Where(x => x.ProviderId == providerId)
+                //                            .Select(x => (x.Reviews.Count() != 0) ? x.Reviews.Average(r => r.Rating) : -1)
+                //                            .ToList())
+                //                            .Where(x => x != -1)
+                //                            .Average(), 2);
             }
             // get orders count
             provider.TotalOrderCount = (await _context.Tours.Where(x => x.ProviderId == provider.Id).Select(x => x.Orders.Count()).ToListAsync()).Sum(el => el);
@@ -996,5 +1091,6 @@ namespace HappyVacation.Repositories.Providers
                 CanceledOrderCount = (await _context.Tours.Where(x => x.ProviderId == providerId).Select(x => x.Orders.Where(o => o.State == "canceled").Count()).ToListAsync()).Sum(el => el)
             };
         }
+
     }
 }

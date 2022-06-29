@@ -38,12 +38,14 @@ namespace HappyVacation.Repositories.Providers
 
         // tour provider registration
         Task<int> CreateProviderRegistration(int userId, ProviderRegistrationRequest request);
+        Task<int> DeleteProviderRegistration(int userId, int registrationId);
         Task<ProviderRegistrationVm> GetProviderRegistration(int userId);   // get registration of a user
         Task<ProviderRegistrationVm> GetProviderRegistrationById(int registrationId);
         Task<PagedResult<ProviderRegistrationVm>> GetRegistrations(GetProviderRegistrationRequest request);
 
         // admin's features
         Task<int> ApproveProviderRegistration(int registrationId);
+        Task<int> RejectProviderRegistration(int registrationId);
         Task<int> DisableProvider(int providerId);
         Task<int> EnableProvider(int providerId);
         Task<PagedResult<ProviderManageMainInfoVm>> GetProvidersManage(GetProvidersManageRequest request);

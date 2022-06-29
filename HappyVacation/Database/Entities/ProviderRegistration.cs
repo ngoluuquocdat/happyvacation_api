@@ -10,6 +10,7 @@
         public string ProviderPhone { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsRejected { get; set; }
 
         // navigation props
         // 1 provider registration - 1 user

@@ -10,5 +10,6 @@
         public string ProviderPhone { get; set; }
         public string DateCreated { get; set; }
         public bool IsApproved { get; set; }
+        public bool IsRejected { get; set; }
     }
 }

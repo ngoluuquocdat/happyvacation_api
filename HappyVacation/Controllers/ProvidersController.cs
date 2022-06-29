@@ -85,6 +85,34 @@ namespace HappyVacation.Controllers
             return Ok(newRegistration);
         }
 
+        [HttpDelete("registrations/{registrationId}")]
+        [Authorize(Roles = "Tourist")]
+        public async Task<ActionResult> DeleteProviderRegistration(int registrationId)
+        {
+            var NOT_FOUND_ERROR = -1;
+            var NOT_ALLOWED = -3;
+
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _providerRepository.DeleteProviderRegistration(userId, registrationId);
+
+            if (result == 0)
+            {
+                return BadRequest("Something wrong");
+            }
+            if (result == NOT_FOUND_ERROR)
+            {
+                return NotFound();
+            }
+            if (result == NOT_ALLOWED)
+            {
+                return Forbid("Member is not associated with this registration");
+            }
+
+            return Ok(result);
+        }
+
         [HttpGet("me/registration")]
         [Authorize(Roles = "Tourist")]
         public async Task<ActionResult> GetProviderRegistration()
@@ -299,10 +327,43 @@ namespace HappyVacation.Controllers
         public async Task<ActionResult> ApproveProviderRegistration(int registrationId)
         {
             var NOT_FOUND_ERROR = -1;
+            var MEMBER_IS_DISABLED = -2;
 
             try
             {
                 var result = await _providerRepository.ApproveProviderRegistration(registrationId);
+                if (result == NOT_FOUND_ERROR)
+                {
+                    return NotFound();
+                }
+                if(result == MEMBER_IS_DISABLED)
+                {
+                    return BadRequest("Associated member is disabled");
+                }
+                if (result == 0)
+                {
+                    return BadRequest("Something wrong");
+                }
+
+                var updatedRegistration = await _providerRepository.GetProviderRegistrationById(result);
+
+                return Ok(updatedRegistration);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(DateTime.Now + "- Server Error: " + ex);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("registrations/{registrationId}/reject")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> RejectProviderRegistration(int registrationId)
+        {
+            var NOT_FOUND_ERROR = -1;
+            try
+            {
+                var result = await _providerRepository.RejectProviderRegistration(registrationId);
                 if (result == NOT_FOUND_ERROR)
                 {
                     return NotFound();

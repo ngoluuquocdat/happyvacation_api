@@ -30,7 +30,8 @@ namespace HappyVacation.Database.Configurations
             // 1-1: user - provider registration
             builder.HasOne(user => user.ProviderRegistration)
                 .WithOne(registration => registration.User)
-                .HasForeignKey<ProviderRegistration>(registration => registration.UserId);
+                .HasForeignKey<ProviderRegistration>(registration => registration.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             // 1-1: user - provider
             builder.HasOne(user => user.Provider)
