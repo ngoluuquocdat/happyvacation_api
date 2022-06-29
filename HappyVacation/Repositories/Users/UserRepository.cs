@@ -144,6 +144,11 @@ namespace HappyVacation.Repositories.Users
             {
                 query = query.Where(x => x.Id == request.UserId);
             }
+            // filter by enable/disable
+            if (request.IsEnabled != null)
+            {
+                query = query.Where(x => (x.IsEnabled == request.IsEnabled));
+            }
             // filter by username
             if (!string.IsNullOrEmpty(request.Username))
             {
@@ -169,6 +174,7 @@ namespace HappyVacation.Repositories.Users
                     query = query.Where(x => x.FirstName.Contains(request.Keyword) || x.LastName.Contains(request.Keyword));
                 }
             }
+
             // order by newest
             query = query.OrderByDescending(x => x.Id);
             // paging
