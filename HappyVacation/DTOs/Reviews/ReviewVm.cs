@@ -8,5 +8,6 @@
         public float Rating { get; set; }
         public string Username { get; set; }
         public string UserAvatar { get; set; }
+        public bool IsUserEnabled { get; set; }
     }
 }

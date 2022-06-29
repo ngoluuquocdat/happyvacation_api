@@ -494,9 +494,9 @@ namespace HappyVacation.Repositories.Orders
             if (!string.IsNullOrEmpty(state))
             {
                 state = state.ToLower();
-                if (state == "processed")
+                if (state == "departed")
                 {
-                    query = query.Where(x => x.State == "confirmed" || x.State == "canceled");
+                    query = query.Where(x => x.State == "confirmed" && x.DepartureDate.Date < DateTime.Now.Date);
                 }
                 else
                 {
@@ -504,7 +504,7 @@ namespace HappyVacation.Repositories.Orders
                 }
             }
 
-            // order by modified date
+            // order by order date
             query = query.OrderByDescending(x => x.OrderDate);
 
             // paging
@@ -522,7 +522,7 @@ namespace HappyVacation.Repositories.Orders
                 TourName = x.Tour.TourName,
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
                 HasDeparted = x.DepartureDate.Date < DateTime.Now.Date,
-                OrderDate = x.DepartureDate.ToString("dd/MM/yyyy"),
+                OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
                 IsPrivate = x.Tour.IsPrivate,
@@ -556,9 +556,9 @@ namespace HappyVacation.Repositories.Orders
             if (!string.IsNullOrEmpty(state))
             {
                 state = state.ToLower();
-                if(state == "processed")
+                if(state == "departed")
                 {
-                    query = query.Where(x => x.State == "confirmed" || x.State == "canceled");
+                    query = query.Where(x => x.State == "confirmed" && x.DepartureDate.Date < DateTime.Now.Date);
                 } 
                 else
                 {
@@ -585,6 +585,7 @@ namespace HappyVacation.Repositories.Orders
                 DepartureDate = x.DepartureDate.ToString("dd/MM/yyyy"),
                 HasDeparted = x.DepartureDate.Date < DateTime.Now.Date,
                 ModifiedDate = x.ModifiedDate.ToString("dd/MM/yyyy"),
+                OrderDate = x.OrderDate.ToString("dd/MM/yyyy"),
                 Duration = x.Tour.Duration,
                 IsPrivate = x.Tour.IsPrivate,
                 Adults = x.Adults,
