@@ -18,6 +18,7 @@
         public int TotalPrice { get; set; }
         public string ThumbnailUrl { get; set; }
         public string State { get; set; }
+        public string TouristIdentityNum { get; set; }
         public string TouristName { get; set; }
         public string TouristPhone { get; set; }
         public string TouristEmail { get; set; }

@@ -42,9 +42,10 @@ namespace HappyVacation.Services.XLSX
             row0.CreateCell(9).SetCellValue("Price Per Child");
             row0.CreateCell(10).SetCellValue("Children");
             row0.CreateCell(11).SetCellValue("Total Price");
-            row0.CreateCell(12).SetCellValue("Tourist Name");
-            row0.CreateCell(13).SetCellValue("Tourist Phone");
-            row0.CreateCell(14).SetCellValue("Tourist Email");
+            row0.CreateCell(12).SetCellValue("Customer Identity");
+            row0.CreateCell(13).SetCellValue("Customer Name");
+            row0.CreateCell(14).SetCellValue("Customer Phone");
+            row0.CreateCell(15).SetCellValue("Customer Email");
             // write order's information
             int rowIndex = 1;
             foreach (var order in orders)
@@ -65,9 +66,10 @@ namespace HappyVacation.Services.XLSX
                 newRow.CreateCell(9).SetCellValue(pricePerChild);
                 newRow.CreateCell(10).SetCellValue(order.Children);
                 newRow.CreateCell(11).SetCellValue(order.TotalPrice);
-                newRow.CreateCell(12).SetCellValue(order.TouristName);
-                newRow.CreateCell(13).SetCellValue(order.TouristPhone);
-                newRow.CreateCell(14).SetCellValue(order.TouristEmail);
+                newRow.CreateCell(12).SetCellValue(order.TouristIdentityNum);
+                newRow.CreateCell(13).SetCellValue(order.TouristName);
+                newRow.CreateCell(14).SetCellValue(order.TouristPhone);
+                newRow.CreateCell(15).SetCellValue(order.TouristEmail);
                 // increase row index
                 rowIndex++;
             }
