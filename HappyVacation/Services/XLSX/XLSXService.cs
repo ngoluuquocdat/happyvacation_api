@@ -49,6 +49,7 @@ namespace HappyVacation.Services.XLSX
             int rowIndex = 1;
             foreach (var order in orders)
             {
+                var pricePerChild = order.PricePerChild >= 0 ? order.PricePerChild.ToString() : "None";
                 // create new row
                 var newRow = sheet.CreateRow(rowIndex);
                 // write to row
@@ -61,7 +62,7 @@ namespace HappyVacation.Services.XLSX
                 newRow.CreateCell(6).SetCellValue(order.DepartureDate);
                 newRow.CreateCell(7).SetCellValue(order.PricePerAdult);
                 newRow.CreateCell(8).SetCellValue(order.Adults);
-                newRow.CreateCell(9).SetCellValue(order.PricePerChild);
+                newRow.CreateCell(9).SetCellValue(pricePerChild);
                 newRow.CreateCell(10).SetCellValue(order.Children);
                 newRow.CreateCell(11).SetCellValue(order.TotalPrice);
                 newRow.CreateCell(12).SetCellValue(order.TouristName);
