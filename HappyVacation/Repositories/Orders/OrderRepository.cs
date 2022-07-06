@@ -949,6 +949,7 @@ namespace HappyVacation.Repositories.Orders
             }
 
             order.DepartureDate = DateTime.ParseExact(newDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            order.ModifiedDate = DateTime.Now;
             await _context.SaveChangesAsync();
 
             return order.Id;
