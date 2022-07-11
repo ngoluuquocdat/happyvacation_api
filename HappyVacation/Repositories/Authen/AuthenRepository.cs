@@ -162,5 +162,27 @@ namespace HappyVacation.Repositories.Authen
                 Token = token
             };
         }
+        public async Task<int?> ChangePassword(int userId, ChangePasswordRequest request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+
+            using var hmac = new HMACSHA512(user.PasswordSalt);
+            var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.CurrentPassword));
+            // compare two bytes arrays
+            for (int i = 0; i < passwordHash.Length; i++)
+            {
+                if (passwordHash[i] != user.PasswordHash[i])
+                {
+                    return null;
+                }
+            }
+
+            // save new password
+            using var new_hmac = new HMACSHA512();
+            user.PasswordHash = new_hmac.ComputeHash(Encoding.UTF8.GetBytes(request.NewPassword));
+            user.PasswordSalt = new_hmac.Key;          
+
+            return await _context.SaveChangesAsync();
+        }
     }
 }

@@ -54,14 +54,40 @@ namespace HappyVacation.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register(RegisterRequest request)
         {
-            if (request == null)
+            if(request == null)
             {
                 return BadRequest();
             }
             var result = await _authenRepository.Register(request);
-            if (result == null)
+            if(result == null)
             {
                 return BadRequest(error: "Username already exists or password not match");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("me/change-password")]
+        [Authorize]
+        public async Task<ActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest();
+            }
+
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _authenRepository.ChangePassword(userId, request);
+
+            if(result == null)
+            {
+                return Unauthorized("Current password invalid.");
+            }
+            if(result == 0)
+            {
+                return BadRequest(error: "Something wrong. Cannot change password.");
             }
 
             return Ok(result);
