@@ -859,32 +859,42 @@ namespace HappyVacation.Repositories.Providers
             return await query.Take(3).ToListAsync();
         }
 
-        public async Task<List<TourStatisticVm>> GetTopOrderedTours(int providerId, int fromMonth, int toMonth, int year)
+        public async Task<PagedResult<TourStatisticVm>> GetTopOrderedTours(int providerId, int fromMonth, int toMonth, int year, int page, int perPage)
         {
-            var result = await _context.Tours.Where(x => x.ProviderId == providerId).AsNoTracking()
-                                    .OrderByDescending(x => x.Orders.Where(o => o.OrderDate.Year == year &&
+            var query = _context.Tours.Where(x => x.ProviderId == providerId).AsNoTracking();
+            query = query.OrderByDescending(x => x.Orders.Where(o => o.OrderDate.Year == year &&
                                                                                 o.OrderDate.Month >= fromMonth &&
                                                                                 o.OrderDate.Month <= toMonth &&
-                                                                                o.State.Equals("confirmed")).Count())
-                                    .Take(3)
-                                    .Select(x => new TourStatisticVm()
-                                    {
-                                        TourId = x.Id,
-                                        TourName = x.TourName,
-                                        TotalOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
-                                                                                o.OrderDate.Month >= fromMonth &&
-                                                                                o.OrderDate.Month <= toMonth).Count(),
-                                        ConfirmedOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
-                                                                                o.OrderDate.Month >= fromMonth &&
-                                                                                o.OrderDate.Month <= toMonth &&
-                                                                                o.State.Equals("confirmed")).Count(),
-                                        CanceledOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
-                                                                                o.OrderDate.Month >= fromMonth &&
-                                                                                o.OrderDate.Month <= toMonth &&
-                                                                                o.State.Equals("canceled")).Count()
-                                    }).ToListAsync();
-            result = result.Where(x => x.TotalOrderCount > 0).ToList();
-            return result;
+                                                                                o.State.Equals("confirmed")).Count()).ThenByDescending(x => x.Id);
+            // paging
+            int totalCount = query.Count();
+            int totalPages = ((totalCount - 1) / perPage) + 1;
+            query = query.Skip((page - 1) * perPage).Take(perPage);
+
+            var result = await query.Select(x => new TourStatisticVm()
+            {
+                 TourId = x.Id,
+                 TourName = x.TourName,
+                 TotalOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
+                                                         o.OrderDate.Month >= fromMonth &&
+                                                         o.OrderDate.Month <= toMonth).Count(),
+                 ConfirmedOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
+                                                         o.OrderDate.Month >= fromMonth &&
+                                                         o.OrderDate.Month <= toMonth &&
+                                                         o.State.Equals("confirmed")).Count(),
+                 CanceledOrderCount = x.Orders.Where(o => o.OrderDate.Year == year &&
+                                                         o.OrderDate.Month >= fromMonth &&
+                                                         o.OrderDate.Month <= toMonth &&
+                                                         o.State.Equals("canceled")).Count()
+            }).ToListAsync();
+
+
+            return new PagedResult<TourStatisticVm>()
+            {
+                TotalCount = totalCount,
+                TotalPage = totalPages,
+                Items = result
+            }; ;
         }
 
         public async Task<PagedResult<TourMainInfoManageVm>> GetToursAdmin(int providerId, int page = 1, int perPage = 4)
@@ -972,7 +982,7 @@ namespace HappyVacation.Repositories.Providers
             {
                 categories = await GetTopOrderedCategories(_providerId, months[0], months[^1], year);
                 places = await GetTopOrderedPlaces(_providerId, months[0], months[^1], year);
-                tours = await GetTopOrderedTours(_providerId, months[0], months[^1], year);
+                //tours = await GetTopOrderedTours(_providerId, months[0], months[^1], year);
                 totalOrderCount = await GetOrdersCount(_providerId, String.Empty, months[0], months[^1], year);
                 confirmedOrderCount = await GetOrdersCount(_providerId, "confirmed", months[0], months[^1], year);
                 canceledOrderCount = await GetOrdersCount(_providerId, "canceled", months[0], months[^1], year);
@@ -984,7 +994,7 @@ namespace HappyVacation.Repositories.Providers
                 Revenue = listRevenue,
                 TopOrderedCategories = categories,
                 TopOrderedPlaces = places,
-                TopOrderedTours = tours,
+                //TopOrderedTours = tours,
                 TotalOrderCount = totalOrderCount,
                 ConfirmedOrderCount = confirmedOrderCount,
                 CanceledOrderCount = canceledOrderCount
@@ -1034,7 +1044,7 @@ namespace HappyVacation.Repositories.Providers
 
             categories = await GetTopOrderedCategories(providerId, month, month, year);
             places = await GetTopOrderedPlaces(providerId, month, month, year);
-            tours = await GetTopOrderedTours(providerId, month, month, year);
+            //tours = await GetTopOrderedTours(providerId, month, month, year);
             totalOrderCount = await GetOrdersCount(providerId, String.Empty, month, month, year);
             confirmedOrderCount = await GetOrdersCount(providerId, "confirmed", month, month, year);
             canceledOrderCount = await GetOrdersCount(providerId, "canceled", month, month, year);
@@ -1046,12 +1056,14 @@ namespace HappyVacation.Repositories.Providers
                 Revenue = listRevenue,
                 TopOrderedCategories = categories,
                 TopOrderedPlaces = places,
-                TopOrderedTours = tours,
+                //TopOrderedTours = tours,
                 TotalOrderCount = totalOrderCount,
                 ConfirmedOrderCount = confirmedOrderCount,
                 CanceledOrderCount = canceledOrderCount
             };
         }
+
+
 
         public async Task<int> GetOrdersCount(int providerId, string? state, int fromMonth, int toMonth, int year)
         {
@@ -1092,5 +1104,25 @@ namespace HappyVacation.Repositories.Providers
             };
         }
 
+        public async Task<PagedResult<TourStatisticVm>> GetTourStatisticByQuarter(int quarterIndex, int year, int userId, int page, int perPage)
+        {
+            // get months in quarter
+            var months = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+            months = months.Skip((quarterIndex - 1) * 3).Take(3).ToList();
+
+            var _providerId = (await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync()).GetValueOrDefault();
+
+            var result = await GetTopOrderedTours(_providerId, months[0], months[^1], year, page, perPage);
+
+            return result;
+        }
+
+        public async Task<PagedResult<TourStatisticVm>> GetTourStatisticByMonth(int month, int year, int userId, int page, int perPage)
+        {
+            var _providerId = (await _context.Users.Where(x => x.Id == userId).AsNoTracking().Select(x => x.ProviderId).FirstOrDefaultAsync()).GetValueOrDefault();
+            var result = await GetTopOrderedTours(_providerId, month, month, year, page, perPage);
+
+            return result;
+        }
     }
 }

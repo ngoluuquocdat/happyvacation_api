@@ -30,6 +30,10 @@ namespace HappyVacation.Repositories.Providers
         // get revenue by month (for provider)
         Task<RevenueVm> GetRevenueByMonth(int month, int year, int userId = 0);
 
+        Task<PagedResult<TourStatisticVm>> GetTourStatisticByQuarter(int quarterIndex, int year, int userId, int page, int perPage);
+
+        Task<PagedResult<TourStatisticVm>> GetTourStatisticByMonth(int month, int year, int userId, int page, int perPage);
+        
         // get overall statistic (for provider)
         Task<OverallStatisticVm> GetOverallStatistic(int userId);
 

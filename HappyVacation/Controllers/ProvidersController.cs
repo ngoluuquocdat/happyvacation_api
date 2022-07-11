@@ -310,6 +310,27 @@ namespace HappyVacation.Controllers
             return Ok(result);
         }
 
+        [HttpGet("me/tour-statistic/by-quarter")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetTourStatisticByQuarter([FromQuery] int quarterIndex, int year, int page, int perPage)
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _providerRepository.GetTourStatisticByQuarter(quarterIndex, year, userId, page, perPage);
+            return Ok(result);
+        }
+
+        [HttpGet("me/tour-statistic/by-month")]
+        [Authorize(Roles = "Provider")]
+        public async Task<ActionResult> GetTourStatisticByMonth([FromQuery] int month, int year, int page, int perPage)
+        {
+            var claimsPrincipal = this.User;
+            var userId = Int32.Parse(claimsPrincipal.FindFirst("id").Value);
+
+            var result = await _providerRepository.GetTourStatisticByMonth(month, year, userId, page, perPage);
+            return Ok(result);
+        }
 
         /* ADMIN */
 
