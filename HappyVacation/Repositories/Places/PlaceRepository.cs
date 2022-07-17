@@ -36,7 +36,7 @@ namespace HappyVacation.Repositories.Places
                     places[i].OrderCount = await GetOrderCount(places[i].Id, requestDate);
                 }
                 // order places by orders count
-                places = places.OrderByDescending(p => p.OrderCount).ToList();
+                places = places.OrderByDescending(p => p.OrderCount).ThenBy(x => x.Id).ToList();
             }                              
 
             if(count != 0)
