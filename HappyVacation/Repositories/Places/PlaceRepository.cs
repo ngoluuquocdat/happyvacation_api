@@ -26,7 +26,7 @@ namespace HappyVacation.Repositories.Places
                              {
                                  Id = place.Id,
                                  PlaceName = place.PlaceName,
-                                 ThumbnailUrl = (place.PlaceImages.Count() > 0) ? place.PlaceImages[0].Url : place.ThumbnailUrl
+                                 ThumbnailUrl = place.ThumbnailUrl
                              }).AsSplitQuery().ToListAsync();
 
             if (!String.IsNullOrEmpty(sort))
